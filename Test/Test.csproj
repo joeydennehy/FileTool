@@ -50,7 +50,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Database\MySQL\CommandTest.cs" />
     <Compile Include="Database\MySQL\ConnectionTest.cs" />
+    <Compile Include="Database\MySQL\ParameterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

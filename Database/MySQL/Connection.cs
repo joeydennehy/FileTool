@@ -40,7 +40,7 @@ namespace Database.MySQL
 		#endregion
 
 		#region Private Methods
-		public void Initialize()
+		private void Initialize()
 		{
 			try
 			{
