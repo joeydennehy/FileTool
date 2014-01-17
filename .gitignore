@@ -1,0 +1,14 @@
+obj
+bin
+*resharper*
+*.suo
+*.user
+*.cache
+Foundant/App_Themes/*
+*docstates
+Foundant.Logi.Web/*.lic
+~$*
+Publish
+reports
+*Publish.xml
+*.orig
