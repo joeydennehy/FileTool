@@ -18,14 +18,16 @@ namespace Database.MySQL
 			mySqlCommand = new MySqlCommand(SqlStatement, mySqlConnector.Connection);
 		}
 
-		public Command(string SqlStatment, Parameters parameters = null)
+		public Command(string SqlStatmentId, Parameters parameters = null)
 		{
-			mySqlCommand.CommandText = SqlStatment;
+			//Add resource manager here
+			mySqlCommand.CommandText = SqlStatmentId;
 
 			if (parameters != null)
 			{
 				mySqlCommand.Parameters.AddRange(parameters.ParameterCollection);
 			}
 		}
+
 	}
 }

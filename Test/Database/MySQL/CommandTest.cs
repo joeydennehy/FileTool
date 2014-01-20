@@ -59,7 +59,7 @@ namespace Test.Database.MySQL
 		#endregion
 
 		[TestMethod]
-		public void TestMethod1()
+		public void TestCommandWorks_End_to_End()
 		{
 			//
 			// TODO: Add test logic here

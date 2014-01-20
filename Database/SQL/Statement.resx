@@ -128,14 +128,17 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 
-	<data name="SELECT_FILES" xml:space="preserve">
+	<data name="SELECT_ALL_URL_KEYS_AND_NAMES" xml:space="preserve">
 		<value>
 			SELECT 
-				* 
-			FROM
-				SOMETABLEOROTHER
+				Name, 
+				UrlKey 
+			FROM 
+				foundation 
 			WHERE
-				SOMETHINGOROTHER = @SOMEPARAM
+				UrlKey = @URL_KEY
+			ORDER BY 
+				Name
 		</value>
 	</data>
 	

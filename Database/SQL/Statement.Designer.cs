@@ -63,16 +63,19 @@ namespace Database.SQL {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///			SELECT 
-        ///				* 
-        ///			FROM
-        ///				SOMETABLEOROTHER
+        ///				Name, 
+        ///				UrlKey 
+        ///			FROM 
+        ///				foundation 
         ///			WHERE
-        ///				SOMETHINGOROTHER = @SOMEPARAM
+        ///				UrlKey = @URL_KEY
+        ///			ORDER BY 
+        ///				Name
         ///		.
         /// </summary>
-        internal static string SELECT_FILES {
+        internal static string SELECT_ALL_URL_KEYS_AND_NAMES {
             get {
-                return ResourceManager.GetString("SELECT_FILES", resourceCulture);
+                return ResourceManager.GetString("SELECT_ALL_URL_KEYS_AND_NAMES", resourceCulture);
             }
         }
     }
