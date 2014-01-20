@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Database.SQL {
+namespace DataProvider.SQL {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Database.SQL {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Database.SQL.Statement", typeof(Statement).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataProvider.SQL.Statement", typeof(Statement).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -76,6 +76,15 @@ namespace Database.SQL {
         internal static string SELECT_ALL_URL_KEYS_AND_NAMES {
             get {
                 return ResourceManager.GetString("SELECT_ALL_URL_KEYS_AND_NAMES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to test.
+        /// </summary>
+        internal static string UNIT_TEST_ONLY {
+            get {
+                return ResourceManager.GetString("UNIT_TEST_ONLY", resourceCulture);
             }
         }
     }

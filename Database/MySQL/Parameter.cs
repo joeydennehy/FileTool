@@ -7,9 +7,9 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Collections;
 
-namespace Database.MySQL
+namespace DataProvider.MySQL
 {
-	public class Parameters
+	public class CommandParameters
 	{
 		public void Add(MySqlParameter item)
 		{
@@ -18,11 +18,11 @@ namespace Database.MySQL
 
 		#region Private Members
 
-		private List<MySqlParameter> parameters = null;
+		private readonly List<MySqlParameter> parameters = null;
 
 		#endregion
 
-		public Parameters()
+		public CommandParameters()
 		{
 			parameters = new List<MySqlParameter>();
 		}
