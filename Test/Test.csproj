@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Test</RootNamespace>
-    <AssemblyName>Test</AssemblyName>
+    <AssemblyName>GLMFileUtilityTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,9 +50,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Database\MySQL\CommandTest.cs" />
-    <Compile Include="Database\MySQL\ConnectionTest.cs" />
-    <Compile Include="Database\MySQL\ParameterTest.cs" />
+    <Compile Include="DataProvider\MySQL\CommandTest.cs" />
+    <Compile Include="DataProvider\MySQL\ConnectionTest.cs" />
+    <Compile Include="DataProvider\MySQL\DataAccessTest.cs" />
+    <Compile Include="DataProvider\MySQL\ParameterTest.cs" />
+    <Compile Include="DataProvider\Resources\ResourceReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

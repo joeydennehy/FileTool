@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-
-namespace Database.MySQL
+﻿namespace DataProvider.MySQL
 {
 	public class Command
 	{
-		private MySqlCommand mySqlCommand;
-		private MySqlConnector mySqlConnector;
+		public string SqlStatementId { get; set; }
+		public CommandParameters Parameters { get; set; }
 
-		public Command(string SqlStatement)
-		{ 
-			mySqlConnector = new MySqlConnector();
-			mySqlCommand = new MySqlCommand(SqlStatement, mySqlConnector.Connection);
+		//private readonly MySqlCommand mySqlCommand;
+
+		public Command(string sqlStatement)
+		{
+			//MySqlConnector mySqlConnector = new MySqlConnector();
+			//mySqlCommand = new MySqlCommand(sqlStatement, mySqlConnector.PrimaryConnection);
 		}
 
-		public Command(string SqlStatmentId, Parameters parameters = null)
+		public Command(string sqlStatmentId, CommandParameters parameters = null)
 		{
 			//Add resource manager here
-			mySqlCommand.CommandText = SqlStatmentId;
+			//mySqlCommand.CommandText = sqlStatmentId;
 
-			if (parameters != null)
-			{
-				mySqlCommand.Parameters.AddRange(parameters.ParameterCollection);
-			}
+			//if (parameters != null)
+			//{
+			//	mySqlCommand.Parameters.AddRange(parameters.ParameterCollection);
+			//}
 		}
 
 	}

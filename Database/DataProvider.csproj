@@ -7,8 +7,8 @@
     <ProjectGuid>{888311C0-B17F-4B74-825A-DFCF73D16CF3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Database</RootNamespace>
-    <AssemblyName>Database</AssemblyName>
+    <RootNamespace>DataProvider</RootNamespace>
+    <AssemblyName>DataProvider</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,8 +47,10 @@
   <ItemGroup>
     <Compile Include="MySQL\Command.cs" />
     <Compile Include="MySQL\Connection.cs" />
+    <Compile Include="MySQL\DataAccess.cs" />
     <Compile Include="MySQL\Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ResourceReader.cs" />
     <Compile Include="SQL\Statement.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

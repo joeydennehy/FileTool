@@ -130,13 +130,36 @@
 
 	<data name="SELECT_ALL_URL_KEYS_AND_NAMES" xml:space="preserve">
 		<value>
-			SELECT 
-				Name, 
-				UrlKey 
+			SELECT
+				UrlKey, 
+				Name 
 			FROM 
-				foundation 
+				foundation
+			ORDER BY 
+				Name
+		</value>
+	</data>
+	<data name="SELECT_FOUNDATION_PROCESS_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				FoundationProcessId, 
+				Name 
+			FROM 
+				foundationprocess, foundation 
 			WHERE
-				UrlKey = @URL_KEY
+				foundation.UrlKey = @URL_KEY AND foundation.FoundationId = foundationprocess.Foundationid 
+			ORDER BY 
+				Name
+		</value>
+	</data>
+	<data name="SELECT_APPLICATION_PROCESS_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				ApplicantProcessId
+			FROM 
+				applicantprocess 
+			WHERE
+				FoundatonProcessId = @FOUNDATION_PROCESS
 			ORDER BY 
 				Name
 		</value>

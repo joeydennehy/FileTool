@@ -1,32 +1,28 @@
 ﻿using System;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
-namespace Database.MySQL
+namespace DataProvider.MySQL
 {
-	public class MySqlConnector
+	internal class MySqlConnector
 	{
 		#region Private Variable
+
+		private readonly DataAccessType dataAccessType;
 
 		private const string PRIMARY_DB_CONNECTION_NAME = "MasterDatabase";
 		private const string LOG_DB_CONNECTION_NAME = "LogConnection";
 
-		private string PrimaryConnectionString = string.Empty;
-		private string LoggingConnectionString = string.Empty;
-
-		MySqlConnection connection = null;
+		private string primaryConnectionString = string.Empty;
+		private string loggingConnectionString = string.Empty;
 
 		#endregion
 
 		#region Constructor
 
-		public MySqlConnector()
+		public MySqlConnector(DataAccessType accessType = DataAccessType.DATA)
 		{
+			dataAccessType = accessType;
 			Initialize();
 		}
 
@@ -34,8 +30,9 @@ namespace Database.MySQL
 		
 		#region Public Properties
 
-		public MySqlConnection Connection
-		{ get { return connection; } }
+		private MySqlConnection LoggingConnection { get; set; }
+
+		private MySqlConnection PrimaryConnection { get; set; }
 
 		#endregion
 
@@ -44,7 +41,7 @@ namespace Database.MySQL
 		{
 			try
 			{
-				PrimaryConnectionString = ConfigurationManager.ConnectionStrings[PRIMARY_DB_CONNECTION_NAME].ConnectionString;
+				primaryConnectionString = ConfigurationManager.ConnectionStrings[PRIMARY_DB_CONNECTION_NAME].ConnectionString;
 			}
 			catch (ConfigurationErrorsException e)
 			{
@@ -53,7 +50,7 @@ namespace Database.MySQL
 
 			try
 			{
-				LoggingConnectionString = ConfigurationManager.ConnectionStrings[LOG_DB_CONNECTION_NAME].ConnectionString;
+				loggingConnectionString = ConfigurationManager.ConnectionStrings[LOG_DB_CONNECTION_NAME].ConnectionString;
 			}
 			catch (ConfigurationErrorsException e)
 			{
@@ -65,32 +62,64 @@ namespace Database.MySQL
 
 		#region Public Methods
 
-		public void Close()
+		public MySqlConnection GetConnection()
 		{
-			try
+				try
 			{
-				if (connection != null && connection.State == ConnectionState.Open)
-					connection.Close();
+				if (dataAccessType == DataAccessType.DATA)
+				{
+					PrimaryConnection = new MySqlConnection(primaryConnectionString);
+					return PrimaryConnection;
+				}
+				else
+				{
+					LoggingConnection = new MySqlConnection(loggingConnectionString);
+					return LoggingConnection;
+				}
 			}
-			catch (MySqlException e)
-			{
-				throw new Exception(string.Format("MySQL gave the following error: {0}", e.Message));
-			}
+				catch (MySqlException e)
+				{
+					throw new Exception(string.Format("MySQL gave the following error: {0}", e.Message));
+				}
 		}
-		
-		public bool Open()
-		{
-			try
-			{
-				connection = new MySqlConnection(PrimaryConnectionString);
-				connection.Open();
-				return true;
-			}
-			catch (MySqlException e)
-			{
-				throw new Exception(string.Format("MySQL gave the following error: {0}", e.Message));
-			}
-		}
+
+		//public void Close()
+		//{
+		//	try
+		//	{
+		//		MySqlConnection connection = dataAccessType == DataAccessType.DATA ? PrimaryConnection : LoggingConnection;
+
+		//		if (connection != null && connection.State == ConnectionState.Open)
+		//			connection.Close();
+		//	}
+		//	catch (MySqlException e)
+		//	{
+		//		throw new Exception(string.Format("MySQL gave the following error: {0}", e.Message));
+		//	}
+		//}
+
+		//public bool Open()
+		//{
+		//	try
+		//	{
+		//		if (dataAccessType == DataAccessType.DATA)
+		//		{
+		//			PrimaryConnection = new MySqlConnection(primaryConnectionString);
+		//			PrimaryConnection.Open();
+		//		}
+		//		else
+		//		{
+		//			LoggingConnection = new MySqlConnection(loggingConnectionString);
+		//			LoggingConnection.Open();
+		//		}
+				
+		//		return true;
+		//	}
+		//	catch (MySqlException e)
+		//	{
+		//		throw new Exception(string.Format("MySQL gave the following error: {0}", e.Message));
+		//	}
+		//}
 
 		#endregion
 	}
