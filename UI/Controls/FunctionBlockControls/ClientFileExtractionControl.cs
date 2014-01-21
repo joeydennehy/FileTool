@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using API;
 
-namespace UI.Controls
+namespace UI.Controls.FunctionBlockControls
 {
-	public partial class ClientFileExtractionControl : UserControlBase
+	public partial class ClientFileExtractionControl : FunctionBlockBaseControl
 	{
+
 		public ClientFileExtractionControl()
 		{
 			InitializeComponent();
@@ -26,6 +27,8 @@ namespace UI.Controls
 			FoundationDropDown.DisplayMember = "Key";
 			FoundationDropDown.ValueMember = "Value";
 		}
+
+		public override string TitleBlockText { get { return "Extract Client Files"; } }
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
