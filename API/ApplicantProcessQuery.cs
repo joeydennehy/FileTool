@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using DataProvider.MySQL;
 using MySql.Data.MySqlClient;
 
@@ -46,11 +45,10 @@ namespace API
 			Command command = new Command {SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO", ParameterCollection = parameters};
 
 			DataAccess access = new DataAccess();
-			MySqlDataReader reader = access.GetReader(command);
 
 			Dictionary<string, int> foundationProcesses = new Dictionary<string, int>();
 
-			if (reader.HasRows)
+			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				while (reader.Read())
 				{
@@ -71,11 +69,10 @@ namespace API
 			Command command = new Command {SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO", ParameterCollection = parameters};
 
 			DataAccess access = new DataAccess();
-			MySqlDataReader reader = access.GetReader(command);
 
 			List<int> foundationProcesses = new List<int>();
 
-			if (reader.HasRows)
+			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				while (reader.Read())
 				{
