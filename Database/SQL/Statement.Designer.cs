@@ -80,7 +80,9 @@ namespace DataProvider.SQL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to test.
+        ///   Looks up a localized string similar to 
+        ///			SELECT * FROM foundation
+        ///		.
         /// </summary>
         internal static string UNIT_TEST_ONLY {
             get {

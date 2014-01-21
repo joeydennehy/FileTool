@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Resources;
 using System.Text;
 using System.Collections.Generic;
-using DataProvider.Resources;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ResourceReader = DataProvider.Resources.ResourceReader;
 
 namespace Test.DataProvider.Resources
 {

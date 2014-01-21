@@ -1,55 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Data;
-using System.Collections;
 
 namespace DataProvider.MySQL
 {
-	public class CommandParameters
+	public class ParameterSet
 	{
-		public void Add(MySqlParameter item)
+		private readonly Dictionary<string, MySqlParameter> parameters;
+
+		public ParameterSet()
 		{
-			throw new NotImplementedException();
+			parameters = new Dictionary<string, MySqlParameter>();
 		}
 
-		#region Private Members
-
-		private readonly List<MySqlParameter> parameters = null;
-
-		#endregion
-
-		public CommandParameters()
-		{
-			parameters = new List<MySqlParameter>();
-		}
-
-		public Array ParameterCollection
+		public MySqlParameter[] Parameters
 		{
 			get
 			{
-				return parameters.ToArray();
+				return parameters.Values.ToArray();
 			}
 		}
 
 		public void Add(DbType dataType, string paramId, object paramValue)
 		{
-			if (paramId.IndexOf('@') != 1)
-				paramId = string.Format("@{0}", paramId);
+			string innerParam = paramId.Replace("@", "");
+			string formattedParam = string.Format("@{0}", innerParam);
 
-			MySqlParameter param = new MySqlParameter() 
+			MySqlParameter param = new MySqlParameter
 			{
 				DbType = dataType,
 				Direction = ParameterDirection.Input,
-				ParameterName = paramId,
+				ParameterName = formattedParam,
+				Value = paramValue ?? DBNull.Value,
 			};
 
-			param.Value = paramValue == null ? DBNull.Value : paramValue;
-			
-			parameters.Add(param);
+			parameters.Add(innerParam, param);
 		}
 	}
 }

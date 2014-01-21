@@ -29,9 +29,9 @@
 		private void InitializeComponent()
 		{
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.btnNavFileExtraction = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
+			this.btnNavFileExtraction = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
@@ -52,14 +52,14 @@
 			this.splitContainer1.SplitterDistance = 154;
 			this.splitContainer1.TabIndex = 0;
 			// 
-			// btnNavFileExtraction
+			// button3
 			// 
-			this.btnNavFileExtraction.Location = new System.Drawing.Point(12, 3);
-			this.btnNavFileExtraction.Name = "btnNavFileExtraction";
-			this.btnNavFileExtraction.Size = new System.Drawing.Size(139, 23);
-			this.btnNavFileExtraction.TabIndex = 0;
-			this.btnNavFileExtraction.Text = "button1";
-			this.btnNavFileExtraction.UseVisualStyleBackColor = true;
+			this.button3.Location = new System.Drawing.Point(12, 61);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(139, 23);
+			this.button3.TabIndex = 2;
+			this.button3.Text = "button3";
+			this.button3.UseVisualStyleBackColor = true;
 			// 
 			// button2
 			// 
@@ -70,14 +70,14 @@
 			this.button2.Text = "button2";
 			this.button2.UseVisualStyleBackColor = true;
 			// 
-			// button3
+			// btnNavFileExtraction
 			// 
-			this.button3.Location = new System.Drawing.Point(12, 61);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(139, 23);
-			this.button3.TabIndex = 2;
-			this.button3.Text = "button3";
-			this.button3.UseVisualStyleBackColor = true;
+			this.btnNavFileExtraction.Location = new System.Drawing.Point(12, 3);
+			this.btnNavFileExtraction.Name = "btnNavFileExtraction";
+			this.btnNavFileExtraction.Size = new System.Drawing.Size(139, 23);
+			this.btnNavFileExtraction.TabIndex = 0;
+			this.btnNavFileExtraction.Text = "button1";
+			this.btnNavFileExtraction.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
@@ -85,6 +85,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(805, 539);
 			this.Controls.Add(this.splitContainer1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.splitContainer1.Panel1.ResumeLayout(false);

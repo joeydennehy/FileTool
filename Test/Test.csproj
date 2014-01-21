@@ -35,7 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\MySQL\MySQL Connector Net 6.8.3\Assemblies\v4.5\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,8 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DataProvider\MySQL\CommandTest.cs" />
-    <Compile Include="DataProvider\MySQL\ConnectionTest.cs" />
+    <Compile Include="DataProvider\MySQL\commandTest.cs" />
     <Compile Include="DataProvider\MySQL\DataAccessTest.cs" />
     <Compile Include="DataProvider\MySQL\ParameterTest.cs" />
     <Compile Include="DataProvider\Resources\ResourceReaderTest.cs" />

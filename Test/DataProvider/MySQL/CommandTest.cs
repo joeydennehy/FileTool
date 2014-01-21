@@ -1,69 +1,81 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
+using DataProvider.MySQL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Test.Database.MySQL
+namespace Test.DataProvider.MySQL
 {
-	/// <summary>
-	/// Summary description for CommandTest
-	/// </summary>
 	[TestClass]
 	public class CommandTest
 	{
-		public CommandTest()
+		[TestMethod]
+		public void Command_SetSqlStatementId_sets_SqlStatement()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-
-		private TestContext testContextInstance;
-
-		/// <summary>
-		///Gets or sets the test context which provides
-		///information about and functionality for the current test run.
-		///</summary>
-		public TestContext TestContext
-		{
-			get
+			Exception error = null;
+			try
 			{
-				return testContextInstance;
-			}
-			set
-			{
-				testContextInstance = value;
-			}
-		}
+				Command command = new Command
+				{
+					SqlStatementId = "UNIT_TEST_ONLY"
+				};
 
-		#region Additional test attributes
-		//
-		// You can use the following additional attributes as you write your tests:
-		//
-		// Use ClassInitialize to run code before running the first test in the class
-		// [ClassInitialize()]
-		// public static void MyClassInitialize(TestContext testContext) { }
-		//
-		// Use ClassCleanup to run code after all tests in a class have run
-		// [ClassCleanup()]
-		// public static void MyClassCleanup() { }
-		//
-		// Use TestInitialize to run code before running each test 
-		// [TestInitialize()]
-		// public void MyTestInitialize() { }
-		//
-		// Use TestCleanup to run code after each test has run
-		// [TestCleanup()]
-		// public void MyTestCleanup() { }
-		//
-		#endregion
+				Assert.IsFalse(string.IsNullOrEmpty(command.SqlStatementId));
+				Assert.IsFalse(string.IsNullOrEmpty(command.SqlStatement));
+			}
+			catch (Exception e)
+			{
+				error = e;
+			}
+
+			Assert.IsNull(error);
+		}
 
 		[TestMethod]
-		public void TestCommandWorks_End_to_End()
+		public void Command_SetSqlStatementId_gives_error_on_empty_id()
 		{
-			//
-			// TODO: Add test logic here
-			//
+			Exception error = null;
+			try
+			{
+				Command command = new Command
+				{
+					SqlStatementId = string.Empty
+				};
+
+				//this code should be unreachable at run time for this test.
+				Assert.IsTrue(string.IsNullOrEmpty(command.SqlStatementId));
+				Assert.IsTrue(string.IsNullOrEmpty(command.SqlStatement));
+			}
+			catch (Exception e)
+			{
+				error = e;
+			}
+
+			Assert.IsNotNull(error);
+		}
+
+		[TestMethod]
+		public void Command_SetSqlStatementId_gives_error_on_invalid_id()
+		{
+			Exception error = null;
+			bool bErrorOut = true;
+			try
+			{
+				Command command = new Command
+				{
+					SqlStatementId = "NonsenseId"
+				};
+
+				bErrorOut = false;
+				//this code should be unreachable at run time for this test.
+				Assert.IsTrue(string.IsNullOrEmpty(command.SqlStatementId));
+				Assert.IsTrue(string.IsNullOrEmpty(command.SqlStatement));
+			}
+			catch (Exception e)
+			{
+				error = e;
+			}
+
+			Assert.IsTrue(bErrorOut);
+			Assert.IsNotNull(error);
 		}
 	}
 }
