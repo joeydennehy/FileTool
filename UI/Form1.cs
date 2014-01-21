@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+//using UI.Controls;
 using UI.Controls;
+using UI.Controls.FunctionBlockControls;
 
 namespace UI
 {
@@ -16,6 +18,19 @@ namespace UI
 		#region Member Variables
 
 		private Dictionary<string, UserControl> panelControls;
+
+		#region Client Controls
+
+		private SourcePathBlockControl sourcePathBlockControl;
+		private TitleBlockControl titleBlockControl;
+
+		private ClientFileExtractionControl clientFileExtractionControl;
+		private RemoveOrphanDocumentRecordsControl removeOrphanDocumentRecordsControl;
+		private RemoveOrphanDocumentsControl removeOrphanDocumentsControl;
+		private RenameDirectoryControl renameDirectoryControl;
+		private RenameFilesControl renameFilesControl;
+		
+		#endregion
 
 		#endregion
 
@@ -29,17 +44,56 @@ namespace UI
 
 		private void Initialize()
 		{
-			panelControls = new Dictionary<string, UserControl>();
+			titleBlockControl = new TitleBlockControl();
+			sourcePathBlockControl = new SourcePathBlockControl();
 			
-			var clientFileExtractionControl = new ClientFileExtractionControl();
+			titleBlockPanel.SuspendLayout();
+			titleBlockPanel.Controls.Add(titleBlockControl);
+			titleBlockPanel.ResumeLayout();
+
+			sourceBlockPanel.SuspendLayout();
+			sourceBlockPanel.Controls.Add(sourcePathBlockControl);
+			sourceBlockPanel.ResumeLayout();
+
+			panelControls = new Dictionary<string, UserControl>();
+
+			clientFileExtractionControl = new ClientFileExtractionControl();
+			removeOrphanDocumentRecordsControl = new RemoveOrphanDocumentRecordsControl();
+			removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl();
+			renameDirectoryControl = new RenameDirectoryControl();
+			renameFilesControl = new RenameFilesControl();
 
 			panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
+			//panelControls.Add(removeOrphanDocumentRecordsControl.Name, removeOrphanDocumentRecordsControl);
+			//panelControls.Add(removeOrphanDocumentsControl.Name, removeOrphanDocumentsControl);
+			//panelControls.Add(renameDirectoryControl.Name, renameDirectoryControl);
+			//panelControls.Add(renameFilesControl.Name, renameFilesControl);
 
-			this.splitContainer1.Panel2.SuspendLayout();
+			functionBlockPanel.SuspendLayout();
+			titleBlockControl.TitleText = clientFileExtractionControl.TitleBlockText;
+			functionBlockPanel.Controls.Add(clientFileExtractionControl);
+			functionBlockPanel.ResumeLayout();
+			
 
-			this.splitContainer1.Panel2.Controls.Add(panelControls.Values.First());
+			//panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
 
-			this.splitContainer1.Panel2.ResumeLayout();
+			//this.splitContainer1.Panel2.SuspendLayout();
+			//panelControlContainer
+			//this.splitContainer1.Panel2.Controls.Add(panelControls.Values.First());
+
+			//this.splitContainer1.Panel2.ResumeLayout();
+		}
+
+		private void btnNavFileExtraction_Click(object sender, EventArgs e)
+		{
+			//functionBlockPanel.SuspendLayout();
+
+			//functionBlockPanel.Controls.RemoveByKey(clientFileExtractionControl.Name);
+
+			//titleBlockControl.TitleText = removeOrphanDocumentRecordsControl.TitleBlockText;
+			//functionBlockPanel.Controls.Add(removeOrphanDocumentRecordsControl);
+
+			//functionBlockPanel.ResumeLayout();
 		}
 	}
 }

@@ -10,11 +10,14 @@ using System.Windows.Forms;
 
 namespace UI.Controls
 {
-	public partial class UserControlBase : UserControl
+	public partial class TitleBlockControl : UserControl
 	{
-		public UserControlBase()
+		public TitleBlockControl()
 		{
 			InitializeComponent();
 		}
+
+		public string TitleText { set { titleTextLabel.Text = value; } }
+
 	}
 }
