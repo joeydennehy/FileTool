@@ -1,28 +1,37 @@
-﻿namespace DataProvider.MySQL
+﻿using System;
+using System.Resources;
+using ResourceReader = DataProvider.Resources.ResourceReader;
+
+namespace DataProvider.MySQL
 {
+
 	public class Command
 	{
-		public string SqlStatementId { get; set; }
-		public CommandParameters Parameters { get; set; }
+		private string sqlStatementId;
 
-		//private readonly MySqlCommand mySqlCommand;
-
-		public Command(string sqlStatement)
+		public string SqlStatementId
 		{
-			//MySqlConnector mySqlConnector = new MySqlConnector();
-			//mySqlCommand = new MySqlCommand(sqlStatement, mySqlConnector.PrimaryConnection);
+			get
+			{
+				return sqlStatementId;
+			}
+			set
+			{
+				if (string.IsNullOrEmpty(value))
+					throw new ArgumentException("Command Statement ID cannot be null or empty.");
+
+				sqlStatementId = value;
+
+				SqlStatement = ResourceReader.GetSql(value);
+				
+				if (string.IsNullOrEmpty(SqlStatement))
+				{
+					throw new ArgumentException(string.Format("Command Statement ID: '{0}' could not be found.", value));
+				}
+			}
 		}
 
-		public Command(string sqlStatmentId, CommandParameters parameters = null)
-		{
-			//Add resource manager here
-			//mySqlCommand.CommandText = sqlStatmentId;
-
-			//if (parameters != null)
-			//{
-			//	mySqlCommand.Parameters.AddRange(parameters.ParameterCollection);
-			//}
-		}
-
+		public string SqlStatement { get; private set; }
+		public ParameterSet ParameterCollection { get; set; }
 	}
 }

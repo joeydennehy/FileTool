@@ -128,6 +128,33 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 
+	<!--<data name ="UNIT_TEST_ONLY" xml:space="preserve">
+		<value>
+			SELECT
+	TABLE_SCHEMA
+	,TABLE_NAME
+	,COLUMN_NAME
+	,ORDINAL_POSITION
+	,COLUMN_DEFAULT
+	,IS_NULLABLE
+	,DATA_TYPE
+
+FROM
+	information_schema.COLUMNS
+WHERE
+	TABLE_SCHEMA = 'glm_dev'
+	AND
+	DATA_TYPE = 'datetime'
+		</value>
+	</data>-->
+
+	<data name ="UNIT_TEST_ONLY" xml:space="preserve">
+		<value>
+			SELECT * FROM foundation
+		</value>
+	</data>
+
+	
 	<data name="SELECT_ALL_URL_KEYS_AND_NAMES" xml:space="preserve">
 		<value>
 			SELECT
@@ -143,7 +170,7 @@
 		<value>
 			SELECT 
 				FoundationProcessId, 
-				Name 
+				foundationprocess.Name 
 			FROM 
 				foundationprocess, foundation 
 			WHERE

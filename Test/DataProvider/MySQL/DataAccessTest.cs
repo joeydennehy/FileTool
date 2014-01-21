@@ -1,7 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using DataProvider.MySQL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MySql.Data.MySqlClient;
 
 namespace Test.Database.MySQL
 {
@@ -11,13 +10,6 @@ namespace Test.Database.MySQL
 	[TestClass]
 	public class DataAccessTest
 	{
-		public DataAccessTest()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-
 		private TestContext testContextInstance;
 
 		/// <summary>
@@ -59,11 +51,24 @@ namespace Test.Database.MySQL
 		#endregion
 
 		[TestMethod]
-		public void TestMethod1()
+		public void TestGetReaderWorks()
 		{
-			//
-			// TODO: Add test logic here
-			//
+			DataAccess access = new DataAccess();
+			Command command = new Command
+			{
+				SqlStatementId = "UNIT_TEST_ONLY"
+			};
+
+			MySqlDataReader reader = access.GetReader(command);
+
+			Assert.IsNotNull(reader);
+
+			int lineCount = 0;
+			while (reader.Read())
+			{
+				lineCount++;
+			}
+			Assert.IsTrue(lineCount > 0);
 		}
 	}
 }

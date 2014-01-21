@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Database.SQL {
+namespace DataProvider.SQL {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Database.SQL {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Database.SQL.Statement", typeof(Statement).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataProvider.SQL.Statement", typeof(Statement).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -99,7 +99,7 @@ namespace Database.SQL {
         ///   Looks up a localized string similar to 
         ///			SELECT 
         ///				FoundationProcessId, 
-        ///				Name 
+        ///				foundationprocess.Name 
         ///			FROM 
         ///				foundationprocess, foundation 
         ///			WHERE
@@ -111,6 +111,17 @@ namespace Database.SQL {
         internal static string SELECT_FOUNDATION_PROCESS_INFO {
             get {
                 return ResourceManager.GetString("SELECT_FOUNDATION_PROCESS_INFO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///			SELECT * FROM foundation
+        ///		.
+        /// </summary>
+        internal static string UNIT_TEST_ONLY {
+            get {
+                return ResourceManager.GetString("UNIT_TEST_ONLY", resourceCulture);
             }
         }
     }

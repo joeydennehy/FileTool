@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MySQL\Command.cs" />
-    <Compile Include="MySQL\Connection.cs" />
+    <Compile Include="MySQL\Connector.cs" />
     <Compile Include="MySQL\DataAccess.cs" />
     <Compile Include="MySQL\Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

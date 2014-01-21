@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataProvider.MySQL;
-using Database.MySQL;
+using MySql.Data.MySqlClient;
 
 namespace API
 {
@@ -16,32 +12,41 @@ namespace API
 		//public  methods to retrieve:
 
 		//1Client URLKeys and names
-		public Dictionary<string, int> RetrieveFoundationInformation()
+		 public Dictionary<string, string> RetrieveFoundationInformation()
 		{
-			Command command = new Command("SELECT_ALL_URL_KEYS_AND_NAMES");
-
-			SqlDataReader reader = command.ExecuteReader();
-
-			Dictionary<string, int> foundations = new Dictionary<string, int>();
-
-			if (reader.HasRows)
+			Command command = new Command
 			{
-				while (reader.Read())
-				{
-					foundations.Add(reader.GetString(0) + " - " + reader.GetString(1), reader.GetInt32(0));
-				}
-			}
+				SqlStatementId = "SELECT_ALL_URL_KEYS_AND_NAMES"
+			};
 
-			return foundations;
+			DataAccess access = new DataAccess();
+
+			Dictionary<string, string> foundations = new Dictionary<string, string>();
+
+			 using (MySqlDataReader reader = access.GetReader(command))
+			 {
+				 while (reader.Read())
+				 {
+					 if (!reader.IsDBNull(0))
+					 {
+						 var foundationId = reader.GetString(0);
+						 foundations.Add(foundationId + " - " + reader.GetString(1), foundationId);
+					 }
+				 }
+			 }
+
+
+			 return foundations;
 		}
 		// 2All process IDs
 		public Dictionary<string, int> RetrieveFoundationProcessInfo(string urlKey)
 		{
-			Parameters parameters = new Parameters();
-			parameters.Add(DbType.Int32, "URL_KEY", urlKey);
-			Command command = new Command("SELECT_FOUNDATION_PROCESS_INFO", parameters);
+			ParameterSet parameters = new ParameterSet();
+			parameters.Add(DbType.String, "URL_KEY", urlKey);
+			Command command = new Command {SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO", ParameterCollection = parameters};
 
-			SqlDataReader reader = command.ExecuteReader();
+			DataAccess access = new DataAccess();
+			MySqlDataReader reader = access.GetReader(command);
 
 			Dictionary<string, int> foundationProcesses = new Dictionary<string, int>();
 
@@ -49,7 +54,8 @@ namespace API
 			{
 				while (reader.Read())
 				{
-					foundationProcesses.Add(reader.GetString(0) + " - " + reader.GetString(1), reader.GetInt32(0));
+					var foundationProcessId = reader.GetInt32(0);
+					foundationProcesses.Add(foundationProcessId + " - " + reader.GetString(1), foundationProcessId);
 				}
 			}
 
@@ -60,11 +66,12 @@ namespace API
 
 		public List<int> RetrieveApplicationProcessInfo(string foundationProcess)
 		{
-			Parameters parameters = new Parameters();
+			ParameterSet parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);
-			Command command = new Command("SELECT_APPLICATION_PROCESS_INFO", parameters);
+			Command command = new Command {SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO", ParameterCollection = parameters};
 
-			SqlDataReader reader = command.ExecuteReader();
+			DataAccess access = new DataAccess();
+			MySqlDataReader reader = access.GetReader(command);
 
 			List<int> foundationProcesses = new List<int>();
 
