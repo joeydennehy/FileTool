@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CustomButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\FunctionBlockControls\ClientFileExtractionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -92,11 +95,11 @@
     <Compile Include="Controls\TitleBlockControl.Designer.cs">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="GLMFileUtilityTool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="GLMFileUtilityTool.Designer.cs">
+      <DependentUpon>GLMFileUtilityTool.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IFunctionControlInterface.cs" />
     <Compile Include="Program.cs" />
@@ -107,14 +110,26 @@
     <EmbeddedResource Include="Controls\FunctionBlockControls\FunctionBlockBaseControl.resx">
       <DependentUpon>FunctionBlockBaseControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\RemoveOrphanDocumentRecordsControl.resx">
+      <DependentUpon>RemoveOrphanDocumentRecordsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.resx">
+      <DependentUpon>RemoveOrphanDocumentsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\RenameDirectoryControl.resx">
+      <DependentUpon>RenameDirectoryControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\RenameFilesControl.resx">
+      <DependentUpon>RenameFilesControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SourcePathBlockControl.resx">
       <DependentUpon>SourcePathBlockControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TitleBlockControl.resx">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="GLMFileUtilityTool.resx">
+      <DependentUpon>GLMFileUtilityTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
