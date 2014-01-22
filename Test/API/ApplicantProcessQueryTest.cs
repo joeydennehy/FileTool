@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using API;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -50,6 +51,14 @@ namespace Test.API
 			string valuePattern = "[0-9]+";
 			Match matchValue = Regex.Match(first.ToString(), valuePattern);
 			Assert.IsTrue(matchValue.Success);
+		}
+
+		[TestMethod]
+		public void Test_RetrieveFiles()
+		{
+			ApplicantProcessQuery query = new ApplicantProcessQuery();
+			query.RetrieveFiles("C:/Users/Joey/Desktop/","petco",query.RetrieveApplicationProcessInfo("7043"),"C:/petcocopy");
+			Assert.IsTrue(Directory.Exists("C:/petcocopy"));
 		}
 	}
 }

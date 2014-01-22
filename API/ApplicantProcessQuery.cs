@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using DataProvider.MySQL;
 using MySql.Data.MySqlClient;
+using System.Linq;
 
 namespace API
 {
@@ -81,6 +84,57 @@ namespace API
 			}
 
 			return foundationProcesses;
+		}
+
+		public void RetrieveFiles(string baseDirectory, string urlKey, List<int> applicantProcessIds, string copyDirectory)
+		{
+			if (!Directory.Exists(copyDirectory))
+			{
+				Directory.CreateDirectory(copyDirectory);
+			}
+			foreach (var applicantProcessId in applicantProcessIds)
+			{
+				string directoryPath = baseDirectory + "/" + urlKey + "/" + applicantProcessId;
+				if (Directory.Exists(directoryPath))
+				{
+					string[] files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+					bool hasOtherStages = files.Any(file => Path.GetDirectoryName(file)
+					                                                 .TrimEnd(Path.DirectorySeparatorChar)
+					                                                 .Split(Path.DirectorySeparatorChar)
+					                                                 .Last()
+					                                                 .Contains("loi") || Path.GetDirectoryName(file)
+					                                                                         .TrimEnd(Path.DirectorySeparatorChar)
+					                                                                         .Split(Path.DirectorySeparatorChar)
+					                                                                         .Last()
+					                                                                         .Contains("qualification"));
+					// Copy the files and overwrite destination files if they already exist. 
+					foreach (string file in files)
+					{
+						// Use static Path methods to extract only the file name from the path.
+						string stage = Path.GetDirectoryName(file)
+						                      .TrimEnd(Path.DirectorySeparatorChar)
+						                      .Split(Path.DirectorySeparatorChar)
+						                      .Last();
+						string fileName = string.Format("{0}{1}_{2}",applicantProcessId, hasOtherStages ? "_" + stage : "", Path.GetFileName(file));
+						string destFile = Path.Combine(copyDirectory, fileName);
+						
+						if (File.Exists(destFile))
+						{
+							int interation = 1;
+							while (!File.Exists(destFile))
+							{
+								destFile = destFile + "(" + interation + ")";
+								++interation;
+							}
+						}
+						File.Copy(file, destFile, true);
+					}
+				}
+				else
+				{
+					Console.WriteLine("Source path does not exist!");
+				}
+			}
 		}
 
 	 }
