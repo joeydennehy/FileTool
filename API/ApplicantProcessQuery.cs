@@ -38,7 +38,7 @@ namespace API
 			 return foundations;
 		}
 		// 2All process IDs
-		public Dictionary<string, int> RetrieveFoundationProcessInfo(string urlKey)
+		 public Dictionary<string, string> RetrieveFoundationProcessInfo(string urlKey)
 		{
 			ParameterSet parameters = new ParameterSet();
 			parameters.Add(DbType.String, "URL_KEY", urlKey);
@@ -46,13 +46,13 @@ namespace API
 
 			DataAccess access = new DataAccess();
 
-			Dictionary<string, int> foundationProcesses = new Dictionary<string, int>();
+			Dictionary<string, string> foundationProcesses = new Dictionary<string, string>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				while (reader.Read())
 				{
-					var foundationProcessId = reader.GetInt32(0);
+					var foundationProcessId = reader.GetString(0);
 					foundationProcesses.Add(foundationProcessId + " - " + reader.GetString(1), foundationProcessId);
 				}
 			}
