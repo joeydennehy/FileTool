@@ -40,65 +40,73 @@
 			// foundationIdComboBoxLabel
 			// 
 			this.foundationIdComboBoxLabel.AutoSize = true;
-			this.foundationIdComboBoxLabel.Location = new System.Drawing.Point(14, 14);
+			this.foundationIdComboBoxLabel.Location = new System.Drawing.Point(19, 17);
+			this.foundationIdComboBoxLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.foundationIdComboBoxLabel.Name = "foundationIdComboBoxLabel";
-			this.foundationIdComboBoxLabel.Size = new System.Drawing.Size(77, 13);
+			this.foundationIdComboBoxLabel.Size = new System.Drawing.Size(100, 17);
 			this.foundationIdComboBoxLabel.TabIndex = 0;
 			this.foundationIdComboBoxLabel.Text = "Foundation ID:";
 			// 
 			// foundationIdComboBox
 			// 
 			this.foundationIdComboBox.FormattingEnabled = true;
-			this.foundationIdComboBox.Location = new System.Drawing.Point(17, 30);
+			this.foundationIdComboBox.Location = new System.Drawing.Point(23, 37);
+			this.foundationIdComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.foundationIdComboBox.Name = "foundationIdComboBox";
-			this.foundationIdComboBox.Size = new System.Drawing.Size(584, 21);
+			this.foundationIdComboBox.Size = new System.Drawing.Size(777, 24);
 			this.foundationIdComboBox.TabIndex = 1;
+			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.FoundationDropDown_SelectedValueChanged);
 			// 
 			// processIdComboBoxLabel
 			// 
 			this.processIdComboBoxLabel.AutoSize = true;
-			this.processIdComboBoxLabel.Location = new System.Drawing.Point(14, 63);
+			this.processIdComboBoxLabel.Location = new System.Drawing.Point(19, 78);
+			this.processIdComboBoxLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.processIdComboBoxLabel.Name = "processIdComboBoxLabel";
-			this.processIdComboBoxLabel.Size = new System.Drawing.Size(62, 13);
+			this.processIdComboBoxLabel.Size = new System.Drawing.Size(80, 17);
 			this.processIdComboBoxLabel.TabIndex = 2;
 			this.processIdComboBoxLabel.Text = "Process ID:";
 			// 
 			// processIdComboBox
 			// 
 			this.processIdComboBox.FormattingEnabled = true;
-			this.processIdComboBox.Location = new System.Drawing.Point(17, 79);
+			this.processIdComboBox.Location = new System.Drawing.Point(23, 97);
+			this.processIdComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.processIdComboBox.Name = "processIdComboBox";
-			this.processIdComboBox.Size = new System.Drawing.Size(584, 21);
+			this.processIdComboBox.Size = new System.Drawing.Size(777, 24);
 			this.processIdComboBox.TabIndex = 3;
 			// 
 			// outputDestinationTextBoxLabel
 			// 
 			this.outputDestinationTextBoxLabel.AutoSize = true;
-			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 112);
+			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(19, 138);
+			this.outputDestinationTextBoxLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.outputDestinationTextBoxLabel.Name = "outputDestinationTextBoxLabel";
-			this.outputDestinationTextBoxLabel.Size = new System.Drawing.Size(98, 13);
+			this.outputDestinationTextBoxLabel.Size = new System.Drawing.Size(130, 17);
 			this.outputDestinationTextBoxLabel.TabIndex = 4;
 			this.outputDestinationTextBoxLabel.Text = "Output Destination:";
 			// 
 			// outputDestinationTextBox
 			// 
-			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 128);
+			this.outputDestinationTextBox.Location = new System.Drawing.Point(23, 158);
+			this.outputDestinationTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.outputDestinationTextBox.Name = "outputDestinationTextBox";
-			this.outputDestinationTextBox.Size = new System.Drawing.Size(548, 20);
+			this.outputDestinationTextBox.Size = new System.Drawing.Size(729, 22);
 			this.outputDestinationTextBox.TabIndex = 5;
 			// 
 			// outputDesitinationBrowseButton
 			// 
-			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(571, 127);
+			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(761, 156);
+			this.outputDesitinationBrowseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
-			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
+			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(39, 28);
 			this.outputDesitinationBrowseButton.TabIndex = 6;
 			this.outputDesitinationBrowseButton.Text = "...";
 			this.outputDesitinationBrowseButton.UseVisualStyleBackColor = true;
 			// 
 			// ClientFileExtractionControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.Controls.Add(this.outputDesitinationBrowseButton);
 			this.Controls.Add(this.outputDestinationTextBox);
 			this.Controls.Add(this.outputDestinationTextBoxLabel);
@@ -106,6 +114,7 @@
 			this.Controls.Add(this.processIdComboBoxLabel);
 			this.Controls.Add(this.foundationIdComboBox);
 			this.Controls.Add(this.foundationIdComboBoxLabel);
+			this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
 			this.Name = "ClientFileExtractionControl";
 			this.ResumeLayout(false);
 			this.PerformLayout();
