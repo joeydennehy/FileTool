@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using API;
 
@@ -14,7 +8,15 @@ namespace UI.Controls.FunctionBlockControls
 	public partial class ClientFileExtractionControl : FunctionBlockBaseControl
 	{
 
+		#region Member Variables
+
 		private string outputDestination;
+		private string foundationUrlKey;
+		private int foundationProcessId;
+
+		#endregion
+
+		#region Constructor
 
 		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent)
 		{
@@ -22,43 +24,46 @@ namespace UI.Controls.FunctionBlockControls
 			Initialize();
 		}
 
-		private void Initialize()
-		{
-			ApplicantProcessQuery data = new ApplicantProcessQuery();
-			BindData(foundationIdComboBox, data.RetrieveFoundationInformation());
-		}
+		#endregion
+
+		#region Properties
 
 		public override string TitleBlockText { get { return "Extract Client Files"; } }
 
-		protected override void OnPaint(PaintEventArgs pe)
-		{
-			base.OnPaint(pe);
-		}
+		#endregion
+		
+		#region Private Methods
 
-		private void FoundationDropDown_SelectedValueChanged(object sender, EventArgs e)
-		{
-			ApplicantProcessQuery data = new ApplicantProcessQuery();
-			var urlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-			BindData(processIdComboBox, data.RetrieveFoundationProcessInfo(urlKey));
-		}
-
-		private void BindData(ComboBox comboBox, Dictionary<string, string> source)
+		private static void BindData(ComboBox comboBox, Dictionary<string, string> source)
 		{
 			comboBox.DataSource = new BindingSource(source, null);
 			comboBox.DisplayMember = "Key";
 			comboBox.ValueMember = "Value";
 		}
 
-		private void CopyFilesButtonClick(object sender, EventArgs e)
+		private void Initialize()
 		{
-			//Initiate API Call here
+			ApplicantProcessQuery data = new ApplicantProcessQuery();
+			BindData(foundationIdComboBox, data.BuildFoundationDictionary());
 		}
 
-		private void OutputDesitinationBrowseButtonClick(object sender, EventArgs e)
+		#region Event Handlers
+
+		private void ButtonClick_CopyFiles(object sender, EventArgs e)
+		{
+			//FileProcessing.CopyFilesToDestination(
+			//	ParentControl.SourceLocation, 
+			//	foundationUrlKey, 
+			//	new List<int> { foundationProcessId }, 
+			//	outputDestination
+			//);
+		}
+
+		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
 		{
 			FolderBrowserDialog folderBrowser = new FolderBrowserDialog
 			{
-				ShowNewFolderButton = false
+				ShowNewFolderButton = true
 			};
 
 			DialogResult result = folderBrowser.ShowDialog();
@@ -68,5 +73,32 @@ namespace UI.Controls.FunctionBlockControls
 				outputDestinationTextBox.Text = outputDestination;
 			}
 		}
+
+		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
+		{
+			foundationUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+
+			ApplicantProcessQuery data = new ApplicantProcessQuery();
+			BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(foundationUrlKey));
+		}
+
+		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)
+		{
+			Int32.TryParse(((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value, out foundationProcessId);
+		}
+
+		#endregion
+
+		#endregion
+
+		//TODO: handle page validation
+		//TODO: Add task completion notification
+		//TODO: Get count of files to copy and display
+		//TODO: Set up display of task output
+		//TODO: NTH: display list of files to be output
+		//TODO: need to validate the selected path
+			//TODO: need to add ontextchanged event handlers for textbox controls
+		//TODO: add and configure log4net
+
 	}
 }

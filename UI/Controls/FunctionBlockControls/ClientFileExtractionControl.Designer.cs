@@ -36,6 +36,7 @@
 			this.outputDestinationTextBox = new System.Windows.Forms.TextBox();
 			this.outputDesitinationBrowseButton = new System.Windows.Forms.Button();
 			this.copyFilesButton = new System.Windows.Forms.Button();
+			this.fileCountLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// foundationIdComboBoxLabel
@@ -54,7 +55,7 @@
 			this.foundationIdComboBox.Name = "foundationIdComboBox";
 			this.foundationIdComboBox.Size = new System.Drawing.Size(616, 21);
 			this.foundationIdComboBox.TabIndex = 1;
-			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.FoundationDropDown_SelectedValueChanged);
+			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedValueChanged_FoundationDropDown);
 			// 
 			// processIdComboBoxLabel
 			// 
@@ -72,11 +73,12 @@
 			this.processIdComboBox.Name = "processIdComboBox";
 			this.processIdComboBox.Size = new System.Drawing.Size(616, 21);
 			this.processIdComboBox.TabIndex = 3;
+			this.processIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_ProcessIdComboBox);
 			// 
 			// outputDestinationTextBoxLabel
 			// 
 			this.outputDestinationTextBoxLabel.AutoSize = true;
-			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 112);
+			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 134);
 			this.outputDestinationTextBoxLabel.Name = "outputDestinationTextBoxLabel";
 			this.outputDestinationTextBoxLabel.Size = new System.Drawing.Size(98, 13);
 			this.outputDestinationTextBoxLabel.TabIndex = 4;
@@ -84,34 +86,45 @@
 			// 
 			// outputDestinationTextBox
 			// 
-			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 128);
+			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 150);
 			this.outputDestinationTextBox.Name = "outputDestinationTextBox";
 			this.outputDestinationTextBox.Size = new System.Drawing.Size(580, 20);
 			this.outputDestinationTextBox.TabIndex = 5;
 			// 
 			// outputDesitinationBrowseButton
 			// 
-			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 127);
+			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 149);
 			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
 			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
 			this.outputDesitinationBrowseButton.TabIndex = 6;
 			this.outputDesitinationBrowseButton.Text = "...";
 			this.outputDesitinationBrowseButton.UseVisualStyleBackColor = true;
-			this.outputDesitinationBrowseButton.Click += new System.EventHandler(this.OutputDesitinationBrowseButtonClick);
+			this.outputDesitinationBrowseButton.Click += new System.EventHandler(this.ButtonClick_OutputDestinationBrowse);
 			// 
 			// copyFilesButton
 			// 
-			this.copyFilesButton.Location = new System.Drawing.Point(17, 155);
+			this.copyFilesButton.Location = new System.Drawing.Point(17, 177);
 			this.copyFilesButton.Name = "copyFilesButton";
 			this.copyFilesButton.Size = new System.Drawing.Size(75, 23);
 			this.copyFilesButton.TabIndex = 7;
 			this.copyFilesButton.Text = "Copy Files";
 			this.copyFilesButton.UseVisualStyleBackColor = true;
-			this.copyFilesButton.Click += new System.EventHandler(this.CopyFilesButtonClick);
+			this.copyFilesButton.Click += new System.EventHandler(this.ButtonClick_CopyFiles);
+			// 
+			// fileCountLinkLabel
+			// 
+			this.fileCountLinkLabel.AutoSize = true;
+			this.fileCountLinkLabel.Location = new System.Drawing.Point(17, 107);
+			this.fileCountLinkLabel.Name = "fileCountLinkLabel";
+			this.fileCountLinkLabel.Size = new System.Drawing.Size(96, 13);
+			this.fileCountLinkLabel.TabIndex = 8;
+			this.fileCountLinkLabel.TabStop = true;
+			this.fileCountLinkLabel.Text = "[No Files Selected]";
 			// 
 			// ClientFileExtractionControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.Controls.Add(this.fileCountLinkLabel);
 			this.Controls.Add(this.copyFilesButton);
 			this.Controls.Add(this.outputDesitinationBrowseButton);
 			this.Controls.Add(this.outputDestinationTextBox);
@@ -138,5 +151,6 @@
 		private System.Windows.Forms.TextBox outputDestinationTextBox;
 		private System.Windows.Forms.Button outputDesitinationBrowseButton;
 		private System.Windows.Forms.Button copyFilesButton;
+		private System.Windows.Forms.LinkLabel fileCountLinkLabel;
 	}
 }

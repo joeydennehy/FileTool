@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL\Statement.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Statement.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>

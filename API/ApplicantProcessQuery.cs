@@ -10,11 +10,7 @@ namespace API
 {
 	public class ApplicantProcessQuery
 	{
-
-		//public  methods to retrieve:
-
-		//1Client URLKeys and names
-		public Dictionary<string, string> RetrieveFoundationInformation()
+		public Dictionary<string, string> BuildFoundationDictionary()
 		{
 			Command command = new Command {SqlStatementId = "SELECT_ALL_URL_KEYS_AND_NAMES"};
 
@@ -26,24 +22,25 @@ namespace API
 			{
 				while (reader.Read())
 				{
-					if (!reader.IsDBNull(0))
-					{
-						var foundationId = reader.GetString(0);
-						foundations.Add(foundationId + " - " + reader.GetString(1), foundationId);
-					}
+					string foundationUrlKey = !reader.IsDBNull(0) ? reader.GetString(0) : string.Empty;
+					string foundationName = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty;
+
+					foundations.Add(string.Format("{0} - {1}", foundationUrlKey, foundationName), foundationUrlKey);
 				}
 			}
-
 
 			return foundations;
 		}
 
-		// 2All process IDs
-		public Dictionary<string, string> RetrieveFoundationProcessInfo(string urlKey)
+		public Dictionary<string, string> BuildFoundationProcessInfoDictionary(string urlKey)
 		{
 			ParameterSet parameters = new ParameterSet();
 			parameters.Add(DbType.String, "URL_KEY", urlKey);
-			Command command = new Command {SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO", ParameterCollection = parameters};
+			Command command = new Command
+			{
+				SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO", 
+				ParameterCollection = parameters
+			};
 
 			DataAccess access = new DataAccess();
 
@@ -67,7 +64,11 @@ namespace API
 		{
 			ParameterSet parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);
-			Command command = new Command {SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO", ParameterCollection = parameters};
+			Command command = new Command
+			{
+				SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO", 
+				ParameterCollection = parameters
+			};
 
 			DataAccess access = new DataAccess();
 
@@ -84,60 +85,7 @@ namespace API
 			return foundationProcesses;
 		}
 
-		public void RetrieveFiles(string baseDirectory, string urlKey, List<int> applicantProcessIds, string copyDirectory)
-		{
-			if (!Directory.Exists(copyDirectory))
-			{
-				Directory.CreateDirectory(copyDirectory);
-			}
-			List<string> files = new List<string>();
-			foreach (var applicantProcessId in applicantProcessIds)
-			{
-				string directoryPath = baseDirectory + "/" + urlKey + "/" + applicantProcessId;
-				if (Directory.Exists(directoryPath))
-				{
-					files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
-				}
-			}
-
-
-			bool hasOtherStages = files.Any(file => Path.GetDirectoryName(file)
-			                                            .TrimEnd(Path.DirectorySeparatorChar)
-			                                            .Split(Path.DirectorySeparatorChar)
-			                                            .Last()
-			                                            .Contains("loi") || Path.GetDirectoryName(file)
-			                                                                    .TrimEnd(Path.DirectorySeparatorChar)
-			                                                                    .Split(Path.DirectorySeparatorChar)
-			                                                                    .Last()
-			                                                                    .Contains("qualification"));
-			// Copy the files and overwrite destination files if they already exist. 
-			foreach (string file in files)
-			{
-				// Use static Path methods to extract only the file name from the path.
-				string[] directory = Path.GetDirectoryName(file)
-				                         .TrimEnd(Path.DirectorySeparatorChar)
-				                         .Split(Path.DirectorySeparatorChar);
-				string stage = directory.Last();
-				string applicantProcessId = directory[directory.Count() - 2];
-				string fileName = string.Format("{0}{1}_{2}", applicantProcessId, hasOtherStages ? "_" + stage : "",
-				                                Path.GetFileName(file));
-				string destFile = Path.Combine(copyDirectory, fileName);
-
-				if (File.Exists(destFile))
-				{
-					int interation = 1;
-					string tempFullFileName = destFile;
-					while (!File.Exists(tempFullFileName))
-					{
-						string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + interation + ")" + Path.GetExtension(fileName);
-						tempFullFileName = Path.Combine(copyDirectory, tempFileName);
-						++interation;
-					}
-					destFile = tempFullFileName;
-				}
-				File.Copy(file, destFile, true);
-			}
-		}
+		
 
 	}
 

@@ -56,6 +56,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="API\ApplicantProcessQueryTest.cs" />
+    <Compile Include="API\FileProcessingTest.cs" />
     <Compile Include="DataProvider\MySQL\commandTest.cs" />
     <Compile Include="DataProvider\MySQL\DataAccessTest.cs" />
     <Compile Include="DataProvider\MySQL\ParameterTest.cs" />
