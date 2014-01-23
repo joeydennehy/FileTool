@@ -137,9 +137,9 @@
 			// functionBlockPanel
 			// 
 			this.functionBlockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.functionBlockPanel.Location = new System.Drawing.Point(0, 115);
+			this.functionBlockPanel.Location = new System.Drawing.Point(0, 100);
 			this.functionBlockPanel.Name = "functionBlockPanel";
-			this.functionBlockPanel.Size = new System.Drawing.Size(645, 422);
+			this.functionBlockPanel.Size = new System.Drawing.Size(645, 437);
 			this.functionBlockPanel.TabIndex = 2;
 			// 
 			// sourceBlockPanel
@@ -147,7 +147,7 @@
 			this.sourceBlockPanel.Dock = System.Windows.Forms.DockStyle.Top;
 			this.sourceBlockPanel.Location = new System.Drawing.Point(0, 45);
 			this.sourceBlockPanel.Name = "sourceBlockPanel";
-			this.sourceBlockPanel.Size = new System.Drawing.Size(645, 70);
+			this.sourceBlockPanel.Size = new System.Drawing.Size(645, 55);
 			this.sourceBlockPanel.TabIndex = 1;
 			// 
 			// titleBlockPanel

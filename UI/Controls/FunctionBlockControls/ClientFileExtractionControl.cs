@@ -14,6 +14,8 @@ namespace UI.Controls.FunctionBlockControls
 	public partial class ClientFileExtractionControl : FunctionBlockBaseControl
 	{
 
+		private string outputDestination;
+
 		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
@@ -47,6 +49,21 @@ namespace UI.Controls.FunctionBlockControls
 		private void CopyFilesButtonClick(object sender, EventArgs e)
 		{
 			//Initiate API Call here
+		}
+
+		private void OutputDesitinationBrowseButtonClick(object sender, EventArgs e)
+		{
+			FolderBrowserDialog folderBrowser = new FolderBrowserDialog
+			{
+				ShowNewFolderButton = false
+			};
+
+			DialogResult result = folderBrowser.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				outputDestination = folderBrowser.SelectedPath;
+				outputDestinationTextBox.Text = outputDestination;
+			}
 		}
 	}
 }

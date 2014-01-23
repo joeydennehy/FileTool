@@ -52,7 +52,7 @@
 			this.foundationIdComboBox.FormattingEnabled = true;
 			this.foundationIdComboBox.Location = new System.Drawing.Point(17, 30);
 			this.foundationIdComboBox.Name = "foundationIdComboBox";
-			this.foundationIdComboBox.Size = new System.Drawing.Size(584, 21);
+			this.foundationIdComboBox.Size = new System.Drawing.Size(616, 21);
 			this.foundationIdComboBox.TabIndex = 1;
 			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.FoundationDropDown_SelectedValueChanged);
 			// 
@@ -70,7 +70,7 @@
 			this.processIdComboBox.FormattingEnabled = true;
 			this.processIdComboBox.Location = new System.Drawing.Point(17, 79);
 			this.processIdComboBox.Name = "processIdComboBox";
-			this.processIdComboBox.Size = new System.Drawing.Size(584, 21);
+			this.processIdComboBox.Size = new System.Drawing.Size(616, 21);
 			this.processIdComboBox.TabIndex = 3;
 			// 
 			// outputDestinationTextBoxLabel
@@ -86,17 +86,18 @@
 			// 
 			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 128);
 			this.outputDestinationTextBox.Name = "outputDestinationTextBox";
-			this.outputDestinationTextBox.Size = new System.Drawing.Size(548, 20);
+			this.outputDestinationTextBox.Size = new System.Drawing.Size(580, 20);
 			this.outputDestinationTextBox.TabIndex = 5;
 			// 
 			// outputDesitinationBrowseButton
 			// 
-			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(571, 127);
+			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 127);
 			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
 			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
 			this.outputDesitinationBrowseButton.TabIndex = 6;
 			this.outputDesitinationBrowseButton.Text = "...";
 			this.outputDesitinationBrowseButton.UseVisualStyleBackColor = true;
+			this.outputDesitinationBrowseButton.Click += new System.EventHandler(this.OutputDesitinationBrowseButtonClick);
 			// 
 			// copyFilesButton
 			// 
@@ -121,6 +122,7 @@
 			this.Controls.Add(this.foundationIdComboBoxLabel);
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "ClientFileExtractionControl";
+			this.Size = new System.Drawing.Size(662, 422);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
