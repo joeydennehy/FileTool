@@ -22,7 +22,7 @@ namespace UI
 
 		#region Client Controls
 
-		private SourcePathBlockControl sourcePathBlockControl;
+		public SourcePathBlockControl sourcePathBlockControl;
 		private TitleBlockControl titleBlockControl;
 
 		private ClientFileExtractionControl clientFileExtractionControl;
