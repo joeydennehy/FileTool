@@ -35,17 +35,20 @@ namespace UI
 
 		#endregion
 
+		public string SourceLocation { get; set; }
+
 		public GLMFileUtilityTool()
 		{
+			//TODO - NTH: Center in screen, need to hand code that.
 			InitializeComponent();
-
+			ShowInTaskbar = true;
 			Initialize();
 		}
 
 		private void Initialize()
 		{
 			//Set up Top Panel Block controls
-			sourcePathBlockControl = new SourcePathBlockControl();
+			sourcePathBlockControl = new SourcePathBlockControl(this);
 			titleBlockControl = new TitleBlockControl();
 
 			titleBlockPanel.SuspendLayout();
@@ -58,11 +61,11 @@ namespace UI
 
 			//Set up the functional block controls
 			panelControls = new Dictionary<string, FunctionBlockBaseControl>();
-			clientFileExtractionControl = new ClientFileExtractionControl();
-			removeOrphanDocumentRecordsControl = new RemoveOrphanDocumentRecordsControl();
-			removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl();
-			renameDirectoryControl = new RenameDirectoryControl();
-			renameFilesControl = new RenameFilesControl();
+			clientFileExtractionControl = new ClientFileExtractionControl(this);
+			removeOrphanDocumentRecordsControl = new RemoveOrphanDocumentRecordsControl(this);
+			removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl(this);
+			renameDirectoryControl = new RenameDirectoryControl(this);
+			renameFilesControl = new RenameFilesControl(this);
 
 			panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
 			panelControls.Add(removeOrphanDocumentRecordsControl.Name, removeOrphanDocumentRecordsControl);
@@ -129,5 +132,11 @@ namespace UI
 			SetCurrentNavButton(btnSender);
 		}
 
+		protected override void OnShown(EventArgs e)
+		{
+			sourcePathBlockControl.Setup();
+			base.OnShown(e);
+
+		}
 	}
 }

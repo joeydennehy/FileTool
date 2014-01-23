@@ -57,6 +57,7 @@
 			this.browseButton.TabIndex = 2;
 			this.browseButton.Text = "...";
 			this.browseButton.UseVisualStyleBackColor = true;
+			this.browseButton.Click += new System.EventHandler(this.BrowseButtonClick);
 			// 
 			// SourcePathBlockControl
 			// 

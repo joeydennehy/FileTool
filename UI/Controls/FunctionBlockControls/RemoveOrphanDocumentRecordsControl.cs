@@ -12,7 +12,7 @@ namespace UI.Controls.FunctionBlockControls
 {
 	public partial class RemoveOrphanDocumentRecordsControl : FunctionBlockBaseControl
 	{
-		public RemoveOrphanDocumentRecordsControl()
+		public RemoveOrphanDocumentRecordsControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
 		}

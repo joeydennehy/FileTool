@@ -14,7 +14,7 @@ namespace UI.Controls.FunctionBlockControls
 	public partial class ClientFileExtractionControl : FunctionBlockBaseControl
 	{
 
-		public ClientFileExtractionControl()
+		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
 			Initialize();
@@ -42,6 +42,11 @@ namespace UI.Controls.FunctionBlockControls
 			processIdComboBox.DataSource = new BindingSource(data.RetrieveFoundationProcessInfo(urlKey), null);
 			processIdComboBox.DisplayMember = "Key";
 			processIdComboBox.ValueMember = "Value";
+		}
+
+		private void CopyFilesButtonClick(object sender, EventArgs e)
+		{
+			//Initiate API Call here
 		}
 	}
 }

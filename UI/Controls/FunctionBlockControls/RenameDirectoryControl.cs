@@ -12,7 +12,7 @@ namespace UI.Controls.FunctionBlockControls
 {
 	public partial class RenameDirectoryControl : FunctionBlockBaseControl
 	{
-		public RenameDirectoryControl()
+		public RenameDirectoryControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
 		}

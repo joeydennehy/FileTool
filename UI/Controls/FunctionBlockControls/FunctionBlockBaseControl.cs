@@ -15,10 +15,16 @@ namespace UI.Controls.FunctionBlockControls
 		public virtual bool EnableSourceBlock { get; private set; }
 		public virtual string TitleBlockText { get; private set; }
 
+		protected GLMFileUtilityTool ParentControl;
+
 		protected FunctionBlockBaseControl()
 		{
 			InitializeComponent();
+		}
 
+		protected FunctionBlockBaseControl(GLMFileUtilityTool parent) : this()
+		{
+			ParentControl = parent;
 			EnableSourceBlock = true;
 			TitleBlockText = string.Empty;
 		}
