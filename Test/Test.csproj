@@ -55,6 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="API\ApplicantProcessQueryTest.cs" />
     <Compile Include="DataProvider\MySQL\commandTest.cs" />
     <Compile Include="DataProvider\MySQL\DataAccessTest.cs" />
     <Compile Include="DataProvider\MySQL\ParameterTest.cs" />
@@ -62,6 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\API\API.csproj">
+      <Project>{f8a99455-bf64-475c-8c76-c78ae2cf8a49}</Project>
+      <Name>API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Database\DataProvider.csproj">
       <Project>{888311c0-b17f-4b74-825a-dfcf73d16cf3}</Project>
       <Name>DataProvider</Name>

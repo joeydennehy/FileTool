@@ -25,9 +25,7 @@ namespace UI.Controls.FunctionBlockControls
 		private void Initialize()
 		{
 			ApplicantProcessQuery data = new ApplicantProcessQuery();
-			foundationIdComboBox.DataSource = new BindingSource(data.RetrieveFoundationInformation(), null);
-			foundationIdComboBox.DisplayMember = "Key";
-			foundationIdComboBox.ValueMember = "Value";
+			BindData(foundationIdComboBox, data.RetrieveFoundationInformation());
 		}
 
 		public override string TitleBlockText { get { return "Extract Client Files"; } }
@@ -41,9 +39,14 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			ApplicantProcessQuery data = new ApplicantProcessQuery();
 			var urlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-			processIdComboBox.DataSource = new BindingSource(data.RetrieveFoundationProcessInfo(urlKey), null);
-			processIdComboBox.DisplayMember = "Key";
-			processIdComboBox.ValueMember = "Value";
+			BindData(processIdComboBox, data.RetrieveFoundationProcessInfo(urlKey));
+		}
+
+		private void BindData(ComboBox comboBox, Dictionary<string, string> source)
+		{
+			comboBox.DataSource = new BindingSource(source, null);
+			comboBox.DisplayMember = "Key";
+			comboBox.ValueMember = "Value";
 		}
 
 		private void CopyFilesButtonClick(object sender, EventArgs e)

@@ -84,9 +84,7 @@ namespace DataProvider.SQL {
         ///			FROM 
         ///				applicantprocess 
         ///			WHERE
-        ///				FoundatonProcessId = @FOUNDATION_PROCESS
-        ///			ORDER BY 
-        ///				Name
+        ///				FoundationProcessId = @FOUNDATION_PROCESS
         ///		.
         /// </summary>
         internal static string SELECT_APPLICATION_PROCESS_INFO {

@@ -186,9 +186,7 @@ WHERE
 			FROM 
 				applicantprocess 
 			WHERE
-				FoundatonProcessId = @FOUNDATION_PROCESS
-			ORDER BY 
-				Name
+				FoundationProcessId = @FOUNDATION_PROCESS
 		</value>
 	</data>
 	
