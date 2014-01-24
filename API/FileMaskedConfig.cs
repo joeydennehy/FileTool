@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace API
 {
-	class FileMaskedConfig : ConfigurationSection
+	public class FileMaskedConfig : ConfigurationSection
 	{
 		private static readonly Hashtable settings = (Hashtable)ConfigurationManager.GetSection("FileMaskedConfig");
 

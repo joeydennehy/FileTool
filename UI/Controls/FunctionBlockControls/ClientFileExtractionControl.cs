@@ -72,6 +72,7 @@ namespace UI.Controls.FunctionBlockControls
 
 			data = new ApplicantProcessQuery();
 			BindData(foundationIdComboBox, data.BuildFoundationDictionary());
+			BindData(fileTypeComboBox, FileMaskedConfig.Settings);
 		}
 		
 		private void SetProcessingFolderText()
