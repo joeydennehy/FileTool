@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API
@@ -17,9 +18,15 @@ namespace API
 		public string OutputDirectory { get; set; }
 		public string FileMask { get; set; }
 		public List<string> Files { get; set; }
+		public long TotalSize { get; set; }
  
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
+
+		public string RootProcessDirectory
+		{
+			get { return string.Format("{0}\\{1}\\", BaseDirectory, FoundationUrlKey); }
+		}
 
 		public FileProcessingState()
 		{
@@ -36,53 +43,63 @@ namespace API
 				&& (FoundationApplicantProcessIds != null && FoundationApplicantProcessIds.Count != 0)
 			;
 		}
-
 	}
 
 	public static class FileProcessing
 	{
-		public static void SetFilelist(FileProcessingState fileProcessingInfo)
+		public static void SetFilelist(FileProcessingState state)
 		{
-			fileProcessingInfo.Files = new List<string>();
-			foreach (var applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
+			state.Files = new List<string>();
+			state.TotalSize = 0;
+
+			foreach (var applicantProcessId in state.FoundationApplicantProcessIds)
 			{
-				
-				string directoryPath = fileProcessingInfo.BaseDirectory + "\\" + fileProcessingInfo.FoundationUrlKey + "\\" + applicantProcessId;
+				string directoryPath = state.RootProcessDirectory + applicantProcessId;
 				if (Directory.Exists(directoryPath))
 				{
-					fileProcessingInfo.Files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
+					state.Files.AddRange(Directory.GetFiles(directoryPath, state.FileMask, SearchOption.AllDirectories));
+					state.TotalSize += DirectorySize(directoryPath, true);
 				}
 			}
 		}
 
-		public static void CopyFilesToDestination(FileProcessingState fileProcessingInfo)
+		private static long DirectorySize(string sourceDir, bool recurse)
 		{
-			if (!Directory.Exists(fileProcessingInfo.OutputDirectory))
+			long size = 0;
+			string[] fileEntries = Directory.GetFiles(sourceDir);
+
+			foreach (string fileName in fileEntries)
 			{
-				Directory.CreateDirectory(fileProcessingInfo.OutputDirectory);
+				Interlocked.Add(ref size, (new FileInfo(fileName)).Length);
 			}
 
-			string directoryPath;
-			List<string> files = new List<string>();
-			foreach (var applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
+			if (recurse)
 			{
-				directoryPath = fileProcessingInfo.BaseDirectory + "/" + fileProcessingInfo.FoundationUrlKey + "/" + applicantProcessId;
-				if (Directory.Exists(directoryPath))
+				string[] subdirEntries = Directory.GetDirectories(sourceDir);
+
+				Parallel.For<long>(0, subdirEntries.Length, () => 0, (i, loop, subtotal) =>
 				{
-					files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
-				}
+					if ((File.GetAttributes(subdirEntries[i]) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint)
+					{
+						subtotal += DirectorySize(subdirEntries[i], true);
+						return subtotal;
+					}
+					return 0;
+				},
+					 (x) => Interlocked.Add(ref size, x)
+				);
 			}
-			//List<string> files = new List<string>();
-			//foreach (var applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
-			//{
-			//	string directoryPath = fileProcessingInfo.BaseDirectory + "/" + fileProcessingInfo.FoundationUrlKey + "/" + applicantProcessId;
-			//	if (Directory.Exists(directoryPath))
-			//	{
-			//		files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
-			//	}
-			//}
+			return size;
+		}
 
-			bool hasOtherStages = files.Any(
+		public static void CopyFilesToDestination(FileProcessingState state)
+		{
+			if (!Directory.Exists(state.OutputDirectory))
+			{
+				Directory.CreateDirectory(state.OutputDirectory);
+			}
+
+			bool hasOtherStages = state.Files.Any(
 				file => Path.GetDirectoryName(file)
 					.TrimEnd(Path.DirectorySeparatorChar)
 					.Split(Path.DirectorySeparatorChar)
@@ -95,7 +112,7 @@ namespace API
 					.Contains("qualification"));
 
 			// Copy the files and overwrite destination files if they already exist. 
-			foreach (string file in files)
+			foreach (string file in state.Files)
 			{
 				// Use static Path methods to extract only the file name from the path.
 				string[] directory = Path.GetDirectoryName(file)
@@ -105,7 +122,7 @@ namespace API
 				string applicantProcessId = directory[directory.Count() - 2];
 				string fileName = string.Format("{0}{1}_{2}", applicantProcessId, hasOtherStages ? "_" + stage : "",
 														  Path.GetFileName(file));
-				string destFile = Path.Combine(fileProcessingInfo.OutputDirectory, fileName);
+				string destFile = Path.Combine(state.OutputDirectory, fileName);
 
 				if (File.Exists(destFile))
 				{
@@ -114,7 +131,7 @@ namespace API
 					while (!File.Exists(tempFullFileName))
 					{
 						string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + interation + ")" + Path.GetExtension(fileName);
-						tempFullFileName = Path.Combine(fileProcessingInfo.OutputDirectory, tempFileName);
+						tempFullFileName = Path.Combine(state.OutputDirectory, tempFileName);
 						++interation;
 					}
 					destFile = tempFullFileName;

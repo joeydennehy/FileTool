@@ -38,6 +38,9 @@
 			this.copyFilesButton = new System.Windows.Forms.Button();
 			this.fileCountLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.ApplicantProcessIdsLabel = new System.Windows.Forms.Label();
+			this.rootProcessingFolder = new System.Windows.Forms.Label();
+			this.fileTypeComboBox = new System.Windows.Forms.ComboBox();
+			this.fileTypesLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// foundationIdComboBoxLabel
@@ -61,7 +64,7 @@
 			// processIdComboBoxLabel
 			// 
 			this.processIdComboBoxLabel.AutoSize = true;
-			this.processIdComboBoxLabel.Location = new System.Drawing.Point(14, 63);
+			this.processIdComboBoxLabel.Location = new System.Drawing.Point(14, 85);
 			this.processIdComboBoxLabel.Name = "processIdComboBoxLabel";
 			this.processIdComboBoxLabel.Size = new System.Drawing.Size(62, 13);
 			this.processIdComboBoxLabel.TabIndex = 2;
@@ -70,16 +73,16 @@
 			// processIdComboBox
 			// 
 			this.processIdComboBox.FormattingEnabled = true;
-			this.processIdComboBox.Location = new System.Drawing.Point(17, 79);
+			this.processIdComboBox.Location = new System.Drawing.Point(17, 101);
 			this.processIdComboBox.Name = "processIdComboBox";
-			this.processIdComboBox.Size = new System.Drawing.Size(616, 21);
+			this.processIdComboBox.Size = new System.Drawing.Size(489, 21);
 			this.processIdComboBox.TabIndex = 3;
 			this.processIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_ProcessIdComboBox);
 			// 
 			// outputDestinationTextBoxLabel
 			// 
 			this.outputDestinationTextBoxLabel.AutoSize = true;
-			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 134);
+			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 156);
 			this.outputDestinationTextBoxLabel.Name = "outputDestinationTextBoxLabel";
 			this.outputDestinationTextBoxLabel.Size = new System.Drawing.Size(98, 13);
 			this.outputDestinationTextBoxLabel.TabIndex = 4;
@@ -87,14 +90,14 @@
 			// 
 			// outputDestinationTextBox
 			// 
-			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 150);
+			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 172);
 			this.outputDestinationTextBox.Name = "outputDestinationTextBox";
 			this.outputDestinationTextBox.Size = new System.Drawing.Size(580, 20);
 			this.outputDestinationTextBox.TabIndex = 5;
 			// 
 			// outputDesitinationBrowseButton
 			// 
-			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 149);
+			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 171);
 			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
 			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
 			this.outputDesitinationBrowseButton.TabIndex = 6;
@@ -104,7 +107,7 @@
 			// 
 			// copyFilesButton
 			// 
-			this.copyFilesButton.Location = new System.Drawing.Point(17, 177);
+			this.copyFilesButton.Location = new System.Drawing.Point(17, 199);
 			this.copyFilesButton.Name = "copyFilesButton";
 			this.copyFilesButton.Size = new System.Drawing.Size(75, 23);
 			this.copyFilesButton.TabIndex = 7;
@@ -115,7 +118,7 @@
 			// fileCountLinkLabel
 			// 
 			this.fileCountLinkLabel.AutoSize = true;
-			this.fileCountLinkLabel.Location = new System.Drawing.Point(214, 103);
+			this.fileCountLinkLabel.Location = new System.Drawing.Point(214, 125);
 			this.fileCountLinkLabel.Name = "fileCountLinkLabel";
 			this.fileCountLinkLabel.Size = new System.Drawing.Size(96, 13);
 			this.fileCountLinkLabel.TabIndex = 8;
@@ -125,15 +128,44 @@
 			// ApplicantProcessIdsLabel
 			// 
 			this.ApplicantProcessIdsLabel.AutoSize = true;
-			this.ApplicantProcessIdsLabel.Location = new System.Drawing.Point(17, 103);
+			this.ApplicantProcessIdsLabel.Location = new System.Drawing.Point(14, 125);
 			this.ApplicantProcessIdsLabel.Name = "ApplicantProcessIdsLabel";
 			this.ApplicantProcessIdsLabel.Size = new System.Drawing.Size(141, 13);
 			this.ApplicantProcessIdsLabel.TabIndex = 9;
 			this.ApplicantProcessIdsLabel.Text = "Total Applicant Process IDs:";
 			// 
+			// rootProcessingFolder
+			// 
+			this.rootProcessingFolder.AutoSize = true;
+			this.rootProcessingFolder.Location = new System.Drawing.Point(14, 54);
+			this.rootProcessingFolder.Name = "rootProcessingFolder";
+			this.rootProcessingFolder.Size = new System.Drawing.Size(106, 13);
+			this.rootProcessingFolder.TabIndex = 11;
+			this.rootProcessingFolder.Text = "Root Process Folder:";
+			// 
+			// fileTypeComboBox
+			// 
+			this.fileTypeComboBox.FormattingEnabled = true;
+			this.fileTypeComboBox.Location = new System.Drawing.Point(512, 101);
+			this.fileTypeComboBox.Name = "fileTypeComboBox";
+			this.fileTypeComboBox.Size = new System.Drawing.Size(121, 21);
+			this.fileTypeComboBox.TabIndex = 12;
+			// 
+			// fileTypesLabel
+			// 
+			this.fileTypesLabel.AutoSize = true;
+			this.fileTypesLabel.Location = new System.Drawing.Point(512, 82);
+			this.fileTypesLabel.Name = "fileTypesLabel";
+			this.fileTypesLabel.Size = new System.Drawing.Size(58, 13);
+			this.fileTypesLabel.TabIndex = 13;
+			this.fileTypesLabel.Text = "File Types:";
+			// 
 			// ClientFileExtractionControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.Controls.Add(this.fileTypesLabel);
+			this.Controls.Add(this.fileTypeComboBox);
+			this.Controls.Add(this.rootProcessingFolder);
 			this.Controls.Add(this.ApplicantProcessIdsLabel);
 			this.Controls.Add(this.fileCountLinkLabel);
 			this.Controls.Add(this.copyFilesButton);
@@ -164,5 +196,8 @@
 		private System.Windows.Forms.Button copyFilesButton;
 		private System.Windows.Forms.LinkLabel fileCountLinkLabel;
 		private System.Windows.Forms.Label ApplicantProcessIdsLabel;
+		private System.Windows.Forms.Label rootProcessingFolder;
+		private System.Windows.Forms.ComboBox fileTypeComboBox;
+		private System.Windows.Forms.Label fileTypesLabel;
 	}
 }

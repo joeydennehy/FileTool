@@ -12,8 +12,9 @@ namespace UI.Controls.FunctionBlockControls
 		#region Member Variables
 
 		private const string APPLICANT_PROCESS_FORMAT = "Total Applicant Process IDs: {0}";
-		private const string FILE_COUNT_FORMAT = "[{0} files found]";
+		private const string FILE_COUNT_FORMAT = "[{0} files, totaling {1:n} MB";
 		private const string NO_FILE_COUNT = "[No Files Found]";
+		private const string PROCESS_FOLDER_FORMAT = "Root Process Folder: {0}";
 		private const string WORKING = "[Working...]";
 
 		private FileProcessingState state;
@@ -59,20 +60,37 @@ namespace UI.Controls.FunctionBlockControls
 
 		#region Event Handlers
 
+		private const string VALIDATION_ERROR_OUTPUT_NOT_SELECTED = "Please select an output destination before continuing.";
+		private const string VALIDATION_ERROR_CAPTION = "Invalid Processing State";
+
 		private void ButtonClick_CopyFiles(object sender, EventArgs e)
 		{
-			ApplicantProcessQuery query = new ApplicantProcessQuery();
-			//Assembly.GetExecutingAssembly().Location
-			FileProcessingState state = new FileProcessingState
+			if (string.IsNullOrEmpty(state.OutputDirectory))
 			{
-				//sourceBlockPanel.Controls.Add(sourcePathBlockControl);
-				BaseDirectory = ((SourcePathBlockControl)ParentControl.sourceBlockPanel.Controls.Find("sourcePathBlockControl",true)[0]).sourceLocationText.Text,
-				OutputDirectory = outputDestinationTextBox.Text,
-				FoundationUrlKey = ((KeyValuePair<string, string>)foundationIdComboBox.SelectedItem).Value,
-				FoundationApplicantProcessIds = query.RetrieveApplicationProcessInfo(((KeyValuePair<string, string>)processIdComboBox.SelectedItem).Value)
-			};
+				MessageBox.Show(
+					this, 
+					VALIDATION_ERROR_OUTPUT_NOT_SELECTED, 
+					VALIDATION_ERROR_CAPTION, 
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation
+				);
+				return;
+			}
 
-			FileProcessing.CopyFilesToDestination(state);
+			Cursor = Cursors.WaitCursor;
+			try
+			{
+				FileProcessing.CopyFilesToDestination(state);
+			}
+			catch (Exception eError)
+			{
+
+				throw;
+			}
+			finally
+			{
+				Cursor = Cursors.WaitCursor;
+			}
 		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
@@ -93,18 +111,19 @@ namespace UI.Controls.FunctionBlockControls
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
 			state.FoundationUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+			rootProcessingFolder.Text = state.RootProcessDirectory;
 			BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
 		}
 
 		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)
 		{
-			Cursor = Cursors.WaitCursor;
-			ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
-			fileCountLinkLabel.Text = WORKING;
-
 			int foundationProcessId;
 			Int32.TryParse(((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value, out foundationProcessId);
 
+			Cursor = Cursors.WaitCursor;
+			ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
+			fileCountLinkLabel.Text = WORKING;
+			
 			state.FoundationProcessId = foundationProcessId;
 			state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
 
@@ -114,7 +133,9 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				FileProcessing.SetFilelist(state);
 				if (state.Files != null && state.Files.Count > 0)
-					fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count);
+				{
+					fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count, (float)state.TotalSize / (1024 * 1024));
+				}
 				else
 				{
 					fileCountLinkLabel.Text = NO_FILE_COUNT;
@@ -132,11 +153,13 @@ namespace UI.Controls.FunctionBlockControls
 		#endregion
 
 		//TODO: handle page validation
+		// Includes, Do not allow run until destination folder is selected, or input
+		// Includes, Validate empty state of destination folder
 		//TODO: Add task completion notification
-		//COMPLETED: Get count of files to copy and display - also added applicant process IDs
+		//COMPLETED: Get count of files to copy - also added applicant process IDs
+			//TODO: still needs display
 		//TODO: Set up display of task output
 		//TODO: NTH: display list of files to be output
-		//TODO: need to validate the selected path
 			//TODO: need to add ontextchanged event handlers for textbox controls
 		//TODO: add and configure log4net
 
