@@ -60,7 +60,7 @@ namespace API
 
 		//3 ApplicantProcesscodes with a give process ID
 
-		public List<int> RetrieveApplicationProcessInfo(string foundationProcess)
+		public List<int> RetrieveApplicationProcessInfo(int foundationProcess)
 		{
 			ParameterSet parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);

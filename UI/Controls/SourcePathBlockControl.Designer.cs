@@ -48,6 +48,7 @@
 			this.sourceLocationText.Name = "sourceLocationText";
 			this.sourceLocationText.Size = new System.Drawing.Size(580, 20);
 			this.sourceLocationText.TabIndex = 1;
+			this.sourceLocationText.TextChanged += new System.EventHandler(this.TextChanged_SourceFolder);
 			// 
 			// browseButton
 			// 
@@ -57,7 +58,7 @@
 			this.browseButton.TabIndex = 2;
 			this.browseButton.Text = "...";
 			this.browseButton.UseVisualStyleBackColor = true;
-			this.browseButton.Click += new System.EventHandler(this.BrowseButtonClick);
+			this.browseButton.Click += new System.EventHandler(this.ButtonClick_BrowseFolders);
 			// 
 			// SourcePathBlockControl
 			// 
