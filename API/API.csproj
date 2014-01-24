@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ApplicantProcessQuery.cs" />
     <Compile Include="ApplicationConfiguration.cs" />
+    <Compile Include="FileMaskedConfig.cs" />
     <Compile Include="FileProcessing.cs" />
     <Compile Include="NetworkAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
