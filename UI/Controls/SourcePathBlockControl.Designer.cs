@@ -76,7 +76,7 @@
 		#endregion
 
 		private System.Windows.Forms.Label sourceLabel;
-		private System.Windows.Forms.TextBox sourceLocationText;
+		public System.Windows.Forms.TextBox sourceLocationText;
 		private System.Windows.Forms.Button browseButton;
 	}
 }

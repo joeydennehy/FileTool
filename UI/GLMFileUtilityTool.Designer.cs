@@ -251,7 +251,7 @@
 		private UI.Controls.CustomButton btnNavFileExtraction;
 		private System.Windows.Forms.Panel panelControlContainer;
 		private System.Windows.Forms.Panel titleBlockPanel;
-		private System.Windows.Forms.Panel sourceBlockPanel;
+		public System.Windows.Forms.Panel sourceBlockPanel;
 		private System.Windows.Forms.Panel functionBlockPanel;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel buttonPanel4;

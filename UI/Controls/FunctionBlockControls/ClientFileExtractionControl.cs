@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using API;
+using UI.Controls;
 
 namespace UI.Controls.FunctionBlockControls
 {
@@ -60,12 +61,18 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void ButtonClick_CopyFiles(object sender, EventArgs e)
 		{
-			//FileProcessing.CopyFilesToDestination(
-			//	ParentControl.SourceLocation, 
-			//	foundationUrlKey, 
-			//	new List<int> { foundationProcessId }, 
-			//	outputDestination
-			//);
+			ApplicantProcessQuery query = new ApplicantProcessQuery();
+			//Assembly.GetExecutingAssembly().Location
+			FileProcessingState state = new FileProcessingState
+			{
+				//sourceBlockPanel.Controls.Add(sourcePathBlockControl);
+				BaseDirectory = ((SourcePathBlockControl)ParentControl.sourceBlockPanel.Controls.Find("sourcePathBlockControl",true)[0]).sourceLocationText.Text,
+				OutputDirectory = outputDestinationTextBox.Text,
+				FoundationUrlKey = ((KeyValuePair<string, string>)foundationIdComboBox.SelectedItem).Value,
+				FoundationApplicantProcessIds = query.RetrieveApplicationProcessInfo(((KeyValuePair<string, string>)processIdComboBox.SelectedItem).Value)
+			};
+
+			FileProcessing.CopyFilesToDestination(state);
 		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
