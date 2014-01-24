@@ -132,11 +132,12 @@ namespace UI
 			SetCurrentNavButton(btnSender);
 		}
 
-		protected override void OnShown(EventArgs e)
-		{
-			sourcePathBlockControl.Setup();
-			base.OnShown(e);
+		//This is preventing sourceDirectory from being set properly at startup
+		//protected override void OnShown(EventArgs e)
+		//{
+		//	sourcePathBlockControl.Setup();
+		//	base.OnShown(e);
 
-		}
+		//}
 	}
 }

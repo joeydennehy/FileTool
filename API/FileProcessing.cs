@@ -16,7 +16,8 @@ namespace API
 		public List<int> FoundationApplicantProcessIds { get; set; }
 		public string OutputDirectory { get; set; }
 		public string FileMask { get; set; }
-
+		public List<string> Files { get; set; }
+ 
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
 
@@ -40,27 +41,19 @@ namespace API
 
 	public static class FileProcessing
 	{
-
-		//public static string[] GetFilelist(FileProcessingState fileProcessingInfo)
-		//{
-		//	List<string> files = new List<string>();
-		//	string foundationDirectoryPathFormat = string.Format(
-		//		"{0}/{1}/{2}", 
-		//		fileProcessingInfo.BaseDirectory,
-		//		fileProcessingInfo.FoundationUrlKey,
-		//		"{0}"
-		//		);
-
-
-		//	foreach (int applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
-		//	{
-		//		string directoryPath = baseDirectory + "/" + urlKey + "/" + applicantProcessId;
-		//		if (Directory.Exists(directoryPath))
-		//		{
-		//			files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
-		//		}
-		//	}
-		//}
+		public static void SetFilelist(FileProcessingState fileProcessingInfo)
+		{
+			fileProcessingInfo.Files = new List<string>();
+			foreach (var applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
+			{
+				
+				string directoryPath = fileProcessingInfo.BaseDirectory + "\\" + fileProcessingInfo.FoundationUrlKey + "\\" + applicantProcessId;
+				if (Directory.Exists(directoryPath))
+				{
+					fileProcessingInfo.Files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
+				}
+			}
+		}
 
 		public static void CopyFilesToDestination(FileProcessingState fileProcessingInfo)
 		{
@@ -69,15 +62,25 @@ namespace API
 				Directory.CreateDirectory(fileProcessingInfo.OutputDirectory);
 			}
 
+			string directoryPath;
 			List<string> files = new List<string>();
 			foreach (var applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
 			{
-				string directoryPath = fileProcessingInfo.BaseDirectory + "/" + fileProcessingInfo.FoundationUrlKey + "/" + applicantProcessId;
+				directoryPath = fileProcessingInfo.BaseDirectory + "/" + fileProcessingInfo.FoundationUrlKey + "/" + applicantProcessId;
 				if (Directory.Exists(directoryPath))
 				{
 					files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
 				}
 			}
+			//List<string> files = new List<string>();
+			//foreach (var applicantProcessId in fileProcessingInfo.FoundationApplicantProcessIds)
+			//{
+			//	string directoryPath = fileProcessingInfo.BaseDirectory + "/" + fileProcessingInfo.FoundationUrlKey + "/" + applicantProcessId;
+			//	if (Directory.Exists(directoryPath))
+			//	{
+			//		files.AddRange(Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories));
+			//	}
+			//}
 
 			bool hasOtherStages = files.Any(
 				file => Path.GetDirectoryName(file)

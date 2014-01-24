@@ -20,14 +20,20 @@ namespace UI.Controls
 
 		public SourcePathBlockControl(GLMFileUtilityTool parent)
 		{
-			InitializeComponent();
 			parentControl = parent;
+			InitializeComponent();
+			Initialize();
 		}
 
-		public void Setup()
+		private void Initialize()
 		{
-			SetLocation(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
+			CheckLocationAccessAndSet(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
 		}
+
+		//public void Setup()
+		//{
+		//	SetLocation(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
+		//}
 
 		//public string[] Files { get; private set; }
 		public string SourceLocation { get; private set; }
@@ -95,7 +101,8 @@ namespace UI.Controls
 
 			return accessCredential;
 		}
-
+		//TODO: Check Network credentials - this code does work, but the timing problem it introduces during startup
+		// will have to change when this type of code gets called.  Removing for now.
 		private void SetLocation(string directoryPath)
 		{
 			if (!CheckLocationAccessAndSet(directoryPath))
@@ -122,7 +129,7 @@ namespace UI.Controls
 					MessageBox.Show(string.Format(AUTHENTICATION_ERROR, eError.Message), VALIDATION_ERROR_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-				
+
 				if (string.IsNullOrEmpty(SourceLocation))
 					MessageBox.Show(string.Format(VALIDATION_ERROR, SourceLocation));
 			}

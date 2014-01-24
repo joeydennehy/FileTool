@@ -46,7 +46,7 @@ namespace Test.API
 		public void Test_RetrieveApplicationProcessInfo()
 		{
 			ApplicantProcessQuery query = new ApplicantProcessQuery();
-			List<int> data = query.RetrieveApplicationProcessInfo("31");
+			List<int> data = query.RetrieveApplicationProcessInfo(31);
 			Assert.IsTrue(data.Count > 0);
 			var first = data.First();
 			string valuePattern = "[0-9]+";
@@ -64,7 +64,7 @@ namespace Test.API
 				BaseDirectory = "C:/Users/Joey/Desktop/petcocopy",
 				OutputDirectory = "C:/petcocopy",
 				FoundationUrlKey = "petco",
-				FoundationApplicantProcessIds = query.RetrieveApplicationProcessInfo("7043")
+				FoundationApplicantProcessIds = query.RetrieveApplicationProcessInfo(7043)
 			};
 
 			FileProcessing.CopyFilesToDestination(state);

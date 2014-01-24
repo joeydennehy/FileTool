@@ -10,9 +10,13 @@ namespace UI.Controls.FunctionBlockControls
 
 		#region Member Variables
 
-		private string outputDestination;
-		private string foundationUrlKey;
-		private int foundationProcessId;
+		private const string APPLICANT_PROCESS_FORMAT = "Total Applicant Process IDs: {0}";
+		private const string FILE_COUNT_FORMAT = "[{0} files found]";
+		private const string NO_FILE_COUNT = "[No Files Found]";
+		private const string WORKING = "[Working...]";
+
+		private FileProcessingState state;
+		private ApplicantProcessQuery data;
 
 		#endregion
 
@@ -43,7 +47,12 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void Initialize()
 		{
-			ApplicantProcessQuery data = new ApplicantProcessQuery();
+			state = new FileProcessingState
+			{
+				BaseDirectory = ParentControl.SourceLocation
+			};
+
+			data = new ApplicantProcessQuery();
 			BindData(foundationIdComboBox, data.BuildFoundationDictionary());
 		}
 
@@ -69,22 +78,46 @@ namespace UI.Controls.FunctionBlockControls
 			DialogResult result = folderBrowser.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				outputDestination = folderBrowser.SelectedPath;
-				outputDestinationTextBox.Text = outputDestination;
+				state.OutputDirectory = folderBrowser.SelectedPath;
+				outputDestinationTextBox.Text = state.OutputDirectory;
 			}
 		}
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-			foundationUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-
-			ApplicantProcessQuery data = new ApplicantProcessQuery();
-			BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(foundationUrlKey));
+			state.FoundationUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+			BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
 		}
 
 		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)
 		{
+			Cursor = Cursors.WaitCursor;
+			ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
+			fileCountLinkLabel.Text = WORKING;
+
+			int foundationProcessId;
 			Int32.TryParse(((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value, out foundationProcessId);
+
+			state.FoundationProcessId = foundationProcessId;
+			state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
+
+			ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessIds.Count);
+
+			if (state.FoundationApplicantProcessIds.Count > 0)
+			{
+				FileProcessing.SetFilelist(state);
+				if (state.Files != null && state.Files.Count > 0)
+					fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count);
+				else
+				{
+					fileCountLinkLabel.Text = NO_FILE_COUNT;
+				}
+			}
+			else
+			{
+				fileCountLinkLabel.Text = NO_FILE_COUNT;
+			}
+			Cursor = Cursors.Default;
 		}
 
 		#endregion
@@ -93,7 +126,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		//TODO: handle page validation
 		//TODO: Add task completion notification
-		//TODO: Get count of files to copy and display
+		//COMPLETED: Get count of files to copy and display - also added applicant process IDs
 		//TODO: Set up display of task output
 		//TODO: NTH: display list of files to be output
 		//TODO: need to validate the selected path

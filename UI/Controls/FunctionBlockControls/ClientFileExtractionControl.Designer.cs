@@ -37,6 +37,7 @@
 			this.outputDesitinationBrowseButton = new System.Windows.Forms.Button();
 			this.copyFilesButton = new System.Windows.Forms.Button();
 			this.fileCountLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.ApplicantProcessIdsLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// foundationIdComboBoxLabel
@@ -114,16 +115,26 @@
 			// fileCountLinkLabel
 			// 
 			this.fileCountLinkLabel.AutoSize = true;
-			this.fileCountLinkLabel.Location = new System.Drawing.Point(17, 107);
+			this.fileCountLinkLabel.Location = new System.Drawing.Point(214, 103);
 			this.fileCountLinkLabel.Name = "fileCountLinkLabel";
 			this.fileCountLinkLabel.Size = new System.Drawing.Size(96, 13);
 			this.fileCountLinkLabel.TabIndex = 8;
 			this.fileCountLinkLabel.TabStop = true;
 			this.fileCountLinkLabel.Text = "[No Files Selected]";
 			// 
+			// ApplicantProcessIdsLabel
+			// 
+			this.ApplicantProcessIdsLabel.AutoSize = true;
+			this.ApplicantProcessIdsLabel.Location = new System.Drawing.Point(17, 103);
+			this.ApplicantProcessIdsLabel.Name = "ApplicantProcessIdsLabel";
+			this.ApplicantProcessIdsLabel.Size = new System.Drawing.Size(141, 13);
+			this.ApplicantProcessIdsLabel.TabIndex = 9;
+			this.ApplicantProcessIdsLabel.Text = "Total Applicant Process IDs:";
+			// 
 			// ClientFileExtractionControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.Controls.Add(this.ApplicantProcessIdsLabel);
 			this.Controls.Add(this.fileCountLinkLabel);
 			this.Controls.Add(this.copyFilesButton);
 			this.Controls.Add(this.outputDesitinationBrowseButton);
@@ -152,5 +163,6 @@
 		private System.Windows.Forms.Button outputDesitinationBrowseButton;
 		private System.Windows.Forms.Button copyFilesButton;
 		private System.Windows.Forms.LinkLabel fileCountLinkLabel;
+		private System.Windows.Forms.Label ApplicantProcessIdsLabel;
 	}
 }
