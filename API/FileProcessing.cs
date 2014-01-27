@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using API.Logging;
 
 namespace API
 {
@@ -137,6 +138,7 @@ namespace API
 					destFile = tempFullFileName;
 				}
 				File.Copy(file, destFile, true);
+				Logger.Log("Copy file " + file + " to " + destFile, Logger.INFO);
 			}
 		}
 
