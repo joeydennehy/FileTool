@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Lib\Logging\log4net-1.2.13\bin\net-cp\4.0\release\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\MySQL\MySQL Connector Net 6.8.3\Assemblies\v4.5\MySql.Data.dll</HintPath>
@@ -47,6 +50,7 @@
     <Compile Include="Data\ApplicantProcessQuery.cs" />
     <Compile Include="Config\ApplicationConfiguration.cs" />
     <Compile Include="FileIO\FileProcessing.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Security\NetworkAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Win32Interop.cs" />
@@ -57,6 +61,7 @@
       <Name>DataProvider</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

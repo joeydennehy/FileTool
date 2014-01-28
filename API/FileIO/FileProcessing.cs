@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using API.Logging;
 
 namespace API.FileIO
 {
@@ -155,7 +156,7 @@ namespace API.FileIO
 				global::System.Diagnostics.Debug.Print(string.Format("{0}:From:[{1}] To:[{2}", i++, file, destFile));
 
 				File.Copy(file, destFile, true);
-
+				Logger.Log("Copy file " + file + " to " + destFile, Logger.INFO);
 				if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
 				{
 					string tempFileName = Path.GetFileNameWithoutExtension(destFile);
