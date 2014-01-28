@@ -1,6 +1,6 @@
 obj
 bin
-!Lib/Logging/log4net-1.2.13/bin
+!Lib/Logging/
 *resharper*
 *.suo
 *.user
