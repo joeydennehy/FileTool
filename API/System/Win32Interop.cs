@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using API.Security;
 
-namespace API
+namespace API.System
 {
 	// ReSharper disable InconsistentNaming
 	// ReSharper disable MemberCanBePrivate.Global

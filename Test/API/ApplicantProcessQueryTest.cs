@@ -4,6 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using API;
+using API.Data;
+using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 

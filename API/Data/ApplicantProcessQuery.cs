@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using DataProvider.MySQL;
 using MySql.Data.MySqlClient;
-using System.Linq;
 
-namespace API
+namespace API.Data
 {
 	public class ApplicantProcessQuery
 	{

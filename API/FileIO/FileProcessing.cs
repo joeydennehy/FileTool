@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API
+namespace API.FileIO
 {
 	public class FileProcessingState
 	{
@@ -19,6 +17,8 @@ namespace API
 		public string FileMask { get; set; }
 		public List<string> Files { get; set; }
 		public long TotalSize { get; set; }
+		public List<string> SequesterPatterns { get; set; }
+		public string SequesterPath { get; set; } 
  
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
@@ -31,6 +31,16 @@ namespace API
 		public FileProcessingState()
 		{
 			FileMask = "*.*";
+			//Defaulting the set for now.
+			SequesterPatterns = new List<string>
+			{
+				"IRS",
+				"W9",
+				"W-9",
+				"501",
+				"990"
+			};
+			SequesterPath = OutputDirectory + "\\Sequester";
 		}
 
 		public bool Validate()
@@ -51,22 +61,26 @@ namespace API
 		{
 			state.Files = new List<string>();
 			state.TotalSize = 0;
+			string[] maskPatterns = state.FileMask.Split('|');
 
 			foreach (var applicantProcessId in state.FoundationApplicantProcessIds)
 			{
 				string directoryPath = state.RootProcessDirectory + applicantProcessId;
 				if (Directory.Exists(directoryPath))
 				{
-					state.Files.AddRange(Directory.GetFiles(directoryPath, state.FileMask, SearchOption.AllDirectories));
-					state.TotalSize += DirectorySize(directoryPath, true);
+					foreach (string maskPattern in maskPatterns)
+					{
+						state.Files.AddRange(Directory.GetFiles(directoryPath, maskPattern, SearchOption.AllDirectories));
+						//state.TotalSize += DirectorySize(directoryPath, maskPattern, true);
+					}
 				}
 			}
 		}
 
-		private static long DirectorySize(string sourceDir, bool recurse)
+		private static long DirectorySize(string sourceDir, string maskPattern, bool recurse)
 		{
 			long size = 0;
-			string[] fileEntries = Directory.GetFiles(sourceDir);
+			string[] fileEntries = Directory.GetFiles(sourceDir, maskPattern);
 
 			foreach (string fileName in fileEntries)
 			{
@@ -81,7 +95,7 @@ namespace API
 				{
 					if ((File.GetAttributes(subdirEntries[i]) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint)
 					{
-						subtotal += DirectorySize(subdirEntries[i], true);
+						subtotal += DirectorySize(subdirEntries[i], maskPattern, true);
 						return subtotal;
 					}
 					return 0;
@@ -111,7 +125,8 @@ namespace API
 					.Last()
 					.Contains("qualification"));
 
-			// Copy the files and overwrite destination files if they already exist. 
+			// Copy the files and overwrite destination files if they already exist. \
+			int i = 0;
 			foreach (string file in state.Files)
 			{
 				// Use static Path methods to extract only the file name from the path.
@@ -126,17 +141,29 @@ namespace API
 
 				if (File.Exists(destFile))
 				{
-					int interation = 1;
+					int iteration = 1;
 					string tempFullFileName = destFile;
 					while (!File.Exists(tempFullFileName))
 					{
-						string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + interation + ")" + Path.GetExtension(fileName);
+						string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + iteration + ")" + Path.GetExtension(fileName);
 						tempFullFileName = Path.Combine(state.OutputDirectory, tempFileName);
-						++interation;
+						++iteration;
 					}
 					destFile = tempFullFileName;
 				}
+
+				global::System.Diagnostics.Debug.Print(string.Format("{0}:From:[{1}] To:[{2}", i++, file, destFile));
+
 				File.Copy(file, destFile, true);
+
+				if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+				{
+					string tempFileName = Path.GetFileNameWithoutExtension(destFile);
+					if (state.SequesterPatterns.Any(tempFileName.Contains)) {
+						File.Copy(destFile, state.OutputDirectory + "\\" + state.SequesterPath + "\\" + tempFileName + Path.GetExtension(destFile), true);
+						File.Delete(destFile);
+					}
+				}
 			}
 		}
 

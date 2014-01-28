@@ -87,7 +87,7 @@
 			// outputDestinationTextBoxLabel
 			// 
 			this.outputDestinationTextBoxLabel.AutoSize = true;
-			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 156);
+			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 152);
 			this.outputDestinationTextBoxLabel.Name = "outputDestinationTextBoxLabel";
 			this.outputDestinationTextBoxLabel.Size = new System.Drawing.Size(98, 13);
 			this.outputDestinationTextBoxLabel.TabIndex = 9;
@@ -95,7 +95,7 @@
 			// 
 			// outputDestinationTextBox
 			// 
-			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 172);
+			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 168);
 			this.outputDestinationTextBox.Name = "outputDestinationTextBox";
 			this.outputDestinationTextBox.Size = new System.Drawing.Size(580, 20);
 			this.outputDestinationTextBox.TabIndex = 10;
@@ -103,7 +103,7 @@
 			// 
 			// outputDesitinationBrowseButton
 			// 
-			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 171);
+			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 167);
 			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
 			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
 			this.outputDesitinationBrowseButton.TabIndex = 11;
@@ -113,7 +113,7 @@
 			// 
 			// copyFilesButton
 			// 
-			this.copyFilesButton.Location = new System.Drawing.Point(17, 199);
+			this.copyFilesButton.Location = new System.Drawing.Point(17, 195);
 			this.copyFilesButton.Name = "copyFilesButton";
 			this.copyFilesButton.Size = new System.Drawing.Size(75, 23);
 			this.copyFilesButton.TabIndex = 12;
@@ -156,6 +156,7 @@
 			this.fileTypeComboBox.Name = "fileTypeComboBox";
 			this.fileTypeComboBox.Size = new System.Drawing.Size(121, 21);
 			this.fileTypeComboBox.TabIndex = 6;
+			this.fileTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_FileTypeComboBox);
 			// 
 			// fileTypesLabel
 			// 

@@ -4,8 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using API.System;
 
-namespace API
+namespace API.Security
 {
 	public sealed class NetworkAccess : IDisposable
 	{

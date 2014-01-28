@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using API;
+using API.Config;
+using API.Data;
+using API.FileIO;
 using UI.Controls;
 
 namespace UI.Controls.FunctionBlockControls
@@ -49,7 +52,7 @@ namespace UI.Controls.FunctionBlockControls
 		
 		#region Private Methods
 
-		private static void BindData(ComboBox comboBox, Dictionary<string, string> source)
+		private static void BindData(ComboBox comboBox, IReadOnlyCollection<KeyValuePair<string, string>> source)
 		{
 			if (source.Count > 0)
 			{
@@ -72,7 +75,7 @@ namespace UI.Controls.FunctionBlockControls
 
 			data = new ApplicantProcessQuery();
 			BindData(foundationIdComboBox, data.BuildFoundationDictionary());
-			BindData(fileTypeComboBox, FileMaskedConfig.Settings);
+			BindData(fileTypeComboBox, ApplicationConfiguration.FileMaskSettings);
 		}
 		
 		private void SetProcessingFolderText()
@@ -107,7 +110,7 @@ namespace UI.Controls.FunctionBlockControls
 				if (outputDirectory.Exists && outputDirectory.GetFiles().Any())
 				{
 					DialogResult prompt = MessageBox.Show(this, VALIDATION_ERROR_FOLDER_NOT_EMPTY, FILE_COPY_CAPTION, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-					if (prompt == DialogResult.OK)
+					if (prompt == DialogResult.Yes)
 					{
 						foreach (FileInfo fileInfo in outputDirectory.GetFiles())
 						{
@@ -173,7 +176,7 @@ namespace UI.Controls.FunctionBlockControls
 			ComboBox control = sender as ComboBox;
 			if (control != null)
 			{
-				if (control.DroppedDown || e.KeyCode == Keys.Down)
+				if (control.DroppedDown || e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
 					return;
 				control.DroppedDown = true;
 			}
@@ -189,21 +192,13 @@ namespace UI.Controls.FunctionBlockControls
 				selectedUrlKey = ((KeyValuePair<string, string>)control.SelectedItem).Value;
 			}
 
-			//if (!string.IsNullOrEmpty(control.Text))
-			//{
-			//	string selectedText = control.Text;
-			//	Type T = control.DataSource.GetType();
-			//	BindingSource boundData = (BindingSource)control.DataSource;
-			//	Dictionary<string, string> data = (Dictionary<string, string>)boundData.DataSource;
-
-			//	selectedUrlKey = data.FirstOrDefault(x => x.Value == selectedText).Value;
-
-			//	//if (data.ContainsValue(selectedText))
-			//	//{
-			//	//	selectedUrlKey = data.FirstOrDefault(x => x.Value == selectedText).Value;
-			//	//}
-			//}
-
+			if (!string.IsNullOrEmpty(control.Text))
+			{
+				BindingSource boundData = (BindingSource)control.DataSource;
+				KeyValuePair<string, string> keyValuePair = (KeyValuePair<string, string>)boundData[control.FindString(control.Text)];
+				selectedUrlKey = keyValuePair.Value;
+			}
+			
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				state.FoundationUrlKey = selectedUrlKey;
@@ -215,7 +210,7 @@ namespace UI.Controls.FunctionBlockControls
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
 			string selectedUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-
+			System.Diagnostics.Debug.Print(selectedUrlKey);
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				state.FoundationUrlKey = selectedUrlKey;
@@ -234,33 +229,43 @@ namespace UI.Controls.FunctionBlockControls
 					if (keyPair.Value != null)
 						Int32.TryParse(keyPair.Value, out foundationProcessId);
 			}
-
-			Cursor = Cursors.WaitCursor;
-			ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
-			fileCountLinkLabel.Text = WORKING;
-			
-			state.FoundationProcessId = foundationProcessId;
-			state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
-
-			ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessIds.Count);
-
-			if (state.FoundationApplicantProcessIds.Count > 0)
+			try
 			{
-				FileProcessing.SetFilelist(state);
-				if (state.Files != null && state.Files.Count > 0)
+				Cursor = Cursors.WaitCursor;
+				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
+				fileCountLinkLabel.Text = WORKING;
+
+				state.FoundationProcessId = foundationProcessId;
+				state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
+
+				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessIds.Count);
+
+				if (state.FoundationApplicantProcessIds.Count > 0)
 				{
-					fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count, (float)state.TotalSize / (1024 * 1024));
+					FileProcessing.SetFilelist(state);
+					if (state.Files != null && state.Files.Count > 0)
+					{
+						fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count,
+							(float)state.TotalSize / (1024 * 1024));
+					}
+					else
+					{
+						fileCountLinkLabel.Text = NO_FILE_COUNT;
+					}
 				}
 				else
 				{
 					fileCountLinkLabel.Text = NO_FILE_COUNT;
 				}
 			}
-			else
+			catch (Exception eError)
 			{
-				fileCountLinkLabel.Text = NO_FILE_COUNT;
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			Cursor = Cursors.Default;
+			finally
+			{
+				Cursor = Cursors.Default;
+			}
 		}
 
 		private void TextChanged_outputDestinationTextBox(object sender, EventArgs e)
@@ -283,6 +288,17 @@ namespace UI.Controls.FunctionBlockControls
 		}
 
 		#endregion
+
+
+		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
+		{
+			string selectedFilePattern = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+			if (string.Compare(state.FileMask, selectedFilePattern, StringComparison.InvariantCultureIgnoreCase) != 0)
+			{
+				state.FileMask = selectedFilePattern;
+				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
+			}
+		}
 
 		//Completed: handle page validation
 		// Completed - Includes, Do not allow run until destination folder is selected, or input

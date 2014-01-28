@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using API;
+using API.Config;
 
 namespace UI.Controls
 {
