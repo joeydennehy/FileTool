@@ -74,7 +74,15 @@ namespace UI.Controls.FunctionBlockControls
 			};
 
 			data = new ApplicantProcessQuery();
-			BindData(foundationIdComboBox, data.BuildFoundationDictionary());
+			try
+			{
+				BindData(foundationIdComboBox, data.BuildFoundationDictionary());
+			}
+			catch (Exception eError)
+			{
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			
 			BindData(fileTypeComboBox, ApplicationConfiguration.FileMaskSettings);
 		}
 		
@@ -144,6 +152,16 @@ namespace UI.Controls.FunctionBlockControls
 				Cursor = Cursors.Default;
 			}
 		}
+		
+		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			FileExclusionsForm fileExclusions = new FileExclusionsForm();
+			DialogResult result = fileExclusions.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				
+			}
+		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
 		{
@@ -203,19 +221,33 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				state.FoundationUrlKey = selectedUrlKey;
 				SetProcessingFolderText();
-				BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
+				try
+				{
+					BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
+				}
+				catch (Exception eError)
+				{
+					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
 		}
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
 			string selectedUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-			System.Diagnostics.Debug.Print(selectedUrlKey);
+
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				state.FoundationUrlKey = selectedUrlKey;
 				SetProcessingFolderText();
-				BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
+				try
+				{
+					BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
+				}
+				catch (Exception eError)
+				{
+					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
 		}
 
@@ -236,7 +268,14 @@ namespace UI.Controls.FunctionBlockControls
 				fileCountLinkLabel.Text = WORKING;
 
 				state.FoundationProcessId = foundationProcessId;
-				state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
+				try
+				{
+					state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
+				}
+				catch (Exception eError)
+				{
+					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 
 				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessIds.Count);
 
@@ -302,13 +341,15 @@ namespace UI.Controls.FunctionBlockControls
 
 		//Completed: handle page validation
 		// Completed - Includes, Do not allow run until destination folder is selected, or input
-		//TODO: Add task completion notification
+		//COMPLETED: Add task completion notification
 		//COMPLETED: Get count of files to copy - also added applicant process IDs
-			//TODO: still needs display
-		//TODO: Set up display of task output
 		//TODO: NTH: display list of files to be output
-			//TODO: need to add ontextchanged event handlers for textbox controls
-		//TODO: add and configure log4net
+			//COMPLETED: need to add ontextchanged event handlers for textbox controls
+		//COMPLETED: add and configure log4net
+		//TODO: Audit file count functions and File Size Counts
+		//TODO: refactor file copy functions
+		//TODO: Add File Exclusion Control
+		//TODO: Add Foundant Logo
 
 	}
 }

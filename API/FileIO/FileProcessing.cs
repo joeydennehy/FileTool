@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,7 +18,7 @@ namespace API.FileIO
 		public List<int> FoundationApplicantProcessIds { get; set; }
 		public string OutputDirectory { get; set; }
 		public string FileMask { get; set; }
-		public List<string> Files { get; set; }
+		public List<FileInfo> Files { get; set; }
 		public long TotalSize { get; set; }
 		public List<string> SequesterPatterns { get; set; }
 		public string SequesterPath { get; set; } 
@@ -32,6 +34,10 @@ namespace API.FileIO
 		public FileProcessingState()
 		{
 			FileMask = "*.*";
+
+			Files = new List<FileInfo>();
+			FoundationApplicantProcessIds = new List<int>();
+
 			//Defaulting the set for now.
 			SequesterPatterns = new List<string>
 			{
@@ -60,112 +66,108 @@ namespace API.FileIO
 	{
 		public static void SetFilelist(FileProcessingState state)
 		{
-			state.Files = new List<string>();
+			state.Files = new List<FileInfo>();
 			state.TotalSize = 0;
-			string[] maskPatterns = state.FileMask.Split('|');
 
-			foreach (var applicantProcessId in state.FoundationApplicantProcessIds)
+			if (state.FoundationApplicantProcessIds != null)
 			{
-				string directoryPath = state.RootProcessDirectory + applicantProcessId;
-				if (Directory.Exists(directoryPath))
+				foreach (int applicantProcessId in state.FoundationApplicantProcessIds)
 				{
-					foreach (string maskPattern in maskPatterns)
+					string directoryPath = string.Format("{0}{1}", state.RootProcessDirectory, applicantProcessId);
+					if (Directory.Exists(directoryPath))
 					{
-						state.Files.AddRange(Directory.GetFiles(directoryPath, maskPattern, SearchOption.AllDirectories));
-						//state.TotalSize += DirectorySize(directoryPath, maskPattern, true);
+						string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+						foreach (string directoryFile in directoryFiles)
+						{
+							FileInfo file = new FileInfo(directoryFile);
+							if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
+							{
+								if (!state.FileMask.ToLower().Contains(file.Extension.ToLower()))
+								{
+									continue;
+								}
+							}
+							state.Files.Add(file);
+							state.TotalSize += file.Length;
+						}
 					}
 				}
 			}
-		}
-
-		private static long DirectorySize(string sourceDir, string maskPattern, bool recurse)
-		{
-			long size = 0;
-			string[] fileEntries = Directory.GetFiles(sourceDir, maskPattern);
-
-			foreach (string fileName in fileEntries)
-			{
-				Interlocked.Add(ref size, (new FileInfo(fileName)).Length);
-			}
-
-			if (recurse)
-			{
-				string[] subdirEntries = Directory.GetDirectories(sourceDir);
-
-				Parallel.For<long>(0, subdirEntries.Length, () => 0, (i, loop, subtotal) =>
-				{
-					if ((File.GetAttributes(subdirEntries[i]) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint)
-					{
-						subtotal += DirectorySize(subdirEntries[i], maskPattern, true);
-						return subtotal;
-					}
-					return 0;
-				},
-					 (x) => Interlocked.Add(ref size, x)
-				);
-			}
-			return size;
 		}
 
 		public static void CopyFilesToDestination(FileProcessingState state)
 		{
-			if (!Directory.Exists(state.OutputDirectory))
-			{
-				Directory.CreateDirectory(state.OutputDirectory);
-			}
+			//if (!Directory.Exists(state.OutputDirectory))
+			//{
+			//	Directory.CreateDirectory(state.OutputDirectory);
+			//}
 
-			bool hasOtherStages = state.Files.Any(
-				file => Path.GetDirectoryName(file)
-					.TrimEnd(Path.DirectorySeparatorChar)
-					.Split(Path.DirectorySeparatorChar)
-					.Last()
-					.Contains("loi")
-				|| Path.GetDirectoryName(file)
-					.TrimEnd(Path.DirectorySeparatorChar)
-					.Split(Path.DirectorySeparatorChar)
-					.Last()
-					.Contains("qualification"));
+			//foreach (FileInfo file in state.Files)
+			//{
+			//	file.DirectoryName
+			//}
+		}
 
-			// Copy the files and overwrite destination files if they already exist. \
-			int i = 0;
-			foreach (string file in state.Files)
-			{
-				// Use static Path methods to extract only the file name from the path.
-				string[] directory = Path.GetDirectoryName(file)
-												 .TrimEnd(Path.DirectorySeparatorChar)
-												 .Split(Path.DirectorySeparatorChar);
-				string stage = directory.Last();
-				string applicantProcessId = directory[directory.Count() - 2];
-				string fileName = string.Format("{0}{1}_{2}", applicantProcessId, hasOtherStages ? "_" + stage : "",
-														  Path.GetFileName(file));
-				string destFile = Path.Combine(state.OutputDirectory, fileName);
+		public static void CopyFilesToDestinationOld(FileProcessingState state)
+		{
+			//	if (!Directory.Exists(state.OutputDirectory))
+			//	{
+			//		Directory.CreateDirectory(state.OutputDirectory);
+			//	}
 
-				if (File.Exists(destFile))
-				{
-					int iteration = 1;
-					string tempFullFileName = destFile;
-					while (!File.Exists(tempFullFileName))
-					{
-						string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + iteration + ")" + Path.GetExtension(fileName);
-						tempFullFileName = Path.Combine(state.OutputDirectory, tempFileName);
-						++iteration;
-					}
-					destFile = tempFullFileName;
-				}
+			//bool hasOtherStages = state.Files.Any(
+			//	file => Path.GetDirectoryName(file)
+			//		.TrimEnd(Path.DirectorySeparatorChar)
+			//		.Split(Path.DirectorySeparatorChar)
+			//		.Last()
+			//		.Contains("loi")
+			//	|| Path.GetDirectoryName(file)
+			//		.TrimEnd(Path.DirectorySeparatorChar)
+			//		.Split(Path.DirectorySeparatorChar)
+			//		.Last()
+			//		.Contains("qualification"));
 
-				global::System.Diagnostics.Debug.Print(string.Format("{0}:From:[{1}] To:[{2}", i++, file, destFile));
+			//// Copy the files and overwrite destination files if they already exist. \
+			//int i = 0;
+			//foreach (string file in state.Files)
+			//{
+			//	// Use static Path methods to extract only the file name from the path.
+			//	string[] directory = Path.GetDirectoryName(file)
+			//									 .TrimEnd(Path.DirectorySeparatorChar)
+			//									 .Split(Path.DirectorySeparatorChar);
+			//	string stage = directory.Last();
+			//	string applicantProcessId = directory[directory.Count() - 2];
+			//	string fileName = string.Format("{0}{1}_{2}", applicantProcessId, hasOtherStages ? "_" + stage : "",
+			//											  Path.GetFileName(file));
+			//	string destFile = Path.Combine(state.OutputDirectory, fileName);
 
-				File.Copy(file, destFile, true);
-				Logger.Log("Copy file " + file + " to " + destFile, Logger.INFO);
-				if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
-				{
-					string tempFileName = Path.GetFileNameWithoutExtension(destFile);
-					if (state.SequesterPatterns.Any(tempFileName.Contains)) {
-						File.Copy(destFile, state.OutputDirectory + "\\" + state.SequesterPath + "\\" + tempFileName + Path.GetExtension(destFile), true);
-						File.Delete(destFile);
-					}
-				}
-			}
+			//	if (File.Exists(destFile))
+			//	{
+			//		int iteration = 1;
+			//		string tempFullFileName = destFile;
+			//		while (!File.Exists(tempFullFileName))
+			//		{
+			//			string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + iteration + ")" + Path.GetExtension(fileName);
+			//			tempFullFileName = Path.Combine(state.OutputDirectory, tempFileName);
+			//			++iteration;
+			//		}
+			//		destFile = tempFullFileName;
+			//	}
+
+			//	global::System.Diagnostics.Debug.Print(string.Format("{0}:From:[{1}] To:[{2}", i++, file, destFile));
+
+			//	File.Copy(file, destFile, true);
+			//	Logger.Log("Copy file " + file + " to " + destFile, Logger.INFO);
+			//	if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+			//	{
+			//		string tempFileName = Path.GetFileNameWithoutExtension(destFile);
+			//		if (state.SequesterPatterns.Any(tempFileName.Contains))
+			//		{
+			//			File.Copy(destFile, state.OutputDirectory + "\\" + state.SequesterPath + "\\" + tempFileName + Path.GetExtension(destFile), true);
+			//			File.Delete(destFile);
+			//		}
+			//	}
+			//}
 		}
 
 	}

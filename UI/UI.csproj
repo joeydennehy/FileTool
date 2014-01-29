@@ -96,6 +96,12 @@
     <Compile Include="Controls\TitleBlockControl.Designer.cs">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileExclusionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileExclusionsForm.Designer.cs">
+      <DependentUpon>FileExclusionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GLMFileUtilityTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TitleBlockControl.resx">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileExclusionsForm.resx">
+      <DependentUpon>FileExclusionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GLMFileUtilityTool.resx">
       <DependentUpon>GLMFileUtilityTool.cs</DependentUpon>

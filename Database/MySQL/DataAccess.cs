@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using MySql.Data.MySqlClient;
 
@@ -25,7 +26,17 @@ namespace DataProvider.MySQL
 			}
 
 			connection.Open();
-			return cmd.ExecuteReader(CommandBehavior.CloseConnection|CommandBehavior.SequentialAccess);
+
+			MySqlDataReader dataReader;
+			try
+			{
+				dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection|CommandBehavior.SequentialAccess);
+			}
+			catch (Exception eError)
+			{
+				throw new Exception(string.Format("{0}:{1}", eError.Message, eError.StackTrace));
+			}
+			return dataReader;
 		}
 	}
 	
