@@ -155,12 +155,8 @@ namespace UI.Controls.FunctionBlockControls
 		
 		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			FileExclusionsForm fileExclusions = new FileExclusionsForm();
-			DialogResult result = fileExclusions.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				
-			}
+			FileExclusionsForm fileExclusions = new FileExclusionsForm(state);
+			fileExclusions.ShowDialog();
 		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
