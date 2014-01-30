@@ -29,19 +29,19 @@
 		private void InitializeComponent()
 		{
 			this.instructionsPanel = new System.Windows.Forms.Panel();
-			this.exclusionListPanel = new System.Windows.Forms.Panel();
-			this.sequesterLocationPanel = new System.Windows.Forms.Panel();
-			this.dialogControlsPanel = new System.Windows.Forms.Panel();
-			this.okButton = new System.Windows.Forms.Button();
-			this.cancelButton = new System.Windows.Forms.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.browseButton = new System.Windows.Forms.Button();
-			this.sequestorLocationLabel = new System.Windows.Forms.Label();
-			this.dispositionChoiceGroupBox = new System.Windows.Forms.GroupBox();
-			this.dispositionDoNotCopyRadio = new System.Windows.Forms.RadioButton();
-			this.dispositionMoveRadio = new System.Windows.Forms.RadioButton();
-			this.exclusionsTextBox = new System.Windows.Forms.RichTextBox();
 			this.exclusionInstructionsLabel = new System.Windows.Forms.Label();
+			this.exclusionListPanel = new System.Windows.Forms.Panel();
+			this.exclusionsTextBox = new System.Windows.Forms.RichTextBox();
+			this.sequesterLocationPanel = new System.Windows.Forms.Panel();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.okButton = new System.Windows.Forms.Button();
+			this.dialogControlsPanel = new System.Windows.Forms.Panel();
+			this.dispositionChoiceGroupBox = new System.Windows.Forms.GroupBox();
+			this.dispositionMoveRadio = new System.Windows.Forms.RadioButton();
+			this.dispositionDoNotCopyRadio = new System.Windows.Forms.RadioButton();
+			this.sequestorLocationLabel = new System.Windows.Forms.Label();
+			this.browseButton = new System.Windows.Forms.Button();
+			this.sequestorLocationTextBox = new System.Windows.Forms.TextBox();
 			this.instructionsPanel.SuspendLayout();
 			this.exclusionListPanel.SuspendLayout();
 			this.sequesterLocationPanel.SuspendLayout();
@@ -58,6 +58,17 @@
 			this.instructionsPanel.Size = new System.Drawing.Size(344, 63);
 			this.instructionsPanel.TabIndex = 0;
 			// 
+			// exclusionInstructionsLabel
+			// 
+			this.exclusionInstructionsLabel.AutoSize = true;
+			this.exclusionInstructionsLabel.Cursor = System.Windows.Forms.Cursors.Default;
+			this.exclusionInstructionsLabel.Location = new System.Drawing.Point(4, 4);
+			this.exclusionInstructionsLabel.MaximumSize = new System.Drawing.Size(338, 0);
+			this.exclusionInstructionsLabel.Name = "exclusionInstructionsLabel";
+			this.exclusionInstructionsLabel.Size = new System.Drawing.Size(34, 13);
+			this.exclusionInstructionsLabel.TabIndex = 0;
+			this.exclusionInstructionsLabel.Text = "[Text]";
+			// 
 			// exclusionListPanel
 			// 
 			this.exclusionListPanel.Controls.Add(this.exclusionsTextBox);
@@ -67,6 +78,15 @@
 			this.exclusionListPanel.Padding = new System.Windows.Forms.Padding(3);
 			this.exclusionListPanel.Size = new System.Drawing.Size(344, 256);
 			this.exclusionListPanel.TabIndex = 1;
+			// 
+			// exclusionsTextBox
+			// 
+			this.exclusionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.exclusionsTextBox.Location = new System.Drawing.Point(3, 3);
+			this.exclusionsTextBox.Name = "exclusionsTextBox";
+			this.exclusionsTextBox.Size = new System.Drawing.Size(338, 250);
+			this.exclusionsTextBox.TabIndex = 0;
+			this.exclusionsTextBox.Text = "";
 			// 
 			// sequesterLocationPanel
 			// 
@@ -78,27 +98,6 @@
 			this.sequesterLocationPanel.Size = new System.Drawing.Size(344, 32);
 			this.sequesterLocationPanel.TabIndex = 2;
 			// 
-			// dialogControlsPanel
-			// 
-			this.dialogControlsPanel.Controls.Add(this.dispositionChoiceGroupBox);
-			this.dialogControlsPanel.Controls.Add(this.sequestorLocationLabel);
-			this.dialogControlsPanel.Controls.Add(this.browseButton);
-			this.dialogControlsPanel.Controls.Add(this.textBox1);
-			this.dialogControlsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.dialogControlsPanel.Location = new System.Drawing.Point(0, 319);
-			this.dialogControlsPanel.Name = "dialogControlsPanel";
-			this.dialogControlsPanel.Size = new System.Drawing.Size(344, 144);
-			this.dialogControlsPanel.TabIndex = 3;
-			// 
-			// okButton
-			// 
-			this.okButton.Location = new System.Drawing.Point(12, 3);
-			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(75, 23);
-			this.okButton.TabIndex = 0;
-			this.okButton.Text = "OK";
-			this.okButton.UseVisualStyleBackColor = true;
-			// 
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -109,30 +108,27 @@
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
-			// textBox1
+			// okButton
 			// 
-			this.textBox1.Location = new System.Drawing.Point(19, 103);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(270, 20);
-			this.textBox1.TabIndex = 0;
+			this.okButton.Location = new System.Drawing.Point(12, 3);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 0;
+			this.okButton.Text = "OK";
+			this.okButton.UseVisualStyleBackColor = true;
+			this.okButton.Click += new System.EventHandler(this.ButtonClick_Ok);
 			// 
-			// browseButton
+			// dialogControlsPanel
 			// 
-			this.browseButton.Location = new System.Drawing.Point(295, 100);
-			this.browseButton.Name = "browseButton";
-			this.browseButton.Size = new System.Drawing.Size(30, 23);
-			this.browseButton.TabIndex = 1;
-			this.browseButton.Text = "...";
-			this.browseButton.UseVisualStyleBackColor = true;
-			// 
-			// sequestorLocationLabel
-			// 
-			this.sequestorLocationLabel.AutoSize = true;
-			this.sequestorLocationLabel.Location = new System.Drawing.Point(16, 87);
-			this.sequestorLocationLabel.Name = "sequestorLocationLabel";
-			this.sequestorLocationLabel.Size = new System.Drawing.Size(102, 13);
-			this.sequestorLocationLabel.TabIndex = 2;
-			this.sequestorLocationLabel.Text = "Sequestor Location:";
+			this.dialogControlsPanel.Controls.Add(this.dispositionChoiceGroupBox);
+			this.dialogControlsPanel.Controls.Add(this.sequestorLocationLabel);
+			this.dialogControlsPanel.Controls.Add(this.browseButton);
+			this.dialogControlsPanel.Controls.Add(this.sequestorLocationTextBox);
+			this.dialogControlsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.dialogControlsPanel.Location = new System.Drawing.Point(0, 319);
+			this.dialogControlsPanel.Name = "dialogControlsPanel";
+			this.dialogControlsPanel.Size = new System.Drawing.Size(344, 144);
+			this.dialogControlsPanel.TabIndex = 3;
 			// 
 			// dispositionChoiceGroupBox
 			// 
@@ -145,17 +141,6 @@
 			this.dispositionChoiceGroupBox.TabStop = false;
 			this.dispositionChoiceGroupBox.Text = "File Disposition:";
 			// 
-			// dispositionDoNotCopyRadio
-			// 
-			this.dispositionDoNotCopyRadio.AutoSize = true;
-			this.dispositionDoNotCopyRadio.Location = new System.Drawing.Point(7, 20);
-			this.dispositionDoNotCopyRadio.Name = "dispositionDoNotCopyRadio";
-			this.dispositionDoNotCopyRadio.Size = new System.Drawing.Size(86, 17);
-			this.dispositionDoNotCopyRadio.TabIndex = 0;
-			this.dispositionDoNotCopyRadio.TabStop = true;
-			this.dispositionDoNotCopyRadio.Text = "Do Not Copy";
-			this.dispositionDoNotCopyRadio.UseVisualStyleBackColor = true;
-			// 
 			// dispositionMoveRadio
 			// 
 			this.dispositionMoveRadio.AutoSize = true;
@@ -166,24 +151,45 @@
 			this.dispositionMoveRadio.TabStop = true;
 			this.dispositionMoveRadio.Text = "Move To Other Location";
 			this.dispositionMoveRadio.UseVisualStyleBackColor = true;
+			this.dispositionMoveRadio.Click += new System.EventHandler(this.ButtonClick_RadioButtonGroup);
 			// 
-			// exclusionsTextBox
+			// dispositionDoNotCopyRadio
 			// 
-			this.exclusionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.exclusionsTextBox.Location = new System.Drawing.Point(3, 3);
-			this.exclusionsTextBox.Name = "exclusionsTextBox";
-			this.exclusionsTextBox.Size = new System.Drawing.Size(338, 250);
-			this.exclusionsTextBox.TabIndex = 0;
-			this.exclusionsTextBox.Text = "";
+			this.dispositionDoNotCopyRadio.AutoSize = true;
+			this.dispositionDoNotCopyRadio.Location = new System.Drawing.Point(7, 20);
+			this.dispositionDoNotCopyRadio.Name = "dispositionDoNotCopyRadio";
+			this.dispositionDoNotCopyRadio.Size = new System.Drawing.Size(86, 17);
+			this.dispositionDoNotCopyRadio.TabIndex = 0;
+			this.dispositionDoNotCopyRadio.TabStop = true;
+			this.dispositionDoNotCopyRadio.Text = "Do Not Copy";
+			this.dispositionDoNotCopyRadio.UseVisualStyleBackColor = true;
+			this.dispositionDoNotCopyRadio.Click += new System.EventHandler(this.ButtonClick_RadioButtonGroup);
 			// 
-			// exclusionInstructionsLabel
+			// sequestorLocationLabel
 			// 
-			this.exclusionInstructionsLabel.AutoSize = true;
-			this.exclusionInstructionsLabel.Location = new System.Drawing.Point(4, 4);
-			this.exclusionInstructionsLabel.Name = "exclusionInstructionsLabel";
-			this.exclusionInstructionsLabel.Size = new System.Drawing.Size(35, 13);
-			this.exclusionInstructionsLabel.TabIndex = 0;
-			this.exclusionInstructionsLabel.Text = "label1";
+			this.sequestorLocationLabel.AutoSize = true;
+			this.sequestorLocationLabel.Location = new System.Drawing.Point(16, 87);
+			this.sequestorLocationLabel.Name = "sequestorLocationLabel";
+			this.sequestorLocationLabel.Size = new System.Drawing.Size(102, 13);
+			this.sequestorLocationLabel.TabIndex = 2;
+			this.sequestorLocationLabel.Text = "Sequester Location:";
+			// 
+			// browseButton
+			// 
+			this.browseButton.Location = new System.Drawing.Point(295, 100);
+			this.browseButton.Name = "browseButton";
+			this.browseButton.Size = new System.Drawing.Size(30, 23);
+			this.browseButton.TabIndex = 1;
+			this.browseButton.Text = "...";
+			this.browseButton.UseVisualStyleBackColor = true;
+			this.browseButton.Click += new System.EventHandler(this.ButtonClick_SequesterDestinationBrowse);
+			// 
+			// sequestorLocationTextBox
+			// 
+			this.sequestorLocationTextBox.Location = new System.Drawing.Point(19, 103);
+			this.sequestorLocationTextBox.Name = "sequestorLocationTextBox";
+			this.sequestorLocationTextBox.Size = new System.Drawing.Size(270, 20);
+			this.sequestorLocationTextBox.TabIndex = 0;
 			// 
 			// FileExclusionsForm
 			// 
@@ -227,6 +233,6 @@
 		private System.Windows.Forms.RadioButton dispositionDoNotCopyRadio;
 		private System.Windows.Forms.Label sequestorLocationLabel;
 		private System.Windows.Forms.Button browseButton;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox sequestorLocationTextBox;
 	}
 }

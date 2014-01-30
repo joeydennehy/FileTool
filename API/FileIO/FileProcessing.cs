@@ -21,7 +21,6 @@ namespace API.FileIO
 		public string SequesterPath { get; set; }
 		public List<string> SequesterPatterns { get; set; }
 		public long TotalSize { get; set; }
-		public long TotalSequesterFileSize { get; set; }
 		
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
@@ -54,13 +53,14 @@ namespace API.FileIO
 		{
 			CopyFilesToDestination(state.Files, state.OutputDirectory);
 
-			if (state.SequesterFiles.Count > 0)
+			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
 				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
 		}
 
 		public static void SetFilelist(FileProcessingState state)
 		{
 			state.Files = new List<FileInfo>();
+			state.SequesterFiles = new List<FileInfo>();
 			state.TotalSize = 0;
 
 			if (state.FoundationApplicantProcessIds != null)
@@ -80,21 +80,18 @@ namespace API.FileIO
 								{
 									continue;
 								}
+							}
 
-								if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+							if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+							{
+								bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
+								if (sequesterFile)
 								{
-									bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
-									if (sequesterFile)
-									{
-										if (state.SequesterPath != string.Empty)
-										{
-											state.SequesterFiles.Add(file);
-											state.TotalSequesterFileSize += file.Length;
-										}
-										continue;
-									}
+									state.SequesterFiles.Add(file);
+									continue;
 								}
 							}
+
 							state.Files.Add(file);
 							state.TotalSize += file.Length;
 						}

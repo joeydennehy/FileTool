@@ -80,7 +80,7 @@
 			this.processIdComboBox.FormattingEnabled = true;
 			this.processIdComboBox.Location = new System.Drawing.Point(17, 101);
 			this.processIdComboBox.Name = "processIdComboBox";
-			this.processIdComboBox.Size = new System.Drawing.Size(418, 21);
+			this.processIdComboBox.Size = new System.Drawing.Size(388, 21);
 			this.processIdComboBox.TabIndex = 4;
 			this.processIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_ProcessIdComboBox);
 			this.processIdComboBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown_comboBox);
@@ -126,12 +126,13 @@
 			// fileCountLinkLabel
 			// 
 			this.fileCountLinkLabel.AutoSize = true;
-			this.fileCountLinkLabel.Location = new System.Drawing.Point(214, 125);
+			this.fileCountLinkLabel.Location = new System.Drawing.Point(209, 125);
 			this.fileCountLinkLabel.Name = "fileCountLinkLabel";
 			this.fileCountLinkLabel.Size = new System.Drawing.Size(96, 13);
 			this.fileCountLinkLabel.TabIndex = 8;
 			this.fileCountLinkLabel.TabStop = true;
 			this.fileCountLinkLabel.Text = "[No Files Selected]";
+			this.fileCountLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClick_FileCountLinkLabel);
 			// 
 			// ApplicantProcessIdsLabel
 			// 
@@ -154,9 +155,9 @@
 			// fileTypeComboBox
 			// 
 			this.fileTypeComboBox.FormattingEnabled = true;
-			this.fileTypeComboBox.Location = new System.Drawing.Point(441, 101);
+			this.fileTypeComboBox.Location = new System.Drawing.Point(411, 101);
 			this.fileTypeComboBox.Name = "fileTypeComboBox";
-			this.fileTypeComboBox.Size = new System.Drawing.Size(192, 21);
+			this.fileTypeComboBox.Size = new System.Drawing.Size(222, 21);
 			this.fileTypeComboBox.TabIndex = 6;
 			this.fileTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_FileTypeComboBox);
 			// 
@@ -172,7 +173,7 @@
 			// fileExclusionLinkLabel
 			// 
 			this.fileExclusionLinkLabel.AutoSize = true;
-			this.fileExclusionLinkLabel.Location = new System.Drawing.Point(439, 125);
+			this.fileExclusionLinkLabel.Location = new System.Drawing.Point(408, 125);
 			this.fileExclusionLinkLabel.Name = "fileExclusionLinkLabel";
 			this.fileExclusionLinkLabel.Size = new System.Drawing.Size(85, 13);
 			this.fileExclusionLinkLabel.TabIndex = 13;
@@ -183,12 +184,13 @@
 			// secludedFileCountlinkLabel
 			// 
 			this.secludedFileCountlinkLabel.AutoSize = true;
-			this.secludedFileCountlinkLabel.Location = new System.Drawing.Point(530, 125);
+			this.secludedFileCountlinkLabel.Location = new System.Drawing.Point(499, 125);
 			this.secludedFileCountlinkLabel.Name = "secludedFileCountlinkLabel";
-			this.secludedFileCountlinkLabel.Size = new System.Drawing.Size(55, 13);
+			this.secludedFileCountlinkLabel.Size = new System.Drawing.Size(98, 13);
 			this.secludedFileCountlinkLabel.TabIndex = 14;
 			this.secludedFileCountlinkLabel.TabStop = true;
-			this.secludedFileCountlinkLabel.Text = "linkLabel1";
+			this.secludedFileCountlinkLabel.Text = "[No Files Excluded]";
+			this.secludedFileCountlinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClick_SecludedFileCountlinkLabel);
 			// 
 			// ClientFileExtractionControl
 			// 

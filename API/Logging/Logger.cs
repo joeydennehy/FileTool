@@ -9,27 +9,6 @@ namespace API.Logging
 {
 	class Logger
 	{
-
-		public static LogLevel DEBUG
-		{
-			get { return LogLevel.Debug; }
-		}
-
-		public static LogLevel WARN
-		{
-			get { return LogLevel.Warn; }
-		}
-
-		public static LogLevel ERROR
-		{
-			get { return LogLevel.Error; }
-		}
-
-		public static LogLevel INFO
-		{
-			get { return LogLevel.Info; }
-		}
-
 		protected static readonly ILog log;
 
 	    static Logger()
