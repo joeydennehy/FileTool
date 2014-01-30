@@ -41,7 +41,8 @@
 			this.rootProcessingFolder = new System.Windows.Forms.Label();
 			this.fileTypeComboBox = new System.Windows.Forms.ComboBox();
 			this.fileTypesLabel = new System.Windows.Forms.Label();
-			this.fileExclusionLabel = new System.Windows.Forms.LinkLabel();
+			this.fileExclusionLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.secludedFileCountlinkLabel = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// foundationIdComboBoxLabel
@@ -79,7 +80,7 @@
 			this.processIdComboBox.FormattingEnabled = true;
 			this.processIdComboBox.Location = new System.Drawing.Point(17, 101);
 			this.processIdComboBox.Name = "processIdComboBox";
-			this.processIdComboBox.Size = new System.Drawing.Size(489, 21);
+			this.processIdComboBox.Size = new System.Drawing.Size(418, 21);
 			this.processIdComboBox.TabIndex = 4;
 			this.processIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_ProcessIdComboBox);
 			this.processIdComboBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown_comboBox);
@@ -153,36 +154,47 @@
 			// fileTypeComboBox
 			// 
 			this.fileTypeComboBox.FormattingEnabled = true;
-			this.fileTypeComboBox.Location = new System.Drawing.Point(512, 101);
+			this.fileTypeComboBox.Location = new System.Drawing.Point(441, 101);
 			this.fileTypeComboBox.Name = "fileTypeComboBox";
-			this.fileTypeComboBox.Size = new System.Drawing.Size(121, 21);
+			this.fileTypeComboBox.Size = new System.Drawing.Size(192, 21);
 			this.fileTypeComboBox.TabIndex = 6;
 			this.fileTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_FileTypeComboBox);
 			// 
 			// fileTypesLabel
 			// 
 			this.fileTypesLabel.AutoSize = true;
-			this.fileTypesLabel.Location = new System.Drawing.Point(512, 82);
+			this.fileTypesLabel.Location = new System.Drawing.Point(438, 85);
 			this.fileTypesLabel.Name = "fileTypesLabel";
 			this.fileTypesLabel.Size = new System.Drawing.Size(58, 13);
 			this.fileTypesLabel.TabIndex = 5;
 			this.fileTypesLabel.Text = "File Types:";
 			// 
-			// fileExclusionLabel
+			// fileExclusionLinkLabel
 			// 
-			this.fileExclusionLabel.AutoSize = true;
-			this.fileExclusionLabel.Location = new System.Drawing.Point(512, 129);
-			this.fileExclusionLabel.Name = "fileExclusionLabel";
-			this.fileExclusionLabel.Size = new System.Drawing.Size(85, 13);
-			this.fileExclusionLabel.TabIndex = 13;
-			this.fileExclusionLabel.TabStop = true;
-			this.fileExclusionLabel.Text = "File Exclusions...";
-			this.fileExclusionLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ButtonClick_FileExclusions);
+			this.fileExclusionLinkLabel.AutoSize = true;
+			this.fileExclusionLinkLabel.Location = new System.Drawing.Point(439, 125);
+			this.fileExclusionLinkLabel.Name = "fileExclusionLinkLabel";
+			this.fileExclusionLinkLabel.Size = new System.Drawing.Size(85, 13);
+			this.fileExclusionLinkLabel.TabIndex = 13;
+			this.fileExclusionLinkLabel.TabStop = true;
+			this.fileExclusionLinkLabel.Text = "File Exclusions...";
+			this.fileExclusionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ButtonClick_FileExclusions);
+			// 
+			// secludedFileCountlinkLabel
+			// 
+			this.secludedFileCountlinkLabel.AutoSize = true;
+			this.secludedFileCountlinkLabel.Location = new System.Drawing.Point(530, 125);
+			this.secludedFileCountlinkLabel.Name = "secludedFileCountlinkLabel";
+			this.secludedFileCountlinkLabel.Size = new System.Drawing.Size(55, 13);
+			this.secludedFileCountlinkLabel.TabIndex = 14;
+			this.secludedFileCountlinkLabel.TabStop = true;
+			this.secludedFileCountlinkLabel.Text = "linkLabel1";
 			// 
 			// ClientFileExtractionControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.Controls.Add(this.fileExclusionLabel);
+			this.Controls.Add(this.secludedFileCountlinkLabel);
+			this.Controls.Add(this.fileExclusionLinkLabel);
 			this.Controls.Add(this.fileTypesLabel);
 			this.Controls.Add(this.fileTypeComboBox);
 			this.Controls.Add(this.rootProcessingFolder);
@@ -219,6 +231,7 @@
 		private System.Windows.Forms.Label rootProcessingFolder;
 		private System.Windows.Forms.ComboBox fileTypeComboBox;
 		private System.Windows.Forms.Label fileTypesLabel;
-		private System.Windows.Forms.LinkLabel fileExclusionLabel;
+		private System.Windows.Forms.LinkLabel fileExclusionLinkLabel;
+		private System.Windows.Forms.LinkLabel secludedFileCountlinkLabel;
 	}
 }

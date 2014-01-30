@@ -69,7 +69,7 @@ namespace Test.API
 				FoundationApplicantProcessIds = query.RetrieveApplicationProcessInfo(7043)
 			};
 
-			FileProcessing.CopyFilesToDestination(state);
+			FileProcessing.CopyApplicationProcessFiles(state);
 			Assert.IsTrue(Directory.Exists("C:/petcocopy"));
 		}
 	}

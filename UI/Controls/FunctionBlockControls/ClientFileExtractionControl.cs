@@ -139,7 +139,7 @@ namespace UI.Controls.FunctionBlockControls
 					}
 				}
 
-				FileProcessing.CopyFilesToDestination(state);
+				FileProcessing.CopyApplicationProcessFiles(state);
 
 				MessageBox.Show(this, FILE_COPY_COMPLETE, FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
