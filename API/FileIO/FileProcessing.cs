@@ -22,7 +22,6 @@ namespace API.FileIO
 		public long TotalSize { get; set; }
 		public List<string> SequesterPatterns { get; set; }
 		public string SequesterPath { get; set; }
-		public ExclusionActions ExclusionAction { get; set; }
  
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
@@ -171,10 +170,5 @@ namespace API.FileIO
 			//}
 		}
 
-	}
-	public enum ExclusionActions
-	{
-		doNotCopy = 1,
-		move = 2
 	}
 }

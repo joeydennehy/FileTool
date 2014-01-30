@@ -14,6 +14,7 @@ namespace UI
 	public partial class FileExclusionsForm : Form
 	{
 		private FileProcessingState state;
+        private string previousFilePath;
 
 		public FileExclusionsForm(FileProcessingState state)
 		{
@@ -25,8 +26,8 @@ namespace UI
 		{
 			this.state = state;
 			exclusionsTextBox.Text = string.Join("\n", state.SequesterPatterns);
-			dispositionMoveRadio.Checked = state.ExclusionAction == ExclusionActions.move;
-			dispositionDoNotCopyRadio.Checked = state.ExclusionAction == ExclusionActions.doNotCopy || !Enum.IsDefined(typeof(ExclusionActions),state.ExclusionAction);
+            dispositionMoveRadio.Checked = !string.IsNullOrEmpty(state.SequesterPath);
+            dispositionDoNotCopyRadio.Checked = string.IsNullOrEmpty(state.SequesterPath);
 			sequestorLocationTextBox.Text = state.SequesterPath;
 		}
 
@@ -43,11 +44,13 @@ namespace UI
 		{
 			if (sender == dispositionDoNotCopyRadio)
 			{
-				state.ExclusionAction = ExclusionActions.doNotCopy;
+				state.SequesterPath = "";
+                previousFilePath = sequestorLocationTextBox.Text;
+                sequestorLocationTextBox.Text = "";
 			}
 			else
 			{
-				state.ExclusionAction = ExclusionActions.move;
+                sequestorLocationTextBox.Text = previousFilePath;
 			}
 		}
 
@@ -57,7 +60,7 @@ namespace UI
 		private void okButton_Click(object sender, EventArgs e)
 		{
 			UpdateStateWithSequestorLocation(sequestorLocationTextBox.Text);
-			if (state.ExclusionAction == ExclusionActions.move && string.IsNullOrEmpty(state.SequesterPath))
+            if (dispositionMoveRadio.Checked && string.IsNullOrEmpty(state.SequesterPath))
 			{
 				MessageBox.Show(this, "Please enter a sequester path where you would like to move the excluded files to.", "Sequester Path Mission", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -71,5 +74,20 @@ namespace UI
 		private void RadioButton_Click(object sender, EventArgs e) { UpdateStateWithExclusionAction(sender); }
 
 		private void cancelButton_Click(object sender, EventArgs e) { Close(); }
+
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = true
+            };
+
+            DialogResult result = folderBrowser.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                state.OutputDirectory = folderBrowser.SelectedPath;
+                sequestorLocationTextBox.Text = state.OutputDirectory;
+            }
+        }
 	}
 }

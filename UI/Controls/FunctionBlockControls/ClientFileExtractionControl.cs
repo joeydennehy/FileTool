@@ -156,7 +156,11 @@ namespace UI.Controls.FunctionBlockControls
 		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			FileExclusionsForm fileExclusions = new FileExclusionsForm(state);
-			fileExclusions.ShowDialog();
+			DialogResult result =fileExclusions.ShowDialog();
+            if (result == DialogResult.OK)
+			{
+                SelectedIndexChanged_FileTypeComboBox(fileTypeComboBox, new EventArgs());
+			}
 		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
@@ -334,6 +338,7 @@ namespace UI.Controls.FunctionBlockControls
 				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
 			}
 		}
+
 
 		//Completed: handle page validation
 		// Completed - Includes, Do not allow run until destination folder is selected, or input
