@@ -7,22 +7,27 @@ namespace API.Data
 {
 	public class ApplicantProcessQuery
 	{
-		public Dictionary<string, string> BuildFoundationDictionary()
+        public Dictionary<string, List<string>> BuildFoundationDictionary()
 		{
 			Command command = new Command {SqlStatementId = "SELECT_ALL_URL_KEYS_AND_NAMES"};
 
 			DataAccess access = new DataAccess();
 
-			Dictionary<string, string> foundations = new Dictionary<string, string>();
+			Dictionary<string, List<string>> foundations = new Dictionary<string, List<string>>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				while (reader.Read())
 				{
-					string foundationUrlKey = !reader.IsDBNull(0) ? reader.GetString(0) : string.Empty;
-					string foundationName = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty;
+                    string foundationId = !reader.IsDBNull(0) ? reader.GetString(0) : string.Empty;
+					string foundationUrlKey = !reader.IsDBNull(0) ? reader.GetString(1) : string.Empty;
+					string foundationName = !reader.IsDBNull(1) ? reader.GetString(2) : string.Empty;
 
-					foundations.Add(string.Format("{0} - {1}", foundationUrlKey, foundationName), foundationUrlKey);
+				    List<string> foundationData = new List<string>();
+                    foundationData.Add(foundationId);
+                    foundationData.Add(foundationUrlKey);
+
+                    foundations.Add(string.Format("{0} - {1}", foundationUrlKey, foundationName), foundationData);
 				}
 			}
 

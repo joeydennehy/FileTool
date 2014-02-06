@@ -52,6 +52,19 @@ namespace UI.Controls.FunctionBlockControls
 		
 		#region Private Methods
 
+        private static void BindFoundationData(ComboBox comboBox, IReadOnlyCollection<KeyValuePair<string, List<string>>> source)
+        {
+            if (source.Count > 0)
+            {
+                comboBox.DataSource = new BindingSource(source, null);
+                comboBox.DisplayMember = "Key";
+            }
+            else
+            {
+                comboBox.DataSource = null;
+            }
+        }
+
 		private static void BindData(ComboBox comboBox, IReadOnlyCollection<KeyValuePair<string, string>> source)
 		{
 			if (source.Count > 0)
@@ -76,7 +89,7 @@ namespace UI.Controls.FunctionBlockControls
 			data = new ApplicantProcessQuery();
 			try
 			{
-				BindData(foundationIdComboBox, data.BuildFoundationDictionary());
+				BindFoundationData(foundationIdComboBox, data.BuildFoundationDictionary());
 			}
 			catch (Exception eError)
 			{
@@ -207,14 +220,14 @@ namespace UI.Controls.FunctionBlockControls
 			string selectedUrlKey = string.Empty;
 			if (control.SelectedItem != null)
 			{
-				selectedUrlKey = ((KeyValuePair<string, string>)control.SelectedItem).Value;
+				selectedUrlKey = ((KeyValuePair<string, List<string>>)control.SelectedItem).Value.ToList()[1];
 			}
 
 			if (!string.IsNullOrEmpty(control.Text))
 			{
 				BindingSource boundData = (BindingSource)control.DataSource;
-				KeyValuePair<string, string> keyValuePair = (KeyValuePair<string, string>)boundData[control.FindString(control.Text)];
-				selectedUrlKey = keyValuePair.Value;
+                KeyValuePair<string, List<string>> keyValuePair = (KeyValuePair<string, List<string>>)boundData[control.FindString(control.Text)];
+			    selectedUrlKey = keyValuePair.Value.ToList()[1];
 			}
 			
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
@@ -234,7 +247,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-			string selectedUrlKey = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+			string selectedUrlKey = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[1];
 
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
