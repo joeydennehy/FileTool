@@ -13,6 +13,7 @@ namespace API.FileIO
 	public class FileProcessingState
 	{
 		public string BaseDirectory { get; set; }
+        public string FoundationId { get; set; }
 		public string FoundationUrlKey { get; set; }
 		public int FoundationProcessId { get; set; }
 		public List<int> FoundationApplicantProcessIds { get; set; }

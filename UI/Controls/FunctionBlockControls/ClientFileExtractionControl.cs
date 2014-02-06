@@ -218,8 +218,10 @@ namespace UI.Controls.FunctionBlockControls
 			ComboBox control = (ComboBox)sender;
 
 			string selectedUrlKey = string.Empty;
+		    string selectedFoundationId = string.Empty;
 			if (control.SelectedItem != null)
 			{
+                selectedFoundationId = ((KeyValuePair<string, List<string>>)control.SelectedItem).Value.ToList()[0];
 				selectedUrlKey = ((KeyValuePair<string, List<string>>)control.SelectedItem).Value.ToList()[1];
 			}
 
@@ -227,12 +229,14 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				BindingSource boundData = (BindingSource)control.DataSource;
                 KeyValuePair<string, List<string>> keyValuePair = (KeyValuePair<string, List<string>>)boundData[control.FindString(control.Text)];
-			    selectedUrlKey = keyValuePair.Value.ToList()[1];
+			    selectedFoundationId = keyValuePair.Value.ToList()[0];
+                selectedUrlKey = keyValuePair.Value.ToList()[1];
 			}
 			
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				state.FoundationUrlKey = selectedUrlKey;
+			    state.FoundationId = selectedFoundationId;
 				SetProcessingFolderText();
 				try
 				{
@@ -247,11 +251,13 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
+            string selectedFoundationId = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[0];
 			string selectedUrlKey = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[1];
 
 			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				state.FoundationUrlKey = selectedUrlKey;
+			    state.FoundationId = selectedFoundationId;
 				SetProcessingFolderText();
 				try
 				{
