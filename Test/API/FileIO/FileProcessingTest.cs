@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Collections.Generic;
+using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test.API
@@ -11,8 +14,24 @@ namespace Test.API
 	[TestClass]
 	public class FileProcessingTest
 	{
+		private string rootPath;
+		private FileProcessingState state;
 		public FileProcessingTest()
 		{
+			state = new FileProcessingState();
+			state.BaseDirectory = string.Format("{0}\\TestSet", Directory.GetCurrentDirectory());
+			Directory.CreateDirectory(state.BaseDirectory);
+
+
+//<drive>
+//---<URLKey>
+//---|---<########1>
+//---|---|---<application>
+//---|---|---<followup>
+//---|---|---<loi>
+//---|---|---<qualification>
+//---|---|---<supportingdocuments>
+
 			//
 			// TODO: Add constructor logic here
 			//

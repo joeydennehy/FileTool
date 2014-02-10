@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using API;
 using API.Config;
 using API.Data;
 using API.FileIO;
-using UI.Controls;
 
 namespace UI.Controls.FunctionBlockControls
 {
@@ -21,8 +19,10 @@ namespace UI.Controls.FunctionBlockControls
 		private const string FILE_COPY_COMPLETE = "File copy has completed.";
 		private const string FILE_COPY_ERROR_FORMAT = "File copy procedure gave the following error {0}.";
 		private const string FILE_DELETE_ERROR_FORMAT = "Unable to remove file: {0} due to the following error: {1}. /r/n The copy process will abort.";
-		private const string FILE_COUNT_FORMAT = "[{0} files, totaling {1:n} MB";
+		private const string FILE_COUNT_FORMAT = "[{0} files, totaling {1:n} MB]";
+		private const string FILE_EXCLUDED_COUNT_FORMAT = "[{0} files]";
 		private const string NO_FILE_COUNT = "[No Files Found]";
+		private const string NO_FILE_EXCLUSIONS = "[No Files Excluded]";
 		private const string VALIDATION_ERROR_CAPTION = "Invalid Processing State";
 		private const string VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT = "{0}   WARNING!: Cannot find or access specified folder.";
 		private const string VALIDATION_ERROR_FOLDER_NOT_EMPTY = "Warning: All files in the destination folder will be removed, do you wish to proceed?";
@@ -152,7 +152,7 @@ namespace UI.Controls.FunctionBlockControls
 					}
 				}
 
-				FileProcessing.CopyFilesToDestination(state);
+				FileProcessing.CopyApplicationProcessFiles(state);
 
 				MessageBox.Show(this, FILE_COPY_COMPLETE, FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
@@ -170,10 +170,20 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			FileExclusionsForm fileExclusions = new FileExclusionsForm(state);
 			DialogResult result =fileExclusions.ShowDialog();
-            if (result == DialogResult.OK)
+			if (result == DialogResult.OK)
 			{
-                SelectedIndexChanged_FileTypeComboBox(fileTypeComboBox, new EventArgs());
+				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
 			}
+
+			if (state.SequesterFiles != null && state.SequesterFiles.Count > 0)
+			{
+				secludedFileCountlinkLabel.Text = string.Format(FILE_EXCLUDED_COUNT_FORMAT, state.SequesterFiles.Count);
+			}
+			else
+			{
+				secludedFileCountlinkLabel.Text = NO_FILE_EXCLUSIONS;
+			}
+			
 		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
@@ -189,6 +199,18 @@ namespace UI.Controls.FunctionBlockControls
 				state.OutputDirectory = folderBrowser.SelectedPath;
 				outputDestinationTextBox.Text = state.OutputDirectory;
 			}
+		}
+
+		private void LinkClick_FileCountLinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			FileListDisplayForm fileListDisplay = new FileListDisplayForm(state.Files);
+			fileListDisplay.ShowDialog(this);
+		}
+
+		private void LinkClick_SecludedFileCountlinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			FileListDisplayForm fileListDisplay = new FileListDisplayForm(state.SequesterFiles);
+			fileListDisplay.ShowDialog(this);
 		}
 
 		private void MouseClick_comboBox(object sender, MouseEventArgs e)
@@ -246,6 +268,16 @@ namespace UI.Controls.FunctionBlockControls
 				{
 					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
+			}
+		}
+
+		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
+		{
+			string selectedFilePattern = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+			if (string.Compare(state.FileMask, selectedFilePattern, StringComparison.InvariantCultureIgnoreCase) != 0)
+			{
+				state.FileMask = selectedFilePattern;
+				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
 			}
 		}
 
@@ -347,18 +379,6 @@ namespace UI.Controls.FunctionBlockControls
 
 		#endregion
 
-
-		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
-		{
-			string selectedFilePattern = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-			if (string.Compare(state.FileMask, selectedFilePattern, StringComparison.InvariantCultureIgnoreCase) != 0)
-			{
-				state.FileMask = selectedFilePattern;
-				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
-			}
-		}
-
-
 		//Completed: handle page validation
 		// Completed - Includes, Do not allow run until destination folder is selected, or input
 		//COMPLETED: Add task completion notification
@@ -366,10 +386,11 @@ namespace UI.Controls.FunctionBlockControls
 		//TODO: NTH: display list of files to be output
 			//COMPLETED: need to add ontextchanged event handlers for textbox controls
 		//COMPLETED: add and configure log4net
-		//TODO: Audit file count functions and File Size Counts
-		//TODO: refactor file copy functions
+		//COMPLETED: Audit file count functions and File Size Counts
+		//COMPETED: refactor file copy functions
 		//TODO: Add File Exclusion Control
 		//TODO: Add Foundant Logo
+		//TODO: Generate Unit tests for file copy functions
 
 	}
 }

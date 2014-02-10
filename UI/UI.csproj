@@ -102,6 +102,12 @@
     <Compile Include="FileExclusionsForm.Designer.cs">
       <DependentUpon>FileExclusionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileListDisplayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileListDisplayForm.Designer.cs">
+      <DependentUpon>FileListDisplayForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GLMFileUtilityTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileExclusionsForm.resx">
       <DependentUpon>FileExclusionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileListDisplayForm.resx">
+      <DependentUpon>FileListDisplayForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GLMFileUtilityTool.resx">
       <DependentUpon>GLMFileUtilityTool.cs</DependentUpon>

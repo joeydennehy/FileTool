@@ -1,11 +1,10 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Text;
 using API.Logging;
 
 namespace API.FileIO
@@ -14,16 +13,17 @@ namespace API.FileIO
 	{
 		public string BaseDirectory { get; set; }
         public string FoundationId { get; set; }
-		public string FoundationUrlKey { get; set; }
-		public int FoundationProcessId { get; set; }
-		public List<int> FoundationApplicantProcessIds { get; set; }
-		public string OutputDirectory { get; set; }
 		public string FileMask { get; set; }
 		public List<FileInfo> Files { get; set; }
-		public long TotalSize { get; set; }
-		public List<string> SequesterPatterns { get; set; }
+		public List<int> FoundationApplicantProcessIds { get; set; }
+		public int FoundationProcessId { get; set; }
+		public string FoundationUrlKey { get; set; }
+		public string OutputDirectory { get; set; }
+		public List<FileInfo> SequesterFiles { get; set; }
 		public string SequesterPath { get; set; }
- 
+		public List<string> SequesterPatterns { get; set; }
+		public long TotalSize { get; set; }
+		
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
 
@@ -38,36 +38,31 @@ namespace API.FileIO
 
 			Files = new List<FileInfo>();
 			FoundationApplicantProcessIds = new List<int>();
-
-			//Defaulting the set for now.
-			SequesterPatterns = new List<string>
-			{
-				"IRS",
-				"W9",
-				"W-9",
-				"501",
-				"990"
-			};
-			SequesterPath = OutputDirectory + "\\Sequester";
-		}
-
-		public bool Validate()
-		{
-			return 
-				!string.IsNullOrEmpty(BaseDirectory) 
-				&& !string.IsNullOrEmpty(FoundationUrlKey)
-				&& !string.IsNullOrEmpty(OutputDirectory)
-				&& FoundationProcessId > 0
-				&& (FoundationApplicantProcessIds != null && FoundationApplicantProcessIds.Count != 0)
-			;
+			SequesterFiles = new List<FileInfo>();
 		}
 	}
 
 	public static class FileProcessing
 	{
+		private static readonly List<string> SUB_FOLDERS;
+
+		static FileProcessing()
+		{
+			SUB_FOLDERS = new List<string> {"followup", "loi", "qualification"};
+		}
+
+		public static void CopyApplicationProcessFiles(FileProcessingState state)
+		{
+			CopyFilesToDestination(state.Files, state.OutputDirectory);
+
+			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
+				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
+		}
+
 		public static void SetFilelist(FileProcessingState state)
 		{
 			state.Files = new List<FileInfo>();
+			state.SequesterFiles = new List<FileInfo>();
 			state.TotalSize = 0;
 
 			if (state.FoundationApplicantProcessIds != null)
@@ -88,6 +83,17 @@ namespace API.FileIO
 									continue;
 								}
 							}
+
+							if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+							{
+								bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
+								if (sequesterFile)
+								{
+									state.SequesterFiles.Add(file);
+									continue;
+								}
+							}
+
 							state.Files.Add(file);
 							state.TotalSize += file.Length;
 						}
@@ -96,80 +102,76 @@ namespace API.FileIO
 			}
 		}
 
-		public static void CopyFilesToDestination(FileProcessingState state)
+		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)
 		{
-			//if (!Directory.Exists(state.OutputDirectory))
-			//{
-			//	Directory.CreateDirectory(state.OutputDirectory);
-			//}
+			if (files == null || files.Count == 0)
+			{
+				Logger.Log("CopyFilesToDestination: no files selected to copy", LogLevel.Warn);
+				return;
+			}
 
-			//foreach (FileInfo file in state.Files)
-			//{
-			//	file.DirectoryName
-			//}
+			if (string.IsNullOrEmpty(destinationFolder))
+			{
+				Logger.Log("CopyFilesToDestination: No destination selected for copy", LogLevel.Error);
+				return;
+			}
+
+			if (!Directory.Exists(destinationFolder))
+			{
+				Directory.CreateDirectory(destinationFolder);
+			}
+
+			foreach (FileInfo file in files)
+			{
+				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
+				try
+				{
+					File.Copy(file.FullName, fullFileName, true);
+					Logger.Log("Copied file " + file.FullName + " to " + fullFileName, LogLevel.Info);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Unable to copy file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+					throw;
+				}
+			}
 		}
 
-		public static void CopyFilesToDestinationOld(FileProcessingState state)
+		private static string BuildApplicationProcessFileName(FileInfo file)
 		{
-			//	if (!Directory.Exists(state.OutputDirectory))
-			//	{
-			//		Directory.CreateDirectory(state.OutputDirectory);
-			//	}
+			if (string.IsNullOrEmpty(file.DirectoryName))
+				return string.Empty;
 
-			//bool hasOtherStages = state.Files.Any(
-			//	file => Path.GetDirectoryName(file)
-			//		.TrimEnd(Path.DirectorySeparatorChar)
-			//		.Split(Path.DirectorySeparatorChar)
-			//		.Last()
-			//		.Contains("loi")
-			//	|| Path.GetDirectoryName(file)
-			//		.TrimEnd(Path.DirectorySeparatorChar)
-			//		.Split(Path.DirectorySeparatorChar)
-			//		.Last()
-			//		.Contains("qualification"));
+			string applicantProcessId = string.Empty;
+			string subFolderId = string.Empty;
+			StringBuilder fileName = new StringBuilder();
 
-			//// Copy the files and overwrite destination files if they already exist. \
-			//int i = 0;
-			//foreach (string file in state.Files)
-			//{
-			//	// Use static Path methods to extract only the file name from the path.
-			//	string[] directory = Path.GetDirectoryName(file)
-			//									 .TrimEnd(Path.DirectorySeparatorChar)
-			//									 .Split(Path.DirectorySeparatorChar);
-			//	string stage = directory.Last();
-			//	string applicantProcessId = directory[directory.Count() - 2];
-			//	string fileName = string.Format("{0}{1}_{2}", applicantProcessId, hasOtherStages ? "_" + stage : "",
-			//											  Path.GetFileName(file));
-			//	string destFile = Path.Combine(state.OutputDirectory, fileName);
+			List<string> folders = new List<string>();
+			folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
 
-			//	if (File.Exists(destFile))
-			//	{
-			//		int iteration = 1;
-			//		string tempFullFileName = destFile;
-			//		while (!File.Exists(tempFullFileName))
-			//		{
-			//			string tempFileName = Path.GetFileNameWithoutExtension(fileName) + "(" + iteration + ")" + Path.GetExtension(fileName);
-			//			tempFullFileName = Path.Combine(state.OutputDirectory, tempFileName);
-			//			++iteration;
-			//		}
-			//		destFile = tempFullFileName;
-			//	}
+			int applicantProcessValue;
+			if (folders.Count - 2 >= 0 && int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
+			{
+				if (applicantProcessValue > 0)
+				{
+					applicantProcessId = applicantProcessValue.ToString("D10");
+				}
+				else
+				{
+					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
+					return string.Empty;
+				}
+			}
 
-			//	global::System.Diagnostics.Debug.Print(string.Format("{0}:From:[{1}] To:[{2}", i++, file, destFile));
+			if (SUB_FOLDERS.Contains(folders.Last()))
+				subFolderId = string.Format("_{0}", folders.Last());
 
-			//	File.Copy(file, destFile, true);
-			//	Logger.Log("Copy file " + file + " to " + destFile, Logger.INFO);
-			//	if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
-			//	{
-			//		string tempFileName = Path.GetFileNameWithoutExtension(destFile);
-			//		if (state.SequesterPatterns.Any(tempFileName.Contains))
-			//		{
-			//			File.Copy(destFile, state.OutputDirectory + "\\" + state.SequesterPath + "\\" + tempFileName + Path.GetExtension(destFile), true);
-			//			File.Delete(destFile);
-			//		}
-			//	}
-			//}
+			fileName.Clear();
+			fileName.Append(applicantProcessId);
+			fileName.Append(subFolderId);
+			fileName.Append(string.Format("_{0}", file.Name));
+
+			return fileName.ToString();
 		}
-
 	}
 }
