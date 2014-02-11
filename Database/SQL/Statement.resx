@@ -154,7 +154,7 @@ WHERE
 		</value>
 	</data>
 
-	
+
 	<data name="SELECT_ALL_URL_KEYS_AND_NAMES" xml:space="preserve">
 		<value>
 			SELECT
@@ -166,19 +166,7 @@ WHERE
 				Name
 		</value>
 	</data>
-	<data name="SELECT_FOUNDATION_PROCESS_INFO" xml:space="preserve">
-		<value>
-			SELECT 
-				FoundationProcessId, 
-				foundationprocess.Name 
-			FROM 
-				foundationprocess, foundation 
-			WHERE
-				foundation.UrlKey = @URL_KEY AND foundation.FoundationId = foundationprocess.Foundationid 
-			ORDER BY 
-				Name
-		</value>
-	</data>
+
 	<data name="SELECT_APPLICATION_PROCESS_INFO" xml:space="preserve">
 		<value>
 			SELECT 
@@ -187,6 +175,98 @@ WHERE
 				applicantprocess 
 			WHERE
 				FoundationProcessId = @FOUNDATION_PROCESS
+		</value>
+	</data>
+
+	<data name="SELECT_FOUNDATION_PROCESS_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				FoundationProcessId, 
+				foundationprocess.Name 
+			FROM 
+				foundationprocess, foundation 
+			WHERE
+				foundation.UrlKey = @URL_KEY 
+				AND 
+				foundation.FoundationId = foundationprocess.Foundationid 
+			ORDER BY 
+				Name
+		</value>
+	</data>
+
+	<data name="SELECT_APPLICATION_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID" xml:space="preserve">
+		<value>
+			SELECT
+				DISTINCT
+					CONCAT(ap.ApplicantProcessCode, '\\supportingdocuments\\', d.FilePath) AS FileName
+			FROM
+				document d
+				LEFT OUTER JOIN foundation f ON (d.FoundationId = f.FoundationId)
+				LEFT OUTER JOIN applicantprocess ap ON (d.ApplicantProcessId = ap.ApplicantProcessId)
+			WHERE
+				f.UrlKey = CONVERT(@URL_KEY USING utf8) COLLATE utf8_general_ci
+				AND
+				NULLIF(d.ApplicantProcessId, '') IS NOT NULL
+			ORDER BY
+				FileName
+		</value>
+	</data>
+
+	<data name="SELECT_ORG_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID" xml:space="preserve">
+		<value>
+			SELECT
+				DISTINCT
+					CONCAT('ORG-', d.OrganizationId, '\\supportingdocuments\\', d.FilePath) AS FileName
+			FROM
+				document d
+				LEFT OUTER JOIN foundation f ON (d.FoundationId = f.FoundationId)
+			WHERE
+				f.UrlKey = CONVERT(@URL_KEY USING utf8) COLLATE utf8_general_ci
+				AND
+				NULLIF(d.OrganizationId, '') IS NOT NULL
+			ORDER BY
+				FileName
+		</value>
+	</data>
+
+	<data name="SELECT_REQUEST_FILES_BY_URL_KEY" xml:space="preserve">
+		<value>
+			SELECT
+				DISTINCT
+				CONCAT(ap.ApplicantProcessCode, '\\', st.Name, '\\', an.Value) AS FileName
+			FROM
+				submission su
+				LEFT OUTER JOIN foundation f ON (su.FoundationId = f.FoundationId)
+				LEFT OUTER JOIN applicantprocess ap ON (su.RequestId = ap.ApplicantProcessId)
+				LEFT OUTER JOIN stage st ON (su.StageId = st.StageId)
+				LEFT OUTER JOIN answer an ON (su.SubmissionId = an.SubmissionId)
+				LEFT OUTER JOIN element em ON (an.ElementId = em.ElementId)
+			 WHERE
+				f.UrlKey = CONVERT(@URL_KEY USING utf8) COLLATE utf8_general_ci
+				AND
+				NULLIF(ap.ApplicantProcessCode, '') IS NOT NULL
+				AND
+				NULLIF(an.Value, '') IS NOT NULL
+				AND
+				em.Type IN ( 17,18 )
+			ORDER BY
+				FileName
+		</value>
+	</data>
+
+	<data name="SELECT_SHARED_FILES_BY_FOUNDATION_ID" xml:space="preserve">
+		<value>
+			SELECT
+				CONCAT('\\Shared\\' , d.FilePath) AS FileName
+			FROM
+				document d
+				LEFT OUTER JOIN foundation f ON (d.FoundationId = f.FoundationId)
+			WHERE
+				f.UrlKey = CONVERT(@URL_KEY USING utf8) COLLATE utf8_general_ci
+				AND
+				d.DocumentTypeId = 9
+			ORDER BY
+				FileName
 		</value>
 	</data>
 	

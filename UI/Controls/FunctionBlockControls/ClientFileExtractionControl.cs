@@ -88,10 +88,10 @@ namespace UI.Controls.FunctionBlockControls
 		
 		private void SetProcessingFolderText()
 		{
-			DirectoryInfo rootDirectory = new DirectoryInfo(state.RootProcessDirectory);
+			DirectoryInfo rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
 			rootProcessingFolder.Text = rootDirectory.Exists 
-				? state.RootProcessDirectory 
-				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.RootProcessDirectory)
+				? state.ClientRootDirectory 
+				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.ClientRootDirectory)
 			;
 		}
 
@@ -313,7 +313,7 @@ namespace UI.Controls.FunctionBlockControls
 
 				if (state.FoundationApplicantProcessIds.Count > 0)
 				{
-					FileProcessing.SetFilelist(state);
+					FileProcessing.SetFileList(state);
 					if (state.Files != null && state.Files.Count > 0)
 					{
 						fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count,

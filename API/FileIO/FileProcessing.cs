@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,6 +14,7 @@ namespace API.FileIO
 		public string BaseDirectory { get; set; }
 		public string FileMask { get; set; }
 		public List<FileInfo> Files { get; set; }
+		public List<string> FilesNotFound { get; set; }
 		public List<int> FoundationApplicantProcessIds { get; set; }
 		public int FoundationProcessId { get; set; }
 		public string FoundationUrlKey { get; set; }
@@ -21,13 +23,13 @@ namespace API.FileIO
 		public string SequesterPath { get; set; }
 		public List<string> SequesterPatterns { get; set; }
 		public long TotalSize { get; set; }
-		
+
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
 
-		public string RootProcessDirectory
+		public string ClientRootDirectory
 		{
-			get { return string.Format("{0}\\{1}\\", BaseDirectory, FoundationUrlKey); }
+			get { return string.Format("{0}{1}\\", BaseDirectory, FoundationUrlKey); }
 		}
 
 		public FileProcessingState()
@@ -57,7 +59,7 @@ namespace API.FileIO
 				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
 		}
 
-		public static void SetFilelist(FileProcessingState state)
+		public static void SetFileList(FileProcessingState state)
 		{
 			state.Files = new List<FileInfo>();
 			state.SequesterFiles = new List<FileInfo>();
@@ -67,37 +69,63 @@ namespace API.FileIO
 			{
 				foreach (int applicantProcessId in state.FoundationApplicantProcessIds)
 				{
-					string directoryPath = string.Format("{0}{1}", state.RootProcessDirectory, applicantProcessId);
-					if (Directory.Exists(directoryPath))
-					{
-						string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
-						foreach (string directoryFile in directoryFiles)
-						{
-							FileInfo file = new FileInfo(directoryFile);
-							if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
-							{
-								if (!state.FileMask.ToLower().Contains(file.Extension.ToLower()))
-								{
-									continue;
-								}
-							}
-
-							if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
-							{
-								bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
-								if (sequesterFile)
-								{
-									state.SequesterFiles.Add(file);
-									continue;
-								}
-							}
-
-							state.Files.Add(file);
-							state.TotalSize += file.Length;
-						}
-					}
+					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessId);
+					SetFilesFromPath(state, directoryPath);
 				}
 			}
+		}
+
+		private static void SetFilesFromPath(FileProcessingState state, string directoryPath)
+		{
+			if (Directory.Exists(directoryPath))
+			{
+				string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+				foreach (string directoryFile in directoryFiles)
+				{
+					var file = new FileInfo(directoryFile);
+					if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
+					{
+						if (!state.FileMask.ToLower().Contains(file.Extension.ToLower()))
+						{
+							continue;
+						}
+					}
+
+					if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+					{
+						bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
+						if (sequesterFile)
+						{
+							state.SequesterFiles.Add(file);
+							continue;
+						}
+					}
+
+					state.Files.Add(file);
+					state.TotalSize += file.Length;
+				}
+			}
+		}
+
+		public static void ReconcileFileListToDatabase(FileProcessingState state, List<string> fileList)
+		{
+			SetFilesFromPath(state, state.ClientRootDirectory);
+
+			foreach (FileInfo file in state.Files)
+			{
+				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty).ToLower();
+				if (!fileList.Contains(partialFileName))
+				{
+					state.SequesterFiles.Add(file);
+				}
+				else
+				{
+					fileList.Remove(partialFileName);
+				}
+			}
+
+			if (fileList.Count > 0)
+				state.FilesNotFound = fileList;
 		}
 
 		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)

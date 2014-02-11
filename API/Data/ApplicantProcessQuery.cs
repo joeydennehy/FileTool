@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Odbc;
+using System.IO;
+using API.Logging;
 using DataProvider.MySQL;
 using MySql.Data.MySqlClient;
 
@@ -9,11 +13,14 @@ namespace API.Data
 	{
 		public Dictionary<string, string> BuildFoundationDictionary()
 		{
-			Command command = new Command {SqlStatementId = "SELECT_ALL_URL_KEYS_AND_NAMES"};
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_URL_KEYS_AND_NAMES"
+			};
 
-			DataAccess access = new DataAccess();
+			var access = new DataAccess();
 
-			Dictionary<string, string> foundations = new Dictionary<string, string>();
+			var foundations = new Dictionary<string, string>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
@@ -31,23 +38,23 @@ namespace API.Data
 
 		public Dictionary<string, string> BuildFoundationProcessInfoDictionary(string urlKey)
 		{
-			ParameterSet parameters = new ParameterSet();
+			var parameters = new ParameterSet();
 			parameters.Add(DbType.String, "URL_KEY", urlKey);
-			Command command = new Command
+			var command = new Command
 			{
-				SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO", 
+				SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO",
 				ParameterCollection = parameters
 			};
 
-			DataAccess access = new DataAccess();
+			var access = new DataAccess();
 
-			Dictionary<string, string> foundationProcesses = new Dictionary<string, string>();
+			var foundationProcesses = new Dictionary<string, string>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				while (reader.Read())
 				{
-					var foundationProcessId = reader.GetString(0);
+					string foundationProcessId = reader.GetString(0);
 					foundationProcesses.Add(foundationProcessId + " - " + reader.GetString(1), foundationProcessId);
 				}
 			}
@@ -55,21 +62,65 @@ namespace API.Data
 			return foundationProcesses;
 		}
 
-		//3 ApplicantProcesscodes with a give process ID
+		public static List<string> GetFoundationFileList(string urlKey)
+		{
+			var fileList = new List<string>();
+
+			var queryIds = new List<string>
+			{
+				"SELECT_SHARED_FILES_BY_FOUNDATION_ID",
+				"SELECT_ORG_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID",
+				"SELECT_APPLICATION_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID",
+				"SELECT_REQUEST_FILES_BY_URL_KEY",
+			};
+
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.String, "URL_KEY", urlKey);
+			var access = new DataAccess();
+
+			foreach (string queryId in queryIds)
+			{
+				var command = new Command()
+				{
+					SqlStatementId = queryId,
+					ParameterCollection = parameters
+				};
+
+				using (MySqlDataReader reader = access.GetReader(command))
+				{
+					while (reader.Read())
+					{
+						if (!reader.IsDBNull(0))
+						{
+							string partialFileName = reader.GetString(0).Split(new[] {"[:|:]"}, StringSplitOptions.None)[0];
+							string fileName = Path.GetFileName(partialFileName);
+
+							if (!string.IsNullOrEmpty(fileName) && !fileList.Contains(partialFileName))
+							{
+								fileList.Add(partialFileName.ToLower());
+							}
+						}
+
+					}
+				}
+			}
+
+			return fileList;
+		}
 
 		public List<int> RetrieveApplicationProcessInfo(int foundationProcess)
 		{
-			ParameterSet parameters = new ParameterSet();
+			var parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);
-			Command command = new Command
+			var command = new Command
 			{
-				SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO", 
+				SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO",
 				ParameterCollection = parameters
 			};
 
-			DataAccess access = new DataAccess();
+			var access = new DataAccess();
 
-			List<int> foundationProcesses = new List<int>();
+			var foundationProcesses = new List<int>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
@@ -81,9 +132,5 @@ namespace API.Data
 
 			return foundationProcesses;
 		}
-
-		
-
 	}
-
 }
