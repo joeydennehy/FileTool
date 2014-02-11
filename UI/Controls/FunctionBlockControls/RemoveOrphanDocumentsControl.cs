@@ -1,30 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using API.Data;
 using API.FileIO;
 
 namespace UI.Controls.FunctionBlockControls
 {
 	public partial class RemoveOrphanDocumentsControl : FunctionBlockBaseControl
-	{
+    {
+        #region member variables
+
+        private const string FILE_COPY_CAPTION = "File Copy";
+        private const string FILE_COPY_ERROR_FORMAT = "File copy procedure gave the following error {0}.";
         private const string VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT = "{0}   WARNING!: Cannot find or access specified folder.";
 
         private FileProcessingState state;
+        private ApplicantProcessQuery data;
 
-		public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent)
+        #endregion
+
+
+        #region properties
+
+        public override string TitleBlockText { get { return "Search and Remove Orphaned Documents"; } }
+
+        #endregion
+
+        #region Constructor
+
+        public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
             Initialize();
 		}
 
-	    private void Initialize()
+        #endregion
+
+        #region private methods
+
+        private void Initialize()
 	    {
 	        state = new FileProcessingState
 	        {
@@ -33,18 +49,57 @@ namespace UI.Controls.FunctionBlockControls
 
             moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text);
 	        undoButton.Enabled = false;
+
+            data = new ApplicantProcessQuery();
+            try
+            {
+                BindFoundationData(foundationIdComboBox, data.BuildFoundationDictionary());
+            }
+            catch (Exception eError)
+            {
+                MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 	    }
 
-	    public override string TitleBlockText { get { return "Search and Remove Orphaned Documents"; } }
+        
 
-		protected override void OnPaint(PaintEventArgs pe)
-		{
-			base.OnPaint(pe);
-		}
-
-        private void sourceLabel_Click(object sender, EventArgs e)
+        private static void BindFoundationData(ComboBox comboBox, IReadOnlyCollection<KeyValuePair<string, List<string>>> source)
         {
+            if (source.Count > 0)
+            {
+                comboBox.DataSource = new BindingSource(source, null);
+                comboBox.DisplayMember = "Key";
+            }
+            else
+            {
+                comboBox.DataSource = null;
+            }
+        }
 
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = false
+            };
+
+            DialogResult result = folderBrowser.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                state.OutputDirectory = folderBrowser.SelectedPath;
+                moveLocationText.Text = state.OutputDirectory;
+            }
+        }
+
+        private void moveFilesButton_Click(object sender, EventArgs e)
+        {
+            undoButton.Enabled = true;
+        }
+
+        private void moveLocationText_TextChanged(object sender, EventArgs e)
+        {
+            state.OutputDirectory = moveLocationText.Text;
+            moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text);
         }
 
         private void MouseClick_comboBox(object sender, MouseEventArgs e)
@@ -68,7 +123,6 @@ namespace UI.Controls.FunctionBlockControls
                 state.FoundationUrlKey = selectedUrlKey;
                 state.FoundationId = selectedFoundationId;
                 SetProcessingFolderText();
-                
             }
         }
 
@@ -77,18 +131,27 @@ namespace UI.Controls.FunctionBlockControls
             DirectoryInfo rootDirectory = new DirectoryInfo(state.RootProcessDirectory);
             rootProcessingFolder.Text = rootDirectory.Exists
                 ? state.RootProcessDirectory
-                : String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.RootProcessDirectory)
-            ;
+                : String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.RootProcessDirectory);
         }
 
-        private void moveLocationText_TextChanged(object sender, EventArgs e)
+        #endregion
+
+        #region protect methods
+
+        protected override void OnEnter(EventArgs e)
         {
-            moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text);
+            state.BaseDirectory = ParentControl.SourceLocation;
+            SetProcessingFolderText();
+
+            base.OnEnter(e);
         }
 
-	    private void moveFilesButton_Click(object sender, EventArgs e)
-	    {
-	        undoButton.Enabled = true;
-	    }
-	}
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            base.OnPaint(pe);
+        }
+
+        #endregion
+
+    }
 }

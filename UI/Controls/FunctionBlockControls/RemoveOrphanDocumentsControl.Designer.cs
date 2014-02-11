@@ -37,6 +37,7 @@
             this.sourceLabel = new System.Windows.Forms.Label();
             this.moveFilesButton = new System.Windows.Forms.Button();
             this.undoButton = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // rootProcessingFolder
@@ -72,10 +73,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(23, 103);
+            this.textBox1.Location = new System.Drawing.Point(275, 103);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(820, 312);
+            this.textBox1.Size = new System.Drawing.Size(568, 312);
             this.textBox1.TabIndex = 6;
             // 
             // browseButton
@@ -87,6 +88,7 @@
             this.browseButton.TabIndex = 9;
             this.browseButton.Text = "...";
             this.browseButton.UseVisualStyleBackColor = true;
+            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
             // moveLocationText
             // 
@@ -106,7 +108,6 @@
             this.sourceLabel.Size = new System.Drawing.Size(130, 17);
             this.sourceLabel.TabIndex = 7;
             this.sourceLabel.Text = "Move File Location:";
-            this.sourceLabel.Click += new System.EventHandler(this.sourceLabel_Click);
             // 
             // moveFilesButton
             // 
@@ -129,9 +130,18 @@
             this.undoButton.Text = "Undo";
             this.undoButton.UseVisualStyleBackColor = true;
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(23, 103);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(233, 312);
+            this.textBox2.TabIndex = 15;
+            // 
             // RemoveOrphanDocumentsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.undoButton);
             this.Controls.Add(this.moveFilesButton);
             this.Controls.Add(this.browseButton);
@@ -141,7 +151,7 @@
             this.Controls.Add(this.rootProcessingFolder);
             this.Controls.Add(this.foundationIdComboBox);
             this.Controls.Add(this.foundationIdComboBoxLabel);
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "RemoveOrphanDocumentsControl";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -159,6 +169,7 @@
         private System.Windows.Forms.Label sourceLabel;
         private System.Windows.Forms.Button moveFilesButton;
         private System.Windows.Forms.Button undoButton;
+        private System.Windows.Forms.TextBox textBox2;
 
     }
 }

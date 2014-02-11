@@ -88,6 +88,11 @@ namespace UI.Controls
 
 		#endregion
 
+        private void sourceLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
 		#endregion
 
 		#region Public Methods
