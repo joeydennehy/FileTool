@@ -158,10 +158,13 @@ WHERE
 	<data name="SELECT_ALL_URL_KEYS_AND_NAMES" xml:space="preserve">
 		<value>
 			SELECT
+        FoundationId,
 				UrlKey, 
 				Name 
 			FROM 
 				foundation
+      WHERE
+        foundation.UrlKey IS NOT NULL
 			ORDER BY 
 				Name
 		</value>

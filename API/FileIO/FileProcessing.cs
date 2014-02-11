@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
@@ -12,6 +13,7 @@ namespace API.FileIO
 	public class FileProcessingState
 	{
 		public string BaseDirectory { get; set; }
+        public string FoundationId { get; set; }
 		public string FileMask { get; set; }
 		public List<FileInfo> Files { get; set; }
 		public List<string> FilesNotFound { get; set; }
