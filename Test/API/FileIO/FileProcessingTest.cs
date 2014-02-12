@@ -81,7 +81,7 @@ namespace Test.API
 		[TestMethod]
 		public void TestMethod1()
 		{
-			List<string> items = RequestQuery.GetFoundationFileList(84);
+			List<string> items = RequestQuery.GetFoundationFileList(465);
 
 			FoundationDataFileState state = new FoundationDataFileState();
 			state.FoundationId = 84;

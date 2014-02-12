@@ -19,7 +19,7 @@ namespace DataProvider.MySQL
 			MySqlConnection connection = Connector.GetConnection();
 
 			MySqlCommand cmd = new MySqlCommand(command.SqlStatement, connection);
-
+			cmd.CommandTimeout = 65535;
 			if (command.ParameterCollection != null && command.ParameterCollection.Parameters.Any())
 			{
 				cmd.Parameters.AddRange(command.ParameterCollection.Parameters);
