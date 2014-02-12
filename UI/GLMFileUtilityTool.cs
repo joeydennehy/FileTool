@@ -103,8 +103,9 @@ namespace UI
 		{
 			functionBlockPanel.SuspendLayout();
 
-			if (string.IsNullOrEmpty(controlId))
+			if (string.IsNullOrEmpty(controlId) || panelControls[controlId] == null)
 				return;
+
 			if (panelControls.ContainsKey(controlId))
 			{
 				if (!string.IsNullOrEmpty(currentControlId) && panelControls.ContainsKey(currentControlId))
@@ -114,6 +115,7 @@ namespace UI
 
 				titleBlockControl.TitleText = panelControls[controlId].TitleBlockText;
 				functionBlockPanel.Controls.Add(panelControls[controlId]);
+				panelControls[controlId].Initialize();
 				currentControlId = controlId;
 			}
 

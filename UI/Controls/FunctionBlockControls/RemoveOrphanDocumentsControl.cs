@@ -21,19 +21,20 @@ namespace UI.Controls.FunctionBlockControls
 		public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
-            Initialize();
 		}
 
-	    private void Initialize()
-	    {
-	        state = new FoundationDataFileState
-	        {
-	            BaseDirectory = ParentControl.SourceLocation
-	        };
+		public override void Initialize()
+		{
+			base.Initialize();
 
-            moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text);
-	        undoButton.Enabled = false;
-	    }
+			state = new FoundationDataFileState
+			{
+				BaseDirectory = ParentControl.SourceLocation
+			};
+
+			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text);
+			undoButton.Enabled = false;
+		}
 
 	    public override string TitleBlockText { get { return "Search and Remove Orphaned Documents"; } }
 

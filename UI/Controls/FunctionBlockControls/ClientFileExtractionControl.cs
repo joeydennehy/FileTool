@@ -38,7 +38,6 @@ namespace UI.Controls.FunctionBlockControls
 		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
-			Initialize();
 		}
 
 		#endregion
@@ -88,8 +87,10 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
-		private void Initialize()
+		public override void Initialize()
 		{
+			base.Initialize();
+
 			state = new FoundationDataFileState
 			{
 				BaseDirectory = ParentControl.SourceLocation
@@ -113,7 +114,7 @@ namespace UI.Controls.FunctionBlockControls
 				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-		
+
 		private void SetProcessingFolderText()
 		{
 			var rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
