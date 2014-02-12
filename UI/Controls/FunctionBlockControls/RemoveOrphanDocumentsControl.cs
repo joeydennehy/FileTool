@@ -16,7 +16,7 @@ namespace UI.Controls.FunctionBlockControls
 	{
         private const string VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT = "{0}   WARNING!: Cannot find or access specified folder.";
 
-        private FileProcessingState state;
+        private FoundationDataFileState state;
 
 		public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent)
 		{
@@ -26,7 +26,7 @@ namespace UI.Controls.FunctionBlockControls
 
 	    private void Initialize()
 	    {
-	        state = new FileProcessingState
+	        state = new FoundationDataFileState
 	        {
 	            BaseDirectory = ParentControl.SourceLocation
 	        };
@@ -66,7 +66,7 @@ namespace UI.Controls.FunctionBlockControls
             if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
             {
                 state.FoundationUrlKey = selectedUrlKey;
-                state.FoundationId = selectedFoundationId;
+                //state.FoundationId = selectedFoundationId;
                 SetProcessingFolderText();
                 
             }

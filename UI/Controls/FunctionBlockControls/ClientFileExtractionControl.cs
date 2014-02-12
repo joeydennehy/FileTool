@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -29,8 +30,7 @@ namespace UI.Controls.FunctionBlockControls
 		private const string VALIDATION_ERROR_OUTPUT_NOT_SELECTED = "Please select an output destination before continuing.";
 		private const string WORKING = "[Working...]";
 	
-		private FileProcessingState state;
-		private ApplicantProcessQuery data;
+		private FoundationDataFileState state;
 
 		#endregion
 
@@ -52,56 +52,54 @@ namespace UI.Controls.FunctionBlockControls
 		
 		#region Private Methods
 
-        private static void BindFoundationData(ComboBox comboBox, IReadOnlyCollection<KeyValuePair<string, List<string>>> source)
-        {
-            if (source.Count > 0)
-            {
-                comboBox.DataSource = new BindingSource(source, null);
-                comboBox.DisplayMember = "Key";
-            }
-            else
-            {
-                comboBox.DataSource = null;
-            }
-        }
-
-		private static void BindData(ComboBox comboBox, IReadOnlyCollection<KeyValuePair<string, string>> source)
+		private void BindFoundationProcessData()
 		{
-			if (source.Count > 0)
-			{
-				comboBox.DataSource = new BindingSource(source, null);
-				comboBox.DisplayMember = "Key";
-				comboBox.ValueMember = "Value";
-			}
-			else
-			{
-				comboBox.DataSource = null;
-			}
-		}
-
-		private void Initialize()
-		{
-			state = new FileProcessingState
-			{
-				BaseDirectory = ParentControl.SourceLocation
-			};
-
-			data = new ApplicantProcessQuery();
 			try
 			{
-				BindFoundationData(foundationIdComboBox, data.BuildFoundationDictionary());
+				RequestQuery.RefreshFoundationProcessData(state.FoundationId);
+				
+				if (RequestQuery.FoundationProcessData.Rows.Count == 0)
+					return;
+
+				processIdComboBox.DataSource = RequestQuery.FoundationProcessData;
+				processIdComboBox.DisplayMember = "ProcessDisplayText";
+				processIdComboBox.ValueMember = "FoundationProcessId";
 			}
 			catch (Exception eError)
 			{
 				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			
-			BindData(fileTypeComboBox, ApplicationConfiguration.FileMaskSettings);
+		}
+
+		private void Initialize()
+		{
+			state = new FoundationDataFileState
+			{
+				BaseDirectory = ParentControl.SourceLocation
+			};
+
+			try
+			{
+				//Bind Foundation List
+				RequestQuery.RefreshFoundationData();
+				foundationIdComboBox.DataSource = RequestQuery.FoundationData;
+				foundationIdComboBox.DisplayMember = "FoundationDisplayText";
+				foundationIdComboBox.ValueMember = "FoundationId";
+
+				//Bind File Types
+				fileTypeComboBox.DataSource = new BindingSource(ApplicationConfiguration.FileMaskSettings, null);
+				fileTypeComboBox.DisplayMember = "Key";
+				fileTypeComboBox.ValueMember = "Value";
+			}
+			catch (Exception eError)
+			{
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 		
 		private void SetProcessingFolderText()
 		{
-			DirectoryInfo rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
+			var rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
 			rootProcessingFolder.Text = rootDirectory.Exists 
 				? state.ClientRootDirectory 
 				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.ClientRootDirectory)
@@ -127,7 +125,7 @@ namespace UI.Controls.FunctionBlockControls
 			Cursor = Cursors.WaitCursor;
 			try
 			{
-				DirectoryInfo outputDirectory = new DirectoryInfo(state.OutputDirectory);
+				var outputDirectory = new DirectoryInfo(state.OutputDirectory);
 				if (outputDirectory.Exists && outputDirectory.GetFiles().Any())
 				{
 					DialogResult prompt = MessageBox.Show(this, VALIDATION_ERROR_FOLDER_NOT_EMPTY, FILE_COPY_CAPTION, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -168,7 +166,7 @@ namespace UI.Controls.FunctionBlockControls
 		
 		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			FileExclusionsForm fileExclusions = new FileExclusionsForm(state);
+			var fileExclusions = new FileExclusionsForm(state);
 			DialogResult result =fileExclusions.ShowDialog();
 			if (result == DialogResult.OK)
 			{
@@ -188,7 +186,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
 		{
-			FolderBrowserDialog folderBrowser = new FolderBrowserDialog
+			var folderBrowser = new FolderBrowserDialog
 			{
 				ShowNewFolderButton = true
 			};
@@ -203,19 +201,19 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void LinkClick_FileCountLinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			FileListDisplayForm fileListDisplay = new FileListDisplayForm(state.Files);
+			var fileListDisplay = new FileListDisplayForm(state.Files);
 			fileListDisplay.ShowDialog(this);
 		}
 
 		private void LinkClick_SecludedFileCountlinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			FileListDisplayForm fileListDisplay = new FileListDisplayForm(state.SequesterFiles);
+			var fileListDisplay = new FileListDisplayForm(state.SequesterFiles);
 			fileListDisplay.ShowDialog(this);
 		}
 
 		private void MouseClick_comboBox(object sender, MouseEventArgs e)
 		{
-			ComboBox control = sender as ComboBox;
+			var control = sender as ComboBox;
 			if (control != null)
 			{
 				if (control.DroppedDown)
@@ -226,7 +224,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void OnKeyDown_comboBox(object sender, KeyEventArgs e)
 		{
-			ComboBox control = sender as ComboBox;
+			var control = sender as ComboBox;
 			if (control != null)
 			{
 				if (control.DroppedDown || e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
@@ -237,38 +235,21 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void OnLeave_FoundationDropDown(object sender, EventArgs e)
 		{
-			ComboBox control = (ComboBox)sender;
-
-			string selectedUrlKey = string.Empty;
-		    string selectedFoundationId = string.Empty;
-			if (control.SelectedItem != null)
+			DataRow selectedRow = null;
+			if (foundationIdComboBox.SelectedValue != null)
 			{
-                selectedFoundationId = ((KeyValuePair<string, List<string>>)control.SelectedItem).Value.ToList()[0];
-				selectedUrlKey = ((KeyValuePair<string, List<string>>)control.SelectedItem).Value.ToList()[1];
+				selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
 			}
-
-			if (!string.IsNullOrEmpty(control.Text))
+			else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
 			{
-				BindingSource boundData = (BindingSource)control.DataSource;
-                KeyValuePair<string, List<string>> keyValuePair = (KeyValuePair<string, List<string>>)boundData[control.FindString(control.Text)];
-			    selectedFoundationId = keyValuePair.Value.ToList()[0];
-                selectedUrlKey = keyValuePair.Value.ToList()[1];
+				var boundData = (DataTable)foundationIdComboBox.DataSource;
+				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
+				var rows = boundData.Select(searchExpression);
+				if(rows.Any())
+					selectedRow = rows[0];
 			}
 			
-			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
-			{
-				state.FoundationUrlKey = selectedUrlKey;
-			    state.FoundationId = selectedFoundationId;
-				SetProcessingFolderText();
-				try
-				{
-					BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
-				}
-				catch (Exception eError)
-				{
-					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
+			HandleFoundationSelectionChanged(selectedRow);
 		}
 
 		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
@@ -283,22 +264,21 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-            string selectedFoundationId = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[0];
-			string selectedUrlKey = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[1];
+			HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedValue).Row);
+		}
 
-			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
+		private void HandleFoundationSelectionChanged(DataRow selectedRow)
+		{
+			var selectedFoundationId = (int)selectedRow[0];
+			var selectedUrlKey = (string)selectedRow[1];
+
+			if (state.FoundationId != selectedFoundationId)
 			{
+				state.FoundationId = selectedFoundationId;
 				state.FoundationUrlKey = selectedUrlKey;
-			    state.FoundationId = selectedFoundationId;
+
 				SetProcessingFolderText();
-				try
-				{
-					BindData(processIdComboBox, data.BuildFoundationProcessInfoDictionary(state.FoundationUrlKey));
-				}
-				catch (Exception eError)
-				{
-					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
+				BindFoundationProcessData();
 			}
 		}
 
@@ -308,9 +288,8 @@ namespace UI.Controls.FunctionBlockControls
 
 			if (((ComboBox)sender).SelectedItem != null)
 			{
-				KeyValuePair<string, string> keyPair = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem);
-					if (keyPair.Value != null)
-						Int32.TryParse(keyPair.Value, out foundationProcessId);
+				var selectedRow = ((DataRowView)((ComboBox)sender).SelectedItem).Row;
+				foundationProcessId = (int)selectedRow[0];
 			}
 			try
 			{
@@ -321,7 +300,7 @@ namespace UI.Controls.FunctionBlockControls
 				state.FoundationProcessId = foundationProcessId;
 				try
 				{
-					state.FoundationApplicantProcessIds = data.RetrieveApplicationProcessInfo(foundationProcessId);
+					state.FoundationApplicantProcessIds = RequestQuery.RetrieveApplicationProcessInfo(foundationProcessId);
 				}
 				catch (Exception eError)
 				{
@@ -378,19 +357,5 @@ namespace UI.Controls.FunctionBlockControls
 		}
 
 		#endregion
-
-		//Completed: handle page validation
-		// Completed - Includes, Do not allow run until destination folder is selected, or input
-		//COMPLETED: Add task completion notification
-		//COMPLETED: Get count of files to copy - also added applicant process IDs
-		//TODO: NTH: display list of files to be output
-			//COMPLETED: need to add ontextchanged event handlers for textbox controls
-		//COMPLETED: add and configure log4net
-		//COMPLETED: Audit file count functions and File Size Counts
-		//COMPETED: refactor file copy functions
-		//TODO: Add File Exclusion Control
-		//TODO: Add Foundant Logo
-		//TODO: Generate Unit tests for file copy functions
-
 	}
 }

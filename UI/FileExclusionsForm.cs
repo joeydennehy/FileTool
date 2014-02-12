@@ -15,14 +15,14 @@ namespace UI
 
 		private const string SEQUESTER_KEYWORD_TEXT = "Enter the file name keywords you would like to exclude from the finished set of client files.  Each keyword or phrase should be on its own line.";
 
-		private FileProcessingState state;
+		private FoundationDataFileState state;
 		private string previousFilePath;
 		
 		#endregion
 
 		#region Constructor
 
-		public FileExclusionsForm(FileProcessingState state)
+		public FileExclusionsForm(FoundationDataFileState state)
 		{
 			InitializeComponent();
 			Initialize(state);
@@ -35,7 +35,7 @@ namespace UI
 
 		#region Private Methods
 
-		private void Initialize(FileProcessingState processingState)
+		private void Initialize(FoundationDataFileState processingState)
 		{
 			state = processingState;
 			if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
