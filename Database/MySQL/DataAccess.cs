@@ -9,7 +9,7 @@ namespace DataProvider.MySQL
 	public enum DataAccessType
 	{
 		Data,
-		Logging,
+		Logging
 	}
 
 	public class DataAccess

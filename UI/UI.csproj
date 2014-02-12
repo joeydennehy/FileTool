@@ -101,6 +101,12 @@
     <Compile Include="Controls\TitleBlockControl.Designer.cs">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileNotFoundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileNotFoundForm.Designer.cs">
+      <DependentUpon>FileNotFoundForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileExclusionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TitleBlockControl.resx">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileNotFoundForm.resx">
+      <DependentUpon>FileNotFoundForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileExclusionsForm.resx">
       <DependentUpon>FileExclusionsForm.cs</DependentUpon>

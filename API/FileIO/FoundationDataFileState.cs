@@ -18,6 +18,8 @@ namespace API.FileIO
 		public string SequesterPath { get; set; }
 		public List<string> SequesterPatterns { get; set; }
 		public long TotalSize { get; set; }
+		public string MovedToDirectory { get; set; }
+		public string MovedFromDirectory { get; set; }
 
 		//Keeping for the possibility of future use
 		//public NetworkCredential BaseDirectoryCredentials { get; set; }
@@ -25,7 +27,12 @@ namespace API.FileIO
 
 		public string ClientRootDirectory
 		{
-			get { return string.Format("{0}\\{1}\\", BaseDirectory.TrimEnd(new[] { Path.DirectorySeparatorChar }), FoundationUrlKey); }
+			get
+			{
+				return string.Format("{0}\\{1}\\",
+					!string.IsNullOrWhiteSpace(BaseDirectory) ? BaseDirectory.TrimEnd(new[] {Path.DirectorySeparatorChar}) : "",
+					FoundationUrlKey);
+			}
 		}
 
 		public FoundationDataFileState()

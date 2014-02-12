@@ -128,6 +128,66 @@ namespace API.FileIO
 			}
 		}
 
+		public static void MoveFilesToDestination(List<FileInfo> files, string destinationFolder, string root)
+		{
+			if (files == null || files.Count == 0)
+			{
+				Logger.Log("MoveFilesToDestination: no files selected to copy", LogLevel.Warn);
+				return;
+			}
+
+			if (string.IsNullOrEmpty(destinationFolder))
+			{
+				Logger.Log("MoveFilesToDestination: No destination selected for copy", LogLevel.Error);
+				return;
+			}
+
+			if (!Directory.Exists(destinationFolder))
+			{
+				Directory.CreateDirectory(destinationFolder);
+			}
+
+			foreach (FileInfo file in files)
+			{
+				string directory = string.Format("{0}\\{1}", destinationFolder, file.Directory.FullName.Substring(root.Length));
+				if (!Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+				string fullDestinationPath = string.Format("{0}\\{1}", directory, file.Name);
+				try
+				{
+					File.Move(file.FullName, fullDestinationPath);
+					Logger.Log("Moved file " + file.FullName + " to " + fullDestinationPath, LogLevel.Info);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Unable to move file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+					throw;
+				}
+			}
+		}
+
+		public static void Undo(FoundationDataFileState state)
+		{
+			SetFilesFromPath(state, state.MovedToDirectory);
+
+			foreach (FileInfo file in state.Files)
+			{
+				try
+				{
+					string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory, file.FullName.Substring(state.MovedToDirectory.Length));
+					File.Move(file.FullName, fullDestination);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+					throw;
+				}
+				
+			}
+		}
+
 		private static string BuildApplicationProcessFileName(FileInfo file)
 		{
 			if (string.IsNullOrEmpty(file.DirectoryName))

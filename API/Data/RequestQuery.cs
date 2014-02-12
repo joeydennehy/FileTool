@@ -30,6 +30,7 @@ namespace API.Data
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				FoundationData.Load(reader);
+				reader.Close();
 			}
 		}
 
@@ -52,6 +53,7 @@ namespace API.Data
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
 				FoundationProcessData.Load(reader);
+				reader.Close();
 			}
 		}
 
