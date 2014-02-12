@@ -15,13 +15,13 @@ namespace Test.API
 	[TestClass]
 	public class FileProcessingTest
 	{
-		private string rootPath;
-		private FileProcessingState state;
-		public FileProcessingTest()
-		{
-			state = new FileProcessingState();
-			state.BaseDirectory = string.Format("{0}\\TestSet", Directory.GetCurrentDirectory());
-			Directory.CreateDirectory(state.BaseDirectory);
+		//private string rootPath;
+		//private FileProcessingState state;
+		//public FileProcessingTest()
+		//{
+		//	state = new FileProcessingState();
+		//	state.BaseDirectory = string.Format("{0}\\TestSet", Directory.GetCurrentDirectory());
+		//	Directory.CreateDirectory(state.BaseDirectory);
 
 
 //<drive>
@@ -36,7 +36,7 @@ namespace Test.API
 			//
 			// TODO: Add constructor logic here
 			//
-		}
+		//}
 
 		private TestContext testContextInstance;
 
@@ -81,9 +81,10 @@ namespace Test.API
 		[TestMethod]
 		public void TestMethod1()
 		{
-			List<string> items = ApplicantProcessQuery.GetFoundationFileList("petco");
+			List<string> items = RequestQuery.GetFoundationFileList(84);
 
-			FileProcessingState state = new FileProcessingState();
+			FoundationDataFileState state = new FoundationDataFileState();
+			state.FoundationId = 84;
 			state.BaseDirectory = "E:\\";
 			state.FoundationUrlKey = "petco";
 

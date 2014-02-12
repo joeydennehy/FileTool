@@ -47,9 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ApplicantProcessQuery.cs" />
+    <Compile Include="Data\RequestQuery.cs" />
     <Compile Include="Config\ApplicationConfiguration.cs" />
     <Compile Include="FileIO\FileProcessing.cs" />
+    <Compile Include="FileIO\FoundationDataFileState.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Security\NetworkAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

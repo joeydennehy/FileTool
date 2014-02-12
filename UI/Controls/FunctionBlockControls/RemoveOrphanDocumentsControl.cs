@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
 using API.Data;
@@ -14,14 +14,13 @@ namespace UI.Controls.FunctionBlockControls
 	{
 		#region member variables
 
-		private const string FILE_COPY_CAPTION = "File Copy";
-		private const string FILE_COPY_ERROR_FORMAT = "File copy procedure gave the following error {0}.";
+		private const string FILE_MOVE_CAPTION = "File Move";
+		private const string FILE_MOVE_ERROR_FORMAT = "File move procedure gave the following error {0}.";
 
 		private const string VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT =
 			"{0}   WARNING!: Cannot find or access specified folder.";
 
-		private FileProcessingState state;
-		private ApplicantProcessQuery data;
+		private FoundationDataFileState state;
 
 		#endregion
 
@@ -48,7 +47,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void Initialize()
 		{
-			state = new FileProcessingState
+			state = new FoundationDataFileState
 			{
 				BaseDirectory = ParentControl.SourceLocation
 			};
@@ -56,30 +55,17 @@ namespace UI.Controls.FunctionBlockControls
 			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text) && state.SequesterFiles.Any();
 			undoButton.Enabled = false;
 
-			data = new ApplicantProcessQuery();
 			try
 			{
-				BindFoundationData(foundationIdComboBox, data.BuildFoundationDictionary());
+				RequestQuery.RefreshFoundationData();
+				foundationIdComboBox.DataSource = RequestQuery.FoundationData;
+				foundationIdComboBox.DisplayMember = "FoundationDisplayText";
+				foundationIdComboBox.ValueMember = "FoundationId";
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK,
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
-			}
-		}
-
-
-		private static void BindFoundationData(ComboBox comboBox,
-			IReadOnlyCollection<KeyValuePair<string, List<string>>> source)
-		{
-			if (source.Count > 0)
-			{
-				comboBox.DataSource = new BindingSource(source, null);
-				comboBox.DisplayMember = "Key";
-			}
-			else
-			{
-				comboBox.DataSource = null;
 			}
 		}
 
@@ -100,19 +86,18 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void LoadStateData()
 		{
-			StringBuilder stateData = new StringBuilder();
+			var stateData = new StringBuilder();
 			stateData.AppendLine("Total Files Processed: " + state.Files.Count);
 			stateData.AppendLine("Total Sequestered Files: " + state.SequesterFiles.Count);
-			stateData.AppendLine("Total Files Not Found: " + state.FilesNotFound.Count);
+			stateData.AppendLine(string.Format("Total Files Not Found: {0}",  state.FilesNotFound != null ? state.FilesNotFound.Count.ToString() : "0"));
 			stateDataTextBox.Text = stateData.ToString();
-			StringBuilder sequesteredFiles = new StringBuilder();
+			var sequesteredFiles = new StringBuilder();
 			string sourcePath = state.ClientRootDirectory;
-			foreach (var sequesterFile in state.SequesterFiles)
+			foreach (FileInfo sequesterFile in state.SequesterFiles)
 			{
 				sequesteredFiles.AppendLine(sequesterFile.FullName.Substring(sourcePath.Length));
 			}
 			moveFilesTextBox.Text = sequesteredFiles.ToString();
-
 		}
 
 		private void LoadInitialStateData(bool hasFiles)
@@ -127,20 +112,19 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				Cursor = Cursors.WaitCursor;
-			FileProcessing.MoveFilesToDestination(state.SequesterFiles, moveLocationText.Text, state.ClientRootDirectory);
-			state.MovedToDirectory = moveLocationText.Text;
-			state.MovedFromDirectory = state.ClientRootDirectory;
-			undoButton.Enabled = true;
+				FileProcessing.MoveFilesToDestination(state.SequesterFiles, moveLocationText.Text, state.ClientRootDirectory);
+				state.MovedToDirectory = moveLocationText.Text;
+				state.MovedFromDirectory = state.ClientRootDirectory;
+				undoButton.Enabled = true;
 			}
 			catch (Exception eError)
 			{
-				
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			finally
 			{
 				Cursor = Cursors.Default;
 			}
-			
 		}
 
 		private void moveLocationText_TextChanged(object sender, EventArgs e)
@@ -164,25 +148,8 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-			string selectedFoundationId = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[0];
-			string selectedUrlKey = ((KeyValuePair<string, List<string>>)((ComboBox)sender).SelectedItem).Value.ToList()[1];
-
-			if (string.Compare(state.FoundationUrlKey, selectedUrlKey, StringComparison.InvariantCultureIgnoreCase) != 0)
-			{
-				state.FoundationUrlKey = selectedUrlKey;
-				state.FoundationId = selectedFoundationId;
-				SetProcessingFolderText();
-			}
-
-			List<string> fileList = ApplicantProcessQuery.GetFoundationFileList(selectedUrlKey);
-			LoadInitialStateData(fileList.Any());
-
-			if (fileList.Any())
-			{
-				FileProcessing.ReconcileFileListToDatabase(state, fileList);
-				LoadStateData();
-			}
-			
+			HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedValue).Row);
+			EvaluateFiles();
 		}
 
 		private void SetProcessingFolderText()
@@ -192,6 +159,54 @@ namespace UI.Controls.FunctionBlockControls
 				? state.ClientRootDirectory
 				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.ClientRootDirectory);
 			rootProcessingFolder.Update();
+		}
+
+		private void HandleFoundationSelectionChanged(DataRow selectedRow)
+		{
+			var selectedFoundationId = (int)selectedRow[0];
+			var selectedUrlKey = (string)selectedRow[1];
+
+			if (state.FoundationId != selectedFoundationId)
+			{
+				state.FoundationId = selectedFoundationId;
+				state.FoundationUrlKey = selectedUrlKey;
+
+				SetProcessingFolderText();
+			}
+		}
+
+		private void OnLeave_FoundationDropDown(object sender, EventArgs e)
+		{
+			DataRow selectedRow = null;
+			if (foundationIdComboBox.SelectedValue != null)
+			{
+				selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
+			}
+			else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
+			{
+				var boundData = (DataTable)foundationIdComboBox.DataSource;
+				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
+				DataRow[] rows = boundData.Select(searchExpression);
+				if (rows.Any())
+				{
+					selectedRow = rows[0];
+				}
+			}
+
+			HandleFoundationSelectionChanged(selectedRow);
+			EvaluateFiles();
+		}
+
+		private void EvaluateFiles()
+		{
+			List<string> fileList = RequestQuery.GetFoundationFileList(state.FoundationId);
+			LoadInitialStateData(fileList.Any());
+
+			if (fileList.Any())
+			{
+				FileProcessing.ReconcileFileListToDatabase(state, fileList);
+				LoadStateData();
+			}
 		}
 
 		#endregion
@@ -206,12 +221,10 @@ namespace UI.Controls.FunctionBlockControls
 			base.OnEnter(e);
 		}
 
+
 		protected override void OnPaint(PaintEventArgs pe) { base.OnPaint(pe); }
 
-		private void undoButton_Click(object sender, EventArgs e)
-		{
-			FileProcessing.Undo(state);
-		}
+		private void undoButton_Click(object sender, EventArgs e) { FileProcessing.Undo(state); }
 
 		#endregion
 	}

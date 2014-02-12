@@ -1,51 +1,12 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
-using System.Net;
 using System.Text;
 using API.Logging;
 
 namespace API.FileIO
 {
-	public class FileProcessingState
-	{
-		public string BaseDirectory { get; set; }
-      public string FoundationId { get; set; }
-		public string FileMask { get; set; }
-		public List<FileInfo> Files { get; set; }
-		public List<string> FilesNotFound { get; set; }
-		public List<int> FoundationApplicantProcessIds { get; set; }
-		public int FoundationProcessId { get; set; }
-		public string FoundationUrlKey { get; set; }
-		public string OutputDirectory { get; set; }
-		public List<FileInfo> SequesterFiles { get; set; }
-		public string SequesterPath { get; set; }
-		public List<string> SequesterPatterns { get; set; }
-		public long TotalSize { get; set; }
-		public string MovedToDirectory { get; set; }
-		public string MovedFromDirectory { get; set; }
-
-		public NetworkCredential BaseDirectoryCredentials { get; set; }
-		public NetworkCredential OutputDirectoryCredentials { get; set; }
-
-		public string ClientRootDirectory
-		{
-			get { return string.Format("{0}\\{1}\\", BaseDirectory, FoundationUrlKey); }
-		}
-
-		public FileProcessingState()
-		{
-			FileMask = "*.*";
-
-			Files = new List<FileInfo>();
-			FoundationApplicantProcessIds = new List<int>();
-			SequesterFiles = new List<FileInfo>();
-		}
-	}
-
 	public static class FileProcessing
 	{
 		private static readonly List<string> SUB_FOLDERS;
@@ -55,7 +16,7 @@ namespace API.FileIO
 			SUB_FOLDERS = new List<string> {"followup", "loi", "qualification"};
 		}
 
-		public static void CopyApplicationProcessFiles(FileProcessingState state)
+		public static void CopyApplicationProcessFiles(FoundationDataFileState state)
 		{
 			CopyFilesToDestination(state.Files, state.OutputDirectory);
 
@@ -63,7 +24,7 @@ namespace API.FileIO
 				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
 		}
 
-		public static void SetFileList(FileProcessingState state)
+		public static void SetFileList(FoundationDataFileState state)
 		{
 			state.Files = new List<FileInfo>();
 			state.SequesterFiles = new List<FileInfo>();
@@ -79,9 +40,8 @@ namespace API.FileIO
 			}
 		}
 
-		private static void SetFilesFromPath(FileProcessingState state, string directoryPath)
+		private static void SetFilesFromPath(FoundationDataFileState state, string directoryPath)
 		{
-			state.Files.Clear();
 			if (Directory.Exists(directoryPath))
 			{
 				string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
@@ -112,7 +72,7 @@ namespace API.FileIO
 			}
 		}
 
-		public static void ReconcileFileListToDatabase(FileProcessingState state, List<string> fileList)
+		public static void ReconcileFileListToDatabase(FoundationDataFileState state, List<string> fileList)
 		{
 			SetFilesFromPath(state, state.ClientRootDirectory);
 
@@ -208,7 +168,7 @@ namespace API.FileIO
 			}
 		}
 
-		public static void Undo(FileProcessingState state)
+		public static void Undo(FoundationDataFileState state)
 		{
 			SetFilesFromPath(state, state.MovedToDirectory);
 

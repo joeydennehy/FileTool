@@ -59,6 +59,7 @@
 			this.foundationIdComboBox.Size = new System.Drawing.Size(820, 24);
 			this.foundationIdComboBox.TabIndex = 4;
 			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedValueChanged_FoundationDropDown);
+			this.foundationIdComboBox.Leave += new System.EventHandler(this.OnLeave_FoundationDropDown);
 			this.foundationIdComboBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick_comboBox);
 			// 
 			// foundationIdComboBoxLabel
