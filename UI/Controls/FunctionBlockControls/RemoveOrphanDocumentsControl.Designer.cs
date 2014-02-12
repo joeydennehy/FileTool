@@ -38,6 +38,7 @@
 			this.moveFilesButton = new System.Windows.Forms.Button();
 			this.undoButton = new System.Windows.Forms.Button();
 			this.stateDataTextBox = new System.Windows.Forms.TextBox();
+			this.fileNotFoundLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// rootProcessingFolder
@@ -140,13 +141,26 @@
 			this.stateDataTextBox.Multiline = true;
 			this.stateDataTextBox.Name = "stateDataTextBox";
 			this.stateDataTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.stateDataTextBox.Size = new System.Drawing.Size(246, 312);
+			this.stateDataTextBox.Size = new System.Drawing.Size(246, 291);
 			this.stateDataTextBox.TabIndex = 15;
 			this.stateDataTextBox.WordWrap = false;
+			// 
+			// fileNotFoundLinkLabel
+			// 
+			this.fileNotFoundLinkLabel.AutoSize = true;
+			this.fileNotFoundLinkLabel.Location = new System.Drawing.Point(20, 397);
+			this.fileNotFoundLinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.fileNotFoundLinkLabel.Name = "fileNotFoundLinkLabel";
+			this.fileNotFoundLinkLabel.Size = new System.Drawing.Size(107, 17);
+			this.fileNotFoundLinkLabel.TabIndex = 16;
+			this.fileNotFoundLinkLabel.TabStop = true;
+			this.fileNotFoundLinkLabel.Text = "Files Not Found";
+			this.fileNotFoundLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.fileNotFoundLinkLabel_LinkClicked);
 			// 
 			// RemoveOrphanDocumentsControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.Controls.Add(this.fileNotFoundLinkLabel);
 			this.Controls.Add(this.stateDataTextBox);
 			this.Controls.Add(this.undoButton);
 			this.Controls.Add(this.moveFilesButton);
@@ -176,6 +190,7 @@
         private System.Windows.Forms.Button moveFilesButton;
         private System.Windows.Forms.Button undoButton;
         private System.Windows.Forms.TextBox stateDataTextBox;
+		  private System.Windows.Forms.LinkLabel fileNotFoundLinkLabel;
 
     }
 }

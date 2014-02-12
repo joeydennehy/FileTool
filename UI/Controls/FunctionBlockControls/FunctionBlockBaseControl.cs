@@ -15,6 +15,8 @@ namespace UI.Controls.FunctionBlockControls
 		public virtual bool EnableSourceBlock { get; private set; }
 		public virtual string TitleBlockText { get; private set; }
 
+		public virtual void Initialize() { }
+
 		protected GLMFileUtilityTool ParentControl;
 
 		protected FunctionBlockBaseControl()

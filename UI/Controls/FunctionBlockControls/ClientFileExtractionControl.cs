@@ -12,7 +12,6 @@ namespace UI.Controls.FunctionBlockControls
 {
 	public partial class ClientFileExtractionControl : FunctionBlockBaseControl
 	{
-
 		#region Member Variables
 
 		private const string APPLICANT_PROCESS_FORMAT = "Total Applicant Process IDs: {0}";
@@ -39,7 +38,6 @@ namespace UI.Controls.FunctionBlockControls
 		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
-			Initialize();
 		}
 
 		#endregion
@@ -57,9 +55,12 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				RequestQuery.RefreshFoundationProcessData(state.FoundationId);
-				
+
 				if (RequestQuery.FoundationProcessData.Rows.Count == 0)
+				{
+					processIdComboBox.DataSource = null;
 					return;
+				}
 
 				processIdComboBox.DataSource = RequestQuery.FoundationProcessData;
 				processIdComboBox.DisplayMember = "ProcessDisplayText";
@@ -70,9 +71,26 @@ namespace UI.Controls.FunctionBlockControls
 				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-
-		private void Initialize()
+		
+		private void HandleFoundationSelectionChanged(DataRow selectedRow)
 		{
+			var selectedFoundationId = (int)selectedRow[0];
+			var selectedUrlKey = (string)selectedRow[1];
+
+			if (state.FoundationId != selectedFoundationId)
+			{
+				state.FoundationId = selectedFoundationId;
+				state.FoundationUrlKey = selectedUrlKey;
+
+				SetProcessingFolderText();
+				BindFoundationProcessData();
+			}
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+
 			state = new FoundationDataFileState
 			{
 				BaseDirectory = ParentControl.SourceLocation
@@ -96,7 +114,7 @@ namespace UI.Controls.FunctionBlockControls
 				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-		
+
 		private void SetProcessingFolderText()
 		{
 			var rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
@@ -264,22 +282,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-			HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedValue).Row);
-		}
-
-		private void HandleFoundationSelectionChanged(DataRow selectedRow)
-		{
-			var selectedFoundationId = (int)selectedRow[0];
-			var selectedUrlKey = (string)selectedRow[1];
-
-			if (state.FoundationId != selectedFoundationId)
-			{
-				state.FoundationId = selectedFoundationId;
-				state.FoundationUrlKey = selectedUrlKey;
-
-				SetProcessingFolderText();
-				BindFoundationProcessData();
-			}
+			HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedItem).Row);
 		}
 
 		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)

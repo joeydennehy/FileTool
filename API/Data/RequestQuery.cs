@@ -57,32 +57,6 @@ namespace API.Data
 			}
 		}
 
-		//public static Dictionary<string, string> BuildFoundationProcessInfoDictionary(int foundationId)
-		//{
-		//	var foundationProcesses = new Dictionary<string, string>();
-
-		//	var parameters = new ParameterSet();
-		//	parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
-		//	var command = new Command
-		//	{
-		//		SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO",
-		//		ParameterCollection = parameters
-		//	};
-		//	var access = new DataAccess();
-
-		//	using (MySqlDataReader reader = access.GetReader(command))
-		//	{
-		//		while (reader.Read())
-		//		{
-		//			string foundationProcessId = !reader.IsDBNull(0) ? reader.GetString(0) : string.Empty;
-		//			string foundationProcessName = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty;
-		//			foundationProcesses.Add(string.Format("{0} - {1}", foundationProcessId, foundationProcessName), foundationProcessId);
-		//		}
-		//	}
-
-		//	return foundationProcesses;
-		//}
-
 		public static List<string> GetFoundationFileList(int foundationId)
 		{
 			var fileList = new List<string>();

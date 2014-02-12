@@ -96,6 +96,12 @@
     <Compile Include="Controls\TitleBlockControl.Designer.cs">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileNotFoundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileNotFoundForm.Designer.cs">
+      <DependentUpon>FileNotFoundForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileExclusionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +147,9 @@
     <EmbeddedResource Include="Controls\TitleBlockControl.resx">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FileNotFoundForm.resx">
+      <DependentUpon>FileNotFoundForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileExclusionsForm.resx">
       <DependentUpon>FileExclusionsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -180,7 +189,9 @@
       <Name>API</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Foundant_Logo_Icon_Large.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

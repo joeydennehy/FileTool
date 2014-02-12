@@ -38,15 +38,15 @@ namespace UI.Controls.FunctionBlockControls
 		public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent)
 		{
 			InitializeComponent();
-			Initialize();
 		}
 
 		#endregion
 
 		#region private methods
 
-		private void Initialize()
+		public override void Initialize()
 		{
+			base.Initialize();
 			state = new FoundationDataFileState
 			{
 				BaseDirectory = ParentControl.SourceLocation
@@ -109,9 +109,10 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void moveFilesButton_Click(object sender, EventArgs e)
 		{
+			Cursor = Cursors.WaitCursor;
+
 			try
 			{
-				Cursor = Cursors.WaitCursor;
 				FileProcessing.MoveFilesToDestination(state.SequesterFiles, moveLocationText.Text, state.ClientRootDirectory);
 				state.MovedToDirectory = moveLocationText.Text;
 				state.MovedFromDirectory = state.ClientRootDirectory;
@@ -130,7 +131,7 @@ namespace UI.Controls.FunctionBlockControls
 		private void moveLocationText_TextChanged(object sender, EventArgs e)
 		{
 			state.OutputDirectory = moveLocationText.Text;
-			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text);
+			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationText.Text) && !string.IsNullOrWhiteSpace(moveFilesTextBox.Text);
 		}
 
 		private void MouseClick_comboBox(object sender, MouseEventArgs e)
@@ -148,8 +149,21 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-			HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedValue).Row);
-			EvaluateFiles();
+			Cursor = Cursors.WaitCursor;
+
+			try
+			{
+				HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedValue).Row);
+				EvaluateFiles();
+			}
+			catch (Exception eError)
+			{
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			finally
+			{
+				Cursor = Cursors.Default;
+			}
 		}
 
 		private void SetProcessingFolderText()
@@ -177,24 +191,38 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void OnLeave_FoundationDropDown(object sender, EventArgs e)
 		{
-			DataRow selectedRow = null;
-			if (foundationIdComboBox.SelectedValue != null)
-			{
-				selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
-			}
-			else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
-			{
-				var boundData = (DataTable)foundationIdComboBox.DataSource;
-				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
-				DataRow[] rows = boundData.Select(searchExpression);
-				if (rows.Any())
-				{
-					selectedRow = rows[0];
-				}
-			}
+			Cursor = Cursors.WaitCursor;
 
-			HandleFoundationSelectionChanged(selectedRow);
-			EvaluateFiles();
+			try
+			{
+				DataRow selectedRow = null;
+				if (foundationIdComboBox.SelectedValue != null)
+				{
+					selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
+				}
+				else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
+				{
+					var boundData = (DataTable)foundationIdComboBox.DataSource;
+					string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
+					DataRow[] rows = boundData.Select(searchExpression);
+					if (rows.Any())
+					{
+						selectedRow = rows[0];
+					}
+				}
+
+				HandleFoundationSelectionChanged(selectedRow);
+				EvaluateFiles();
+			}
+			catch (Exception eError)
+			{
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			finally
+			{
+				Cursor = Cursors.Default;
+				moveFilesButton.Select();
+			}
 		}
 
 		private void EvaluateFiles()
@@ -221,11 +249,20 @@ namespace UI.Controls.FunctionBlockControls
 			base.OnEnter(e);
 		}
 
-
 		protected override void OnPaint(PaintEventArgs pe) { base.OnPaint(pe); }
 
 		private void undoButton_Click(object sender, EventArgs e) { FileProcessing.Undo(state); }
 
 		#endregion
+
+		private void fileNotFoundLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			var fileNotFound = new FileNotFoundForm(state);
+			DialogResult result = fileNotFound.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				
+			}
+		}
 	}
 }
