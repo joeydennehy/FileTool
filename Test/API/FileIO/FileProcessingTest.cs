@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Collections.Generic;
+using API.Data;
 using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -80,9 +81,13 @@ namespace Test.API
 		[TestMethod]
 		public void TestMethod1()
 		{
-			//
-			// TODO: Add test logic here
-			//
+			List<string> items = ApplicantProcessQuery.GetFoundationFileList("petco");
+
+			FileProcessingState state = new FileProcessingState();
+			state.BaseDirectory = "E:\\";
+			state.FoundationUrlKey = "petco";
+
+			FileProcessing.ReconcileFileListToDatabase(state, items);
 		}
 	}
 }

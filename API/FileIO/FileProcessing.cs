@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,9 +13,10 @@ namespace API.FileIO
 	public class FileProcessingState
 	{
 		public string BaseDirectory { get; set; }
-        public string FoundationId { get; set; }
+      public string FoundationId { get; set; }
 		public string FileMask { get; set; }
 		public List<FileInfo> Files { get; set; }
+		public List<string> FilesNotFound { get; set; }
 		public List<int> FoundationApplicantProcessIds { get; set; }
 		public int FoundationProcessId { get; set; }
 		public string FoundationUrlKey { get; set; }
@@ -23,11 +25,13 @@ namespace API.FileIO
 		public string SequesterPath { get; set; }
 		public List<string> SequesterPatterns { get; set; }
 		public long TotalSize { get; set; }
-		
+		public string MovedToDirectory { get; set; }
+		public string MovedFromDirectory { get; set; }
+
 		public NetworkCredential BaseDirectoryCredentials { get; set; }
 		public NetworkCredential OutputDirectoryCredentials { get; set; }
 
-		public string RootProcessDirectory
+		public string ClientRootDirectory
 		{
 			get { return string.Format("{0}\\{1}\\", BaseDirectory, FoundationUrlKey); }
 		}
@@ -59,7 +63,7 @@ namespace API.FileIO
 				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
 		}
 
-		public static void SetFilelist(FileProcessingState state)
+		public static void SetFileList(FileProcessingState state)
 		{
 			state.Files = new List<FileInfo>();
 			state.SequesterFiles = new List<FileInfo>();
@@ -69,37 +73,64 @@ namespace API.FileIO
 			{
 				foreach (int applicantProcessId in state.FoundationApplicantProcessIds)
 				{
-					string directoryPath = string.Format("{0}{1}", state.RootProcessDirectory, applicantProcessId);
-					if (Directory.Exists(directoryPath))
-					{
-						string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
-						foreach (string directoryFile in directoryFiles)
-						{
-							FileInfo file = new FileInfo(directoryFile);
-							if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
-							{
-								if (!state.FileMask.ToLower().Contains(file.Extension.ToLower()))
-								{
-									continue;
-								}
-							}
-
-							if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
-							{
-								bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
-								if (sequesterFile)
-								{
-									state.SequesterFiles.Add(file);
-									continue;
-								}
-							}
-
-							state.Files.Add(file);
-							state.TotalSize += file.Length;
-						}
-					}
+					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessId);
+					SetFilesFromPath(state, directoryPath);
 				}
 			}
+		}
+
+		private static void SetFilesFromPath(FileProcessingState state, string directoryPath)
+		{
+			state.Files.Clear();
+			if (Directory.Exists(directoryPath))
+			{
+				string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+				foreach (string directoryFile in directoryFiles)
+				{
+					var file = new FileInfo(directoryFile);
+					if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
+					{
+						if (!state.FileMask.ToLower().Contains(file.Extension.ToLower()))
+						{
+							continue;
+						}
+					}
+
+					if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+					{
+						bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
+						if (sequesterFile)
+						{
+							state.SequesterFiles.Add(file);
+							continue;
+						}
+					}
+
+					state.Files.Add(file);
+					state.TotalSize += file.Length;
+				}
+			}
+		}
+
+		public static void ReconcileFileListToDatabase(FileProcessingState state, List<string> fileList)
+		{
+			SetFilesFromPath(state, state.ClientRootDirectory);
+
+			foreach (FileInfo file in state.Files)
+			{
+				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty).ToLower();
+				if (!fileList.Contains(partialFileName))
+				{
+					state.SequesterFiles.Add(file);
+				}
+				else
+				{
+					fileList.Remove(partialFileName);
+				}
+			}
+
+			if (fileList.Count > 0)
+				state.FilesNotFound = fileList;
 		}
 
 		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)
@@ -134,6 +165,66 @@ namespace API.FileIO
 					Logger.Log(string.Format("Unable to copy file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
 					throw;
 				}
+			}
+		}
+
+		public static void MoveFilesToDestination(List<FileInfo> files, string destinationFolder, string root)
+		{
+			if (files == null || files.Count == 0)
+			{
+				Logger.Log("MoveFilesToDestination: no files selected to copy", LogLevel.Warn);
+				return;
+			}
+
+			if (string.IsNullOrEmpty(destinationFolder))
+			{
+				Logger.Log("MoveFilesToDestination: No destination selected for copy", LogLevel.Error);
+				return;
+			}
+
+			if (!Directory.Exists(destinationFolder))
+			{
+				Directory.CreateDirectory(destinationFolder);
+			}
+
+			foreach (FileInfo file in files)
+			{
+				string directory = string.Format("{0}\\{1}", destinationFolder, file.Directory.FullName.Substring(root.Length));
+				if (!Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+				string fullDestinationPath = string.Format("{0}\\{1}", directory, file.Name);
+				try
+				{
+					File.Move(file.FullName, fullDestinationPath);
+					Logger.Log("Moved file " + file.FullName + " to " + fullDestinationPath, LogLevel.Info);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Unable to move file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+					throw;
+				}
+			}
+		}
+
+		public static void Undo(FileProcessingState state)
+		{
+			SetFilesFromPath(state, state.MovedToDirectory);
+
+			foreach (FileInfo file in state.Files)
+			{
+				try
+				{
+					string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory, file.FullName.Substring(state.MovedToDirectory.Length));
+					File.Move(file.FullName, fullDestination);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+					throw;
+				}
+				
 			}
 		}
 
