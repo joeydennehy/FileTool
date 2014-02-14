@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using API.Logging;
 
@@ -10,10 +12,15 @@ namespace API.FileIO
 	public static class FileProcessing
 	{
 		private static readonly List<string> SUB_FOLDERS;
-
+		
 		static FileProcessing()
 		{
-			SUB_FOLDERS = new List<string> {"followup", "loi", "qualification"};
+			SUB_FOLDERS = new List<string>
+			{
+				"followup", 
+				"loi", 
+				"qualification"
+			};
 		}
 
 		public static void CopyApplicationProcessFiles(FoundationDataFileState state)
@@ -104,7 +111,7 @@ namespace API.FileIO
 			if (string.IsNullOrEmpty(destinationFolder))
 			{
 				Logger.Log("CopyFilesToDestination: No destination selected for copy", LogLevel.Error);
-				return;
+				throw new ArgumentNullException("destinationFolder");
 			}
 
 			if (!Directory.Exists(destinationFolder))
@@ -117,7 +124,23 @@ namespace API.FileIO
 				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
 				try
 				{
-					File.Copy(file.FullName, fullFileName, true);
+					var destinationFile = new FileInfo(fullFileName);
+					int fileCounter = 1;
+					while (destinationFile.Exists)
+					{
+						string baseFileName = destinationFile.Name.Substring(0,(destinationFile.Name.Length - destinationFile.Extension.Length));
+						int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1), StringComparison.InvariantCulture);
+						if (repetitionIndex > 0)
+						{
+							baseFileName = destinationFile.Name.Substring(0, repetitionIndex);
+						}
+						
+						destinationFile = new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter, destinationFile.Extension));
+						fullFileName = destinationFile.FullName;
+						fileCounter++;
+					}
+
+					File.Copy(file.FullName, fullFileName);
 					Logger.Log("Copied file " + file.FullName + " to " + fullFileName, LogLevel.Info);
 				}
 				catch (Exception eError)
@@ -192,12 +215,12 @@ namespace API.FileIO
 		{
 			if (string.IsNullOrEmpty(file.DirectoryName))
 				return string.Empty;
-
+			
 			string applicantProcessId = string.Empty;
-			string subFolderId = string.Empty;
-			StringBuilder fileName = new StringBuilder();
+			var fileName = new StringBuilder();
+			bool useProcessSubFolderFormat = false;
 
-			List<string> folders = new List<string>();
+			var folders = new List<string>();
 			folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
 
 			int applicantProcessValue;
@@ -205,24 +228,59 @@ namespace API.FileIO
 			{
 				if (applicantProcessValue > 0)
 				{
-					applicantProcessId = applicantProcessValue.ToString("D10");
+						applicantProcessId = applicantProcessValue.ToString("D10");
 				}
 				else
 				{
 					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
 					return string.Empty;
 				}
+
+				var rootFileFolder = new DirectoryInfo(string.Join("\\", folders.GetRange(0, folders.Count - 1)));
+				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories().ToList();
+				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s))).Any();
 			}
 
-			if (SUB_FOLDERS.Contains(folders.Last()))
-				subFolderId = string.Format("_{0}", folders.Last());
-
-			fileName.Clear();
-			fileName.Append(applicantProcessId);
-			fileName.Append(subFolderId);
-			fileName.Append(string.Format("_{0}", file.Name));
+			if (useProcessSubFolderFormat)
+			{
+				fileName.AppendFormat("{0}_{1}_{2}", applicantProcessId, folders.Last(), file.Name);
+			}
+			else
+			{
+				fileName.AppendFormat("{0}_{1}", applicantProcessId, file.Name);
+			}
 
 			return fileName.ToString();
+			//string applicantProcessId = string.Empty;
+			//string subFolderId = string.Empty;
+			//StringBuilder fileName = new StringBuilder();
+
+			//List<string> folders = new List<string>();
+			//folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
+
+			//int applicantProcessValue;
+			//if (folders.Count - 2 >= 0 && int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
+			//{
+			//	if (applicantProcessValue > 0)
+			//	{
+			//		applicantProcessId = applicantProcessValue.ToString("D10");
+			//	}
+			//	else
+			//	{
+			//		Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
+			//		return string.Empty;
+			//	}
+			//}
+
+			//if (SUB_FOLDERS.Contains(folders.Last()))
+			//	subFolderId = string.Format("_{0}", folders.Last());
+
+			//fileName.Clear();
+			//fileName.Append(applicantProcessId);
+			//fileName.Append(subFolderId);
+			//fileName.Append(string.Format("_{0}", file.Name));
+
+			//return fileName.ToString();
 		}
 	}
 }
