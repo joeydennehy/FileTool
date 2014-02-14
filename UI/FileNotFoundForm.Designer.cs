@@ -28,13 +28,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Windows.Forms.Button deleteRecordButton;
 			this.instructionsPanel = new System.Windows.Forms.Panel();
 			this.exclusionInstructionsLabel = new System.Windows.Forms.Label();
 			this.exclusionListPanel = new System.Windows.Forms.Panel();
 			this.notFoundTextBox = new System.Windows.Forms.RichTextBox();
 			this.sequesterLocationPanel = new System.Windows.Forms.Panel();
 			this.cancelButton = new System.Windows.Forms.Button();
-			this.okButton = new System.Windows.Forms.Button();
+			deleteRecordButton = new System.Windows.Forms.Button();
 			this.instructionsPanel.SuspendLayout();
 			this.exclusionListPanel.SuspendLayout();
 			this.sequesterLocationPanel.SuspendLayout();
@@ -86,7 +87,7 @@
 			// sequesterLocationPanel
 			// 
 			this.sequesterLocationPanel.Controls.Add(this.cancelButton);
-			this.sequesterLocationPanel.Controls.Add(this.okButton);
+			this.sequesterLocationPanel.Controls.Add(deleteRecordButton);
 			this.sequesterLocationPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.sequesterLocationPanel.Location = new System.Drawing.Point(0, 313);
 			this.sequesterLocationPanel.Margin = new System.Windows.Forms.Padding(4);
@@ -97,7 +98,7 @@
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(124, 4);
+			this.cancelButton.Location = new System.Drawing.Point(191, 4);
 			this.cancelButton.Margin = new System.Windows.Forms.Padding(4);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(100, 28);
@@ -105,16 +106,16 @@
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
-			// okButton
+			// deleteRecordButton
 			// 
-			this.okButton.Location = new System.Drawing.Point(16, 4);
-			this.okButton.Margin = new System.Windows.Forms.Padding(4);
-			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(100, 28);
-			this.okButton.TabIndex = 0;
-			this.okButton.Text = "OK";
-			this.okButton.UseVisualStyleBackColor = true;
-			this.okButton.Click += new System.EventHandler(this.ButtonClick_Ok);
+			deleteRecordButton.Location = new System.Drawing.Point(16, 4);
+			deleteRecordButton.Margin = new System.Windows.Forms.Padding(4);
+			deleteRecordButton.Name = "deleteRecordButton";
+			deleteRecordButton.Size = new System.Drawing.Size(167, 28);
+			deleteRecordButton.TabIndex = 0;
+			deleteRecordButton.Text = "Delete Records";
+			deleteRecordButton.UseVisualStyleBackColor = true;
+			deleteRecordButton.Click += new System.EventHandler(this.ButtonClick_Ok);
 			// 
 			// FileNotFoundForm
 			// 
@@ -147,6 +148,5 @@
 		private System.Windows.Forms.Label exclusionInstructionsLabel;
 		private System.Windows.Forms.RichTextBox notFoundTextBox;
 		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.Button okButton;
 	}
 }

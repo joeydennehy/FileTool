@@ -42,6 +42,9 @@ namespace API.FileIO
 
 		private static void SetFilesFromPath(FoundationDataFileState state, string directoryPath)
 		{
+			state.SequesterFiles.Clear();
+			state.Files.Clear();
+			state.TotalSize = 0;
 			if (Directory.Exists(directoryPath))
 			{
 				string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);

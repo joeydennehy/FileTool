@@ -269,4 +269,95 @@ WHERE
 		</value>
 	</data>
 	
+	<data name="SELECT_REQUEST_DOCUMENT_ID" xml:space="preserve">
+		<value>
+			SELECT 
+				DocumentId 
+					FROM 
+						document d 
+					WHERE 
+						d.ApplicantProcessId = @REQUESET_ID
+						AND
+						d.Name like '%@FILE_NAME%'
+		</value>
+	</data>
+	
+	<data name="SELECT_ORGANIZATION_DOCUMENT_ID" xml:space="preserve">
+		<value>
+			SELECT 
+				DocumentId 
+					FROM 
+						document d 
+					WHERE 
+						d.ApplicantProcessId = @ORGANIZATION_ID
+						AND
+						d.Name like '%@FILE_NAME%'
+		</value>
+	</data>
+	
+	<data name="SELECT_SHARED_DOCUMENT_ID" xml:space="preserve">
+		<value>
+			SELECT 
+				DocumentId 
+					FROM 
+						document d 
+					WHERE 
+						NULLIF(d.ApplicantProcessId, '') IS NULL
+						AND
+						NULLIF(d.OrganizationId, '') IS NULL
+						AND
+						d.Name like '%@FILE_NAME%'
+		</value>
+	</data>
+
+	<data name="SELECT_REQEST_ANSWER_ID" xml:space="preserve">
+		<value>
+					SELECT DISTINCT
+						an.AnswerID
+							FROM
+								submission su
+								LEFT OUTER JOIN applicantprocess ap ON (su.RequestId = ap.ApplicantProcessId)
+								LEFT OUTER JOIN stage st ON (su.StageId = st.StageId)
+								LEFT OUTER JOIN answer an ON (su.SubmissionId = an.SubmissionId)
+							WHERE
+								su.FoundationId = @FOUNDATION_ID
+								AND
+								ap.ApplicantProcessCode = @REQUEST_PROCESS_CODE
+								AND
+								LOWER(st.Name) = @STAGE_NAME
+								AND
+								an.Value like CONCAT('%', @FILE_NAME, '%')
+				
+		</value>
+	</data>
+	
+	<data name="DELETE_REQEST_DOCUMENT_RECORD" xml:space="preserve">
+		<value>
+			DELETE
+			FROM
+				answer
+			WHERE
+				answer.AnswerId = @ANSWER_ID
+		</value>
+	</data>
+	
+	<data name="DELETE_DOCUMENT_ROLE" xml:space="preserve">
+		<value>
+			DELETE
+			FROM
+				documentrole dr
+			WHERE
+				dr.DocumentId = @DOCUMENT_ID
+		</value>
+	</data>
+	
+	<data name="DELETE_DOCUMENT_RECORD" xml:space="preserve">
+		<value>
+			DELETE
+			FROM
+				document d
+			WHERE
+				d.DocumentId = @DOCUMENT_ID
+		</value>
+	</data>
 </root>

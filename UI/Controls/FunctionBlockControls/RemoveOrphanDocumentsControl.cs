@@ -150,10 +150,9 @@ namespace UI.Controls.FunctionBlockControls
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
-
 			try
 			{
-				HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedValue).Row);
+				HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedItem).Row);
 				EvaluateFiles();
 			}
 			catch (Exception eError)
@@ -261,8 +260,59 @@ namespace UI.Controls.FunctionBlockControls
 			DialogResult result = fileNotFound.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				
+				DeleteRecords();
 			}
+		}
+
+		private void DeleteRecords()
+		{
+			List<string> fileList = state.FilesNotFound;
+			foreach (var file in fileList)
+			{
+				string[] splitPath = file.Split('\\');
+				if (splitPath[1] == "supportingdocuments")
+				{
+					DeleteSupportingRecords(splitPath);
+				}
+				else if (splitPath[0].Contains("shared"))
+				{
+					DeleteSharedRecords(splitPath);
+				}
+				else
+				{
+					DeleteRequestRecords(splitPath);
+				}
+			}
+		}
+
+		private void DeleteSupportingRecords(string [] splitPath)
+		{
+			if (splitPath[0].Contains("ORG-"))
+			{
+				int organizationId = Int32.Parse(splitPath[0].Substring(4));
+				string fileName = splitPath[splitPath.Length - 1];
+				RequestQuery.DeleteOrganizationSupportingRecords(organizationId, fileName);
+			}
+			else
+			{
+				int requestId = Int32.Parse(splitPath[0]);
+				string fileName = splitPath[splitPath.Length - 1];
+				RequestQuery.DeleteRequestSupportingRecords(requestId, fileName);
+			}
+		}
+
+		private void DeleteSharedRecords(string [] splitPath)
+		{
+			string fileName = splitPath[splitPath.Length - 1];
+			RequestQuery.DeleteSharedRecords(fileName);
+		}
+
+		private void DeleteRequestRecords(string[] splitPath)
+		{
+			string requestProcessCode = splitPath[0];
+			string stageName = splitPath[1];
+			string fileName = splitPath[splitPath.Length - 1];
+			RequestQuery.DeleteRequestRecords(state.FoundationId, requestProcessCode, stageName, fileName);
 		}
 	}
 }
