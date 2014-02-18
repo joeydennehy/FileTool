@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using UI.Controls;
 using UI.Controls.FunctionBlockControls;
@@ -26,7 +21,6 @@ namespace UI
 		private TitleBlockControl titleBlockControl;
 
 		private ClientFileExtractionControl clientFileExtractionControl;
-		private RemoveOrphanDocumentRecordsControl removeOrphanDocumentRecordsControl;
 		private RemoveOrphanDocumentsControl removeOrphanDocumentsControl;
 		private RenameDirectoryControl renameDirectoryControl;
 		private RenameFilesControl renameFilesControl;
@@ -62,20 +56,17 @@ namespace UI
 			//Set up the functional block controls
 			panelControls = new Dictionary<string, FunctionBlockBaseControl>();
 			clientFileExtractionControl = new ClientFileExtractionControl(this);
-			removeOrphanDocumentRecordsControl = new RemoveOrphanDocumentRecordsControl(this);
 			removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl(this);
 			renameDirectoryControl = new RenameDirectoryControl(this);
 			renameFilesControl = new RenameFilesControl(this);
 
 			panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
-			panelControls.Add(removeOrphanDocumentRecordsControl.Name, removeOrphanDocumentRecordsControl);
 			panelControls.Add(removeOrphanDocumentsControl.Name, removeOrphanDocumentsControl);
 			panelControls.Add(renameDirectoryControl.Name, renameDirectoryControl);
 			panelControls.Add(renameFilesControl.Name, renameFilesControl);
 
 			//Add client ID to the associated task button on the UI (used by NavigationButtonClick Event to switch controls)
 			btnNavFileExtraction.Tag = clientFileExtractionControl.Name;
-			btnNavRemoveDocRecords.Tag = removeOrphanDocumentRecordsControl.Name;
 			btnNavRemoveDocs.Tag = removeOrphanDocumentsControl.Name;
 			btnNavRenameDirectory.Tag = renameDirectoryControl.Name;
 			btnNavRenameFiles.Tag = renameFilesControl.Name;

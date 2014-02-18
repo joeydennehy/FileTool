@@ -303,16 +303,16 @@ namespace UI.Controls.FunctionBlockControls
 				state.FoundationProcessId = foundationProcessId;
 				try
 				{
-					state.FoundationApplicantProcessIds = RequestQuery.RetrieveApplicationProcessInfo(foundationProcessId);
+					state.FoundationApplicantProcessCodes = RequestQuery.RetrieveApplicationProcessInfo(foundationProcessId);
 				}
 				catch (Exception eError)
 				{
 					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 
-				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessIds.Count);
+				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessCodes.Count);
 
-				if (state.FoundationApplicantProcessIds.Count > 0)
+				if (state.FoundationApplicantProcessCodes.Count > 0)
 				{
 					FileProcessing.SetFileList(state);
 					if (state.Files != null && state.Files.Count > 0)

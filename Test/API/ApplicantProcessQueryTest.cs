@@ -66,7 +66,7 @@ namespace Test.API
 		//		BaseDirectory = "C:/Users/Joey/Desktop/petcocopy",
 		//		OutputDirectory = "C:/petcocopy",
 		//		FoundationUrlKey = "petco",
-		//		FoundationApplicantProcessIds = query.RetrieveApplicationProcessInfo(7043)
+		//		FoundationApplicantProcessCodes = query.RetrieveApplicationProcessInfo(7043)
 		//	};
 
 		//	FileProcessing.CopyApplicationProcessFiles(state);

@@ -31,17 +31,21 @@ namespace API.FileIO
 				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
 		}
 
-		public static void SetFileList(FoundationDataFileState state)
+		private static void ClearFiles(FoundationDataFileState state)
 		{
 			state.Files = new List<FileInfo>();
 			state.SequesterFiles = new List<FileInfo>();
 			state.TotalSize = 0;
+		}
 
-			if (state.FoundationApplicantProcessIds != null)
+		public static void SetFileList(FoundationDataFileState state)
+		{
+			ClearFiles(state);
+			if (state.FoundationApplicantProcessCodes != null)
 			{
-				foreach (int applicantProcessId in state.FoundationApplicantProcessIds)
+				foreach (string applicantProcessCode in state.FoundationApplicantProcessCodes)
 				{
-					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessId);
+					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessCode);
 					SetFilesFromPath(state, directoryPath);
 				}
 			}
@@ -49,9 +53,6 @@ namespace API.FileIO
 
 		private static void SetFilesFromPath(FoundationDataFileState state, string directoryPath)
 		{
-			state.SequesterFiles.Clear();
-			state.Files.Clear();
-			state.TotalSize = 0;
 			if (Directory.Exists(directoryPath))
 			{
 				string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
@@ -84,6 +85,7 @@ namespace API.FileIO
 
 		public static void ReconcileFileListToDatabase(FoundationDataFileState state, List<string> fileList)
 		{
+			ClearFiles(state);
 			SetFilesFromPath(state, state.ClientRootDirectory);
 
 			foreach (FileInfo file in state.Files)
@@ -196,6 +198,7 @@ namespace API.FileIO
 
 		public static void Undo(FoundationDataFileState state)
 		{
+			ClearFiles(state);
 			SetFilesFromPath(state, state.MovedToDirectory);
 
 			foreach (FileInfo file in state.Files)
@@ -226,12 +229,16 @@ namespace API.FileIO
 			var folders = new List<string>();
 			folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
 
-			int applicantProcessValue;
-			if (folders.Count - 2 >= 0 && int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
+			if (folders.Count - 2 >= 0)
 			{
-				if (applicantProcessValue > 0)
+				int applicantProcessValue;
+				if (int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
 				{
-						applicantProcessId = applicantProcessValue.ToString("D10");
+					applicantProcessId = applicantProcessValue.ToString("D10");
+				}
+				else if (!string.IsNullOrWhiteSpace(folders[folders.Count - 2]))
+				{
+					applicantProcessId = folders[folders.Count - 2];
 				}
 				else
 				{
@@ -254,26 +261,6 @@ namespace API.FileIO
 			}
 
 			return fileName.ToString();
-			//string applicantProcessId = string.Empty;
-			//string subFolderId = string.Empty;
-			//StringBuilder fileName = new StringBuilder();
-
-			//List<string> folders = new List<string>();
-			//folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
-
-			//int applicantProcessValue;
-			//if (folders.Count - 2 >= 0 && int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
-			//{
-			//	if (applicantProcessValue > 0)
-			//	{
-			//		applicantProcessId = applicantProcessValue.ToString("D10");
-			//	}
-			//	else
-			//	{
-			//		Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
-			//		return string.Empty;
-			//	}
-			//}
 
 			//if (SUB_FOLDERS.Contains(folders.Last()))
 			//	subFolderId = string.Format("_{0}", folders.Last());

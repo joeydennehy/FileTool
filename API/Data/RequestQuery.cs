@@ -108,7 +108,7 @@ namespace API.Data
 			return fileList;
 		}
 
-		public static List<int> RetrieveApplicationProcessInfo(int foundationProcess)
+		public static List<string> RetrieveApplicationProcessInfo(int foundationProcess)
 		{
 			var parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);
@@ -120,7 +120,7 @@ namespace API.Data
 
 			var access = new DataAccess();
 
-			var foundationProcesses = new List<int>();
+			var foundationProcesses = new List<string>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
@@ -128,7 +128,7 @@ namespace API.Data
 				{
 					if (!reader.IsDBNull(0))
 					{
-						foundationProcesses.Add(reader.GetInt32(0));
+						foundationProcesses.Add(reader.GetString(0));
 					}
 				}
 			}

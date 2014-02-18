@@ -10,7 +10,7 @@ namespace API.FileIO
 		public string FileMask { get; set; }
 		public List<FileInfo> Files { get; set; }
 		public List<string> FilesNotFound { get; set; }
-		public List<int> FoundationApplicantProcessIds { get; set; }
+		public List<string> FoundationApplicantProcessCodes { get; set; }
 		public int FoundationProcessId { get; set; }
 		public string FoundationUrlKey { get; set; }
 		public string OutputDirectory { get; set; }
@@ -40,7 +40,7 @@ namespace API.FileIO
 			FileMask = "*.*";
 
 			Files = new List<FileInfo>();
-			FoundationApplicantProcessIds = new List<int>();
+			FoundationApplicantProcessCodes = new List<string>();
 			SequesterFiles = new List<FileInfo>();
 		}
 	}

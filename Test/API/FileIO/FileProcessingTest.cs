@@ -1,15 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Globalization;
+﻿using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading;
-using API.Data;
 using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -76,6 +70,9 @@ namespace Test.API
 			rootControlFolderPath = string.Format("{0}\\control\\{1}", rootPath, TEST_KEY);
 			FileTestCases = new Dictionary<string, string>();
 
+			state.BaseDirectory = string.Format("{0}\\control\\", rootPath);
+			state.FoundationUrlKey = TEST_KEY;
+
 			//Test Cases
 
 			FileTestCases = new Dictionary<string, string>
@@ -100,29 +97,23 @@ namespace Test.API
 				{ string.Format("{0}\\3\\evaluation 1\\test.txt", rootControlFolderPath), string.Format("{0}\\0000000003_test (1).txt", state.OutputDirectory) },
 				{ string.Format("{0}\\3\\evaluation 2\\test.txt", rootControlFolderPath), string.Format("{0}\\0000000003_test (2).txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\ORG-1\\application\\test_app.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\ORG-1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\ORG-1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\ORG-1\\followup\\test_followup.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\ORG-1\\loi\\test_loi.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\ORG-1\\qualification\\test_qual.txt", rootControlFolderPath), "" },
 				{ string.Format("{0}\\ORG-1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), "" },
 
-				{ string.Format("{0}\\organization-2--00010101_1\\application\\test_app.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\organization-2--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\organization-2--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\organization-2--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\organization-2--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\organization-2--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\organization-2--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}\\organization-2--00010101_1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_application_test_app.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\organization-2--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\organization-2--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\organization-2--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_followup_test_followup.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\organization-2--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_loi_test_loi.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\organization-2--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_qualification_test_qual.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\organization-2--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_supportingdocuments_test_doc.txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\application\\test_app.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_application_test_app.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_followup_test_followup.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_loi_test_loi.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_qualification_test_qual.txt", state.OutputDirectory) },
+				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_supportingdocuments_test_doc.txt", state.OutputDirectory) },
 
 				{ string.Format("{0}\\emailattachments\\1.txt", rootControlFolderPath), "" },
 				{ string.Format("{0}\\GuideStar\\1.txt", rootControlFolderPath), "" },
@@ -185,23 +176,26 @@ namespace Test.API
 		[TestMethod]
 		public void CopyFilesToDestinationTest_OnlyCopiesRequestProcessFiles()
 		{
-			var requestIds = new List<int>();
+			var requestIds = new List<string>();
 			var expectedFiles = new Dictionary<string, string>();
+
+			state.Files.Clear();
 
 			foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
 			{
 				Match matchSet = Regex.Match(fileTestCase.Key, @"[\\][\d]\\");
-				if (matchSet.Success)
+				if (matchSet.Success && !fileTestCase.Key.Contains("supportingdocuments"))
 				{
-					int requestId;
-					int.TryParse(matchSet.Value.Replace("\\", ""), out requestId);
+					string requestId = matchSet.Value.Replace("\\", "");
 					if (!requestIds.Contains(requestId))
 						requestIds.Add(requestId);
 					expectedFiles.Add(fileTestCase.Key, fileTestCase.Value);
+					var file = new FileInfo(fileTestCase.Key);
+					state.Files.Add(file);
 				}
 			}
 
-			state.FoundationApplicantProcessIds = requestIds;
+			state.FoundationApplicantProcessCodes = requestIds;
 			FileProcessing.CopyApplicationProcessFiles(state);
 
 			List<string> testFileList = new List<string>();
@@ -221,35 +215,104 @@ namespace Test.API
 			}
 
 			Assert.IsTrue(testFileList.Count == 0);
+		}
 
-			//var controlFolders = new List<string>();
-			//foreach (KeyValuePair<string, string> processValuePair in FileTestCases)
-			//{
-			//	int value;
-			//	int.TryParse(processValuePair.Key, out value);
-			//	if(value > 0)
-			//		controlFolders.Add(processValuePair.Value);
-			//}
+		[TestMethod]
+		public void MoveFilesToDestinationTest()
+		{
+			FileProcessing.MoveFilesToDestination(state.Files, state.OutputDirectory, rootControlFolderPath);
 
-			//foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
-			//{
-			//	var fi = new FileInfo(fileTestCase.Value);
-			//	bool ShouldBeOnDisk = false;
-			//	foreach (string controlFolder in controlFolders)
-			//	{
-			//		if (fi.FullName.Contains(controlFolder))
-			//		{
-			//			ShouldBeOnDisk = true;
-			//			break;
-			//		}
-			//	}
-			//	if(ShouldBeOnDisk)
-			//		Assert.IsTrue(fi.Exists, string.Format("File should be present: {0}", fi.FullName));
-			//	else
-			//	{
-			//		Assert.IsFalse(fi.Exists, string.Format("File should not be present: {0}", fi.FullName));
-			//	}
-			//}
+			string [] outputFiles = Directory.GetFiles(state.OutputDirectory, "*.*", SearchOption.AllDirectories);
+
+			Assert.IsTrue(outputFiles.Length == state.Files.Count);
+		}
+
+		[TestMethod]
+		public void CopyFilesToDestinationTest_AllRequestProcessFiles()
+		{
+			var requestIds = new List<string>();
+			var expectedFiles = new Dictionary<string, string>();
+
+			state.Files.Clear();
+
+			foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
+			{
+				if (!fileTestCase.Key.Contains("emailattachments") && !fileTestCase.Key.Contains("GuideStar")
+				    && !fileTestCase.Key.Contains("MailMerge") && !fileTestCase.Key.Contains("shared")
+				    && !fileTestCase.Key.Contains("ORG-") && !fileTestCase.Key.Contains("supportingdocuments"))
+				{
+					string requestId = fileTestCase.Key.Split('\\')[1];
+					if (!requestIds.Contains(requestId))
+						requestIds.Add(requestId);
+					expectedFiles.Add(fileTestCase.Key, fileTestCase.Value);
+					var file = new FileInfo(fileTestCase.Key);
+					state.Files.Add(file);
+				}
+			}
+
+			state.FoundationApplicantProcessCodes = requestIds;
+			FileProcessing.CopyApplicationProcessFiles(state);
+
+			List<string> testFileList = new List<string>();
+			DirectoryInfo outputDirectoryInfo = new DirectoryInfo(state.OutputDirectory);
+
+			Assert.IsFalse(outputDirectoryInfo.GetDirectories().Any());
+
+			foreach (FileInfo outputFile in outputDirectoryInfo.GetFiles())
+			{
+				testFileList.Add(outputFile.FullName);
+			}
+
+			foreach (KeyValuePair<string, string> expectedFile in expectedFiles)
+			{
+				if (testFileList.Contains(expectedFile.Value))
+					testFileList.Remove(expectedFile.Value);
+			}
+
+			Assert.IsTrue(testFileList.Count == 0);
+		}
+
+		[TestMethod]
+		public void CopyFilesToDestinationTest_OldRequestFiles()
+		{
+			var requestIds = new List<string>();
+			var expectedFiles = new Dictionary<string, string>();
+
+			state.Files.Clear();
+
+			foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
+			{
+				if (fileTestCase.Key.Contains("organization") || fileTestCase.Key.Contains("scholarshipactor-3--00010101_1"))
+				{
+					string requestId = fileTestCase.Key.Split('\\')[1];
+					if (!requestIds.Contains(requestId))
+						requestIds.Add(requestId);
+					expectedFiles.Add(fileTestCase.Key, fileTestCase.Value);
+					var file = new FileInfo(fileTestCase.Key);
+					state.Files.Add(file);
+				}
+			}
+
+			state.FoundationApplicantProcessCodes = requestIds;
+			FileProcessing.CopyApplicationProcessFiles(state);
+
+			List<string> testFileList = new List<string>();
+			DirectoryInfo outputDirectoryInfo = new DirectoryInfo(state.OutputDirectory);
+
+			Assert.IsFalse(outputDirectoryInfo.GetDirectories().Any());
+
+			foreach (FileInfo outputFile in outputDirectoryInfo.GetFiles())
+			{
+				testFileList.Add(outputFile.FullName);
+			}
+
+			foreach (KeyValuePair<string, string> expectedFile in expectedFiles)
+			{
+				if (testFileList.Contains(expectedFile.Value))
+					testFileList.Remove(expectedFile.Value);
+			}
+
+			Assert.IsTrue(testFileList.Count == 0);
 		}
 
 		[TestMethod]
@@ -271,20 +334,6 @@ namespace Test.API
 			Assert.IsTrue(expectedResults.Count == 0);
 		}
 
-
-		//[TestMethod]
-		//public void TestMethod1()
-		//{
-		//	string s = "s";
-		//	//List<string> items = RequestQuery.GetFoundationFileList(465);
-
-		//	//FoundationDataFileState state = new FoundationDataFileState();
-		//	//state.FoundationId = 84;
-		//	//state.BaseDirectory = "E:\\";
-		//	//state.FoundationUrlKey = "petco";
-
-		//	//FileProcessing.ReconcileFileListToDatabase(state, items);
-		//}
 
 		private static void ClearFolder(string directoryPath)
 		{

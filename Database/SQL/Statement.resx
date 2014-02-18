@@ -174,7 +174,7 @@ WHERE
 	<data name="SELECT_APPLICATION_PROCESS_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				ap.ApplicantProcessId
+				ap.ApplicantProcessCode
 			FROM 
 				applicantprocess ap
 			WHERE
