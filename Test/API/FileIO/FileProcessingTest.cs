@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -184,7 +185,7 @@ namespace Test.API
 			foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
 			{
 				Match matchSet = Regex.Match(fileTestCase.Key, @"[\\][\d]\\");
-				if (matchSet.Success && !fileTestCase.Key.Contains("supportingdocuments"))
+				if (matchSet.Success)
 				{
 					string requestId = matchSet.Value.Replace("\\", "");
 					if (!requestIds.Contains(requestId))
@@ -239,7 +240,7 @@ namespace Test.API
 			{
 				if (!fileTestCase.Key.Contains("emailattachments") && !fileTestCase.Key.Contains("GuideStar")
 				    && !fileTestCase.Key.Contains("MailMerge") && !fileTestCase.Key.Contains("shared")
-				    && !fileTestCase.Key.Contains("ORG-") && !fileTestCase.Key.Contains("supportingdocuments"))
+				    && !fileTestCase.Key.Contains("ORG-"))
 				{
 					string requestId = fileTestCase.Key.Split('\\')[1];
 					if (!requestIds.Contains(requestId))
@@ -258,18 +259,27 @@ namespace Test.API
 
 			Assert.IsFalse(outputDirectoryInfo.GetDirectories().Any());
 
+			var duplicateFilesCount = 0;
 			foreach (FileInfo outputFile in outputDirectoryInfo.GetFiles())
 			{
 				testFileList.Add(outputFile.FullName);
+				Match matchSet = Regex.Match(outputFile.Name, @"[(]\d[)]");
+				if (matchSet.Success)
+				{
+					++duplicateFilesCount;
+				}
 			}
 
 			foreach (KeyValuePair<string, string> expectedFile in expectedFiles)
 			{
 				if (testFileList.Contains(expectedFile.Value))
 					testFileList.Remove(expectedFile.Value);
+
+				
 			}
 
 			Assert.IsTrue(testFileList.Count == 0);
+			Assert.IsTrue(duplicateFilesCount == 2);
 		}
 
 		[TestMethod]
@@ -282,7 +292,7 @@ namespace Test.API
 
 			foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
 			{
-				if (fileTestCase.Key.Contains("organization") || fileTestCase.Key.Contains("scholarshipactor-3--00010101_1"))
+				if (fileTestCase.Key.Contains("organization") || fileTestCase.Key.Contains("scholarshipactor"))
 				{
 					string requestId = fileTestCase.Key.Split('\\')[1];
 					if (!requestIds.Contains(requestId))
@@ -314,26 +324,6 @@ namespace Test.API
 
 			Assert.IsTrue(testFileList.Count == 0);
 		}
-
-		[TestMethod]
-		public void CopyFilesToDestinationTest_DuplicateNameCopy()
-		{
-			var testFiles = state.Files.Where(file => file.FullName.Contains("\\1234\\")).ToList();
-			var expectedResults = FileTestCases.Values.Where(s => s.Contains("\\1234\\")).ToList();
-			state.Files = testFiles;
-			FileProcessing.CopyApplicationProcessFiles(state);
-
-			var outputFolderInfo = new DirectoryInfo(state.OutputDirectory);
-			var testOutputFiles = outputFolderInfo.GetFiles();
-
-			foreach (FileInfo outputFile in testOutputFiles)
-			{
-				if (expectedResults.Contains(outputFile.FullName))
-					expectedResults.Remove(outputFile.Name);
-			}
-			Assert.IsTrue(expectedResults.Count == 0);
-		}
-
 
 		private static void ClearFolder(string directoryPath)
 		{
