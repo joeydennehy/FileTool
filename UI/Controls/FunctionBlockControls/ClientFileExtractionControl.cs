@@ -100,6 +100,7 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				//Bind Foundation List
 				RequestQuery.RefreshFoundationData();
+
 				foundationIdComboBox.DataSource = RequestQuery.FoundationData;
 				foundationIdComboBox.DisplayMember = "FoundationDisplayText";
 				foundationIdComboBox.ValueMember = "FoundationId";
@@ -118,6 +119,7 @@ namespace UI.Controls.FunctionBlockControls
 		private void SetProcessingFolderText()
 		{
 			var rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
+
 			rootProcessingFolder.Text = rootDirectory.Exists 
 				? state.ClientRootDirectory 
 				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.ClientRootDirectory)
@@ -144,9 +146,11 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				var outputDirectory = new DirectoryInfo(state.OutputDirectory);
+
 				if (outputDirectory.Exists && outputDirectory.GetFiles().Any())
 				{
 					DialogResult prompt = MessageBox.Show(this, VALIDATION_ERROR_FOLDER_NOT_EMPTY, FILE_COPY_CAPTION, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
 					if (prompt == DialogResult.Yes)
 					{
 						foreach (FileInfo fileInfo in outputDirectory.GetFiles())
@@ -185,7 +189,9 @@ namespace UI.Controls.FunctionBlockControls
 		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var fileExclusions = new FileExclusionsForm(state);
+
 			DialogResult result =fileExclusions.ShowDialog();
+
 			if (result == DialogResult.OK)
 			{
 				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
@@ -210,6 +216,7 @@ namespace UI.Controls.FunctionBlockControls
 			};
 
 			DialogResult result = folderBrowser.ShowDialog();
+
 			if (result == DialogResult.OK)
 			{
 				state.OutputDirectory = folderBrowser.SelectedPath;
@@ -220,22 +227,26 @@ namespace UI.Controls.FunctionBlockControls
 		private void LinkClick_FileCountLinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var fileListDisplay = new FileListDisplayForm(state.Files);
+
 			fileListDisplay.ShowDialog(this);
 		}
 
 		private void LinkClick_SecludedFileCountlinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var fileListDisplay = new FileListDisplayForm(state.SequesterFiles);
+
 			fileListDisplay.ShowDialog(this);
 		}
 
 		private void MouseClick_comboBox(object sender, MouseEventArgs e)
 		{
 			var control = sender as ComboBox;
+
 			if (control != null)
 			{
 				if (control.DroppedDown)
 					return;
+
 				control.DroppedDown = true;
 			}
 		}
@@ -243,10 +254,12 @@ namespace UI.Controls.FunctionBlockControls
 		private void OnKeyDown_comboBox(object sender, KeyEventArgs e)
 		{
 			var control = sender as ComboBox;
+
 			if (control != null)
 			{
 				if (control.DroppedDown || e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
 					return;
+
 				control.DroppedDown = true;
 			}
 		}
@@ -254,6 +267,7 @@ namespace UI.Controls.FunctionBlockControls
 		private void OnLeave_FoundationDropDown(object sender, EventArgs e)
 		{
 			DataRow selectedRow = null;
+
 			if (foundationIdComboBox.SelectedValue != null)
 			{
 				selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
@@ -261,8 +275,11 @@ namespace UI.Controls.FunctionBlockControls
 			else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
 			{
 				var boundData = (DataTable)foundationIdComboBox.DataSource;
+
 				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
+
 				var rows = boundData.Select(searchExpression);
+
 				if(rows.Any())
 					selectedRow = rows[0];
 			}
@@ -273,9 +290,11 @@ namespace UI.Controls.FunctionBlockControls
 		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
 		{
 			string selectedFilePattern = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
+
 			if (string.Compare(state.FileMask, selectedFilePattern, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				state.FileMask = selectedFilePattern;
+
 				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
 			}
 		}
@@ -297,10 +316,12 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				Cursor = Cursors.WaitCursor;
+
 				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
 				fileCountLinkLabel.Text = WORKING;
 
 				state.FoundationProcessId = foundationProcessId;
+
 				try
 				{
 					state.FoundationApplicantProcessCodes = RequestQuery.RetrieveApplicationProcessInfo(foundationProcessId);
@@ -315,6 +336,7 @@ namespace UI.Controls.FunctionBlockControls
 				if (state.FoundationApplicantProcessCodes.Count > 0)
 				{
 					FileProcessing.SetFileList(state);
+
 					if (state.Files != null && state.Files.Count > 0)
 					{
 						fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count,
@@ -354,6 +376,7 @@ namespace UI.Controls.FunctionBlockControls
 		protected override void OnEnter(EventArgs e)
 		{
 			state.BaseDirectory = ParentControl.SourceLocation;
+
 			SetProcessingFolderText();
 
 			base.OnEnter(e);
