@@ -266,25 +266,21 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void OnLeave_FoundationDropDown(object sender, EventArgs e)
 		{
-			DataRow selectedRow = null;
+			if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
+			{
+				DataRow selectedRow = null;
 
-			if (foundationIdComboBox.SelectedValue != null)
-			{
-				selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
-			}
-			else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
-			{
 				var boundData = (DataTable)foundationIdComboBox.DataSource;
 
 				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
 
 				var rows = boundData.Select(searchExpression);
 
-				if(rows.Any())
+				if (rows.Any())
 					selectedRow = rows[0];
-			}
 
-			ChangeFoundationSelection(selectedRow);
+				ChangeFoundationSelection(selectedRow);
+			}
 		}
 
 		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)

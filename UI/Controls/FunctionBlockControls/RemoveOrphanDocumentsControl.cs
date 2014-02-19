@@ -195,20 +195,15 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				DataRow selectedRow = null;
-				if (foundationIdComboBox.SelectedValue != null)
-				{
-					selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
-				}
-				else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
-				{
-					var boundData = (DataTable)foundationIdComboBox.DataSource;
-					string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
-					DataRow[] rows = boundData.Select(searchExpression);
-					if (rows.Any())
-					{
-						selectedRow = rows[0];
-					}
-				}
+
+				var boundData = (DataTable)foundationIdComboBox.DataSource;
+
+				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
+
+				var rows = boundData.Select(searchExpression);
+
+				if (rows.Any())
+					selectedRow = rows[0];
 
 				HandleFoundationSelectionChanged(selectedRow);
 				EvaluateFiles();
