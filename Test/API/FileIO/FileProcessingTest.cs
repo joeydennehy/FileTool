@@ -318,8 +318,8 @@ namespace Test.API
 		[TestMethod]
 		public void CopyFilesToDestinationTest_DuplicateNameCopy()
 		{
-			var testFiles = state.Files.Where(file => file.FullName.Contains("\\1234\\")).ToList();
-			var expectedResults = FileTestCases.Values.Where(s => s.Contains("\\1234\\")).ToList();
+			var testFiles = state.Files.Where(file => file.FullName.Contains("\\3\\")).ToList();
+			var expectedResults = FileTestCases.Values.Where(s => s.Contains("\\3\\")).ToList();
 			state.Files = testFiles;
 			FileProcessing.CopyApplicationProcessFiles(state);
 

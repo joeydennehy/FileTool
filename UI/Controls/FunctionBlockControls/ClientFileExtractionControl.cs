@@ -71,8 +71,8 @@ namespace UI.Controls.FunctionBlockControls
 				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-		
-		private void HandleFoundationSelectionChanged(DataRow selectedRow)
+
+		private void ChangeFoundationSelection(DataRow selectedRow)
 		{
 			var selectedFoundationId = (int)selectedRow[0];
 			var selectedUrlKey = (string)selectedRow[1];
@@ -266,8 +266,8 @@ namespace UI.Controls.FunctionBlockControls
 				if(rows.Any())
 					selectedRow = rows[0];
 			}
-			
-			HandleFoundationSelectionChanged(selectedRow);
+
+			ChangeFoundationSelection(selectedRow);
 		}
 
 		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
@@ -282,7 +282,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
-			HandleFoundationSelectionChanged(((DataRowView)foundationIdComboBox.SelectedItem).Row);
+			ChangeFoundationSelection(((DataRowView)foundationIdComboBox.SelectedItem).Row);
 		}
 
 		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)
