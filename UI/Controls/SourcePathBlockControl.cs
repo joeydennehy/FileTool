@@ -69,7 +69,15 @@ namespace UI.Controls
 
 		private void TextChanged_SourceFolder(object sender, EventArgs e)
 		{
-			CheckLocationAccessAndSet(sourceLocationText.Text);
+			if (sourceLocationText.Text.StartsWith("\\"))
+			{
+				MessageBox.Show(this, "You cannot type virtual paths in source field.");
+				CheckLocationAccessAndSet(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
+			}
+			else
+			{
+				CheckLocationAccessAndSet(sourceLocationText.Text);
+			}
 		}
 
 		private void ButtonClick_BrowseFolders(object sender, EventArgs e)

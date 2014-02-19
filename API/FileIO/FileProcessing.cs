@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
+using API.Data;
 using API.Logging;
 
 namespace API.FileIO
@@ -12,13 +12,15 @@ namespace API.FileIO
 	public static class FileProcessing
 	{
 		private static readonly List<string> SUB_FOLDERS;
-		
+		private const string RECORDS_DELETE_CAPTION = "Records Delete";
+		private const string RECORDS_DELETE_ERROR_FORMAT = "Records Delete procedure gave the following error {0}.";
+
 		static FileProcessing()
 		{
 			SUB_FOLDERS = new List<string>
 			{
-				"followup", 
-				"loi", 
+				"followup",
+				"loi",
 				"qualification"
 			};
 		}
@@ -28,7 +30,9 @@ namespace API.FileIO
 			CopyFilesToDestination(state.Files, state.OutputDirectory);
 
 			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
+			{
 				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
+			}
 		}
 
 		private static void ClearFiles(FoundationDataFileState state)
@@ -61,7 +65,8 @@ namespace API.FileIO
 					var file = new FileInfo(directoryFile);
 					if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
 					{
-						if (!state.FileMask.ToLower().Contains(file.Extension.ToLower()))
+						if (!state.FileMask.ToLower()
+							.Contains(file.Extension.ToLower()))
 						{
 							continue;
 						}
@@ -69,7 +74,8 @@ namespace API.FileIO
 
 					if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
 					{
-						bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower().Contains(sequesterPattern.ToLower()));
+						bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower()
+							.Contains(sequesterPattern.ToLower()));
 						if (sequesterFile)
 						{
 							state.SequesterFiles.Add(file);
@@ -90,7 +96,8 @@ namespace API.FileIO
 
 			foreach (FileInfo file in state.Files)
 			{
-				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty).ToLower();
+				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty)
+					.ToLower();
 				if (!fileList.Contains(partialFileName))
 				{
 					state.SequesterFiles.Add(file);
@@ -102,7 +109,9 @@ namespace API.FileIO
 			}
 
 			if (fileList.Count > 0)
+			{
 				state.FilesNotFound = fileList;
+			}
 		}
 
 		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)
@@ -133,14 +142,18 @@ namespace API.FileIO
 					int fileCounter = 1;
 					while (destinationFile.Exists)
 					{
-						string baseFileName = destinationFile.Name.Substring(0,(destinationFile.Name.Length - destinationFile.Extension.Length));
-						int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1), StringComparison.InvariantCulture);
+						string baseFileName = destinationFile.Name.Substring(0,
+							(destinationFile.Name.Length - destinationFile.Extension.Length));
+						int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1),
+							StringComparison.InvariantCulture);
 						if (repetitionIndex > 0)
 						{
 							baseFileName = destinationFile.Name.Substring(0, repetitionIndex);
 						}
-						
-						destinationFile = new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter, destinationFile.Extension));
+
+						destinationFile =
+							new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter,
+								destinationFile.Extension));
 						fullFileName = destinationFile.FullName;
 						fileCounter++;
 					}
@@ -205,7 +218,8 @@ namespace API.FileIO
 			{
 				try
 				{
-					string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory, file.FullName.Substring(state.MovedToDirectory.Length));
+					string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory,
+						file.FullName.Substring(state.MovedToDirectory.Length));
 					File.Move(file.FullName, fullDestination);
 				}
 				catch (Exception eError)
@@ -213,21 +227,23 @@ namespace API.FileIO
 					Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
 					throw;
 				}
-				
 			}
 		}
 
 		private static string BuildApplicationProcessFileName(FileInfo file)
 		{
 			if (string.IsNullOrEmpty(file.DirectoryName))
+			{
 				return string.Empty;
-			
+			}
+
 			string applicantProcessId = string.Empty;
 			var fileName = new StringBuilder();
 			bool useProcessSubFolderFormat = false;
 
 			var folders = new List<string>();
-			folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
+			folders.AddRange(file.DirectoryName.ToLower()
+				.Split(Path.DirectorySeparatorChar));
 
 			if (folders.Count - 2 >= 0)
 			{
@@ -242,13 +258,18 @@ namespace API.FileIO
 				}
 				else
 				{
-					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
+					Logger.Log(
+					           String.Format(
+					                         "BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed",
+						           file.FullName), LogLevel.Error);
 					return string.Empty;
 				}
 
 				var rootFileFolder = new DirectoryInfo(string.Join("\\", folders.GetRange(0, folders.Count - 1)));
-				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories().ToList();
-				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s))).Any();
+				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories()
+					.ToList();
+				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s)))
+					.Any();
 			}
 
 			if (useProcessSubFolderFormat)
@@ -271,6 +292,90 @@ namespace API.FileIO
 			//fileName.Append(string.Format("_{0}", file.Name));
 
 			//return fileName.ToString();
+		}
+
+		public static void DeleteRecords(FoundationDataFileState state)
+		{
+			List<string> fileList = state.FilesNotFound;
+
+			foreach (string file in fileList)
+			{
+				string[] splitPath = file.Split('\\');
+
+				if (splitPath[1] == "supportingdocuments")
+				{
+					DeleteSupportingRecords(splitPath);
+				}
+				else if (splitPath[0].Contains("shared"))
+				{
+					DeleteSharedRecords(splitPath);
+				}
+				else
+				{
+					DeleteRequestRecords(splitPath, state);
+				}
+			}
+		}
+
+		private static void DeleteSupportingRecords(string[] splitPath)
+		{
+			try
+			{
+				if (splitPath[0].Contains("ORG-"))
+				{
+					int organizationId = Int32.Parse(splitPath[0].Substring(4));
+					string fileName = splitPath[splitPath.Length - 1];
+
+					RequestQuery.DeleteOrganizationSupportingRecords(organizationId, fileName);
+				}
+				else
+				{
+					int requestId = Int32.Parse(splitPath[0]);
+					string fileName = splitPath[splitPath.Length - 1];
+
+					RequestQuery.DeleteRequestSupportingRecords(requestId, fileName);
+				}
+			}
+
+			catch (Exception eError)
+			{
+				MessageBox.Show(string.Format(RECORDS_DELETE_ERROR_FORMAT, eError.Message), RECORDS_DELETE_CAPTION,
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private static void DeleteSharedRecords(string[] splitPath)
+		{
+			try
+			{
+				string fileName = splitPath[splitPath.Length - 1];
+
+				RequestQuery.DeleteSharedRecords(fileName);
+			}
+
+			catch (Exception eError)
+			{
+				MessageBox.Show(string.Format(RECORDS_DELETE_ERROR_FORMAT, eError.Message), RECORDS_DELETE_CAPTION,
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private static void DeleteRequestRecords(string[] splitPath, FoundationDataFileState state)
+		{
+			try
+			{
+				string requestProcessCode = splitPath[0];
+				string stageName = splitPath[1];
+				string fileName = splitPath[splitPath.Length - 1];
+
+				RequestQuery.DeleteRequestRecords(state.FoundationId, requestProcessCode, stageName, fileName);
+			}
+
+			catch (Exception eError)
+			{
+				MessageBox.Show(string.Format(RECORDS_DELETE_ERROR_FORMAT, eError.Message), RECORDS_DELETE_CAPTION,
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 	}
 }
