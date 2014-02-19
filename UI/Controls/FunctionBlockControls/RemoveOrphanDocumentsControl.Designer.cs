@@ -36,7 +36,7 @@
 			this.moveLocationTextBox = new System.Windows.Forms.TextBox();
 			this.sourceLabel = new System.Windows.Forms.Label();
 			this.moveFilesButton = new System.Windows.Forms.Button();
-			this.undoButton = new System.Windows.Forms.Button();
+			this.moveFilesBackButton = new System.Windows.Forms.Button();
 			this.stateDataTextBox = new System.Windows.Forms.TextBox();
 			this.fileNotFoundLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.EvaluateFilesButton = new System.Windows.Forms.Button();
@@ -125,16 +125,16 @@
 			this.moveFilesButton.UseVisualStyleBackColor = true;
 			this.moveFilesButton.Click += new System.EventHandler(this.ButtonClick_MoveFiles);
 			// 
-			// undoButton
+			// moveFilesBackButton
 			// 
-			this.undoButton.Location = new System.Drawing.Point(252, 476);
-			this.undoButton.Margin = new System.Windows.Forms.Padding(4);
-			this.undoButton.Name = "undoButton";
-			this.undoButton.Size = new System.Drawing.Size(56, 28);
-			this.undoButton.TabIndex = 14;
-			this.undoButton.Text = "Undo";
-			this.undoButton.UseVisualStyleBackColor = true;
-			this.undoButton.Click += new System.EventHandler(this.ButtonClick_Undo);
+			this.moveFilesBackButton.Location = new System.Drawing.Point(252, 476);
+			this.moveFilesBackButton.Margin = new System.Windows.Forms.Padding(4);
+			this.moveFilesBackButton.Name = "moveFilesBackButton";
+			this.moveFilesBackButton.Size = new System.Drawing.Size(130, 28);
+			this.moveFilesBackButton.TabIndex = 14;
+			this.moveFilesBackButton.Text = "Move Files Back";
+			this.moveFilesBackButton.UseVisualStyleBackColor = true;
+			this.moveFilesBackButton.Click += new System.EventHandler(this.ButtonClick_MoveFilesBack);
 			// 
 			// stateDataTextBox
 			// 
@@ -144,7 +144,6 @@
 			this.stateDataTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.stateDataTextBox.Size = new System.Drawing.Size(246, 291);
 			this.stateDataTextBox.TabIndex = 15;
-			this.stateDataTextBox.WordWrap = false;
 			// 
 			// fileNotFoundLinkLabel
 			// 
@@ -175,7 +174,7 @@
 			this.Controls.Add(this.EvaluateFilesButton);
 			this.Controls.Add(this.fileNotFoundLinkLabel);
 			this.Controls.Add(this.stateDataTextBox);
-			this.Controls.Add(this.undoButton);
+			this.Controls.Add(this.moveFilesBackButton);
 			this.Controls.Add(this.moveFilesButton);
 			this.Controls.Add(this.browseButton);
 			this.Controls.Add(this.moveLocationTextBox);
@@ -201,7 +200,7 @@
         public System.Windows.Forms.TextBox moveLocationTextBox;
         private System.Windows.Forms.Label sourceLabel;
         private System.Windows.Forms.Button moveFilesButton;
-        private System.Windows.Forms.Button undoButton;
+        private System.Windows.Forms.Button moveFilesBackButton;
         private System.Windows.Forms.TextBox stateDataTextBox;
 		  private System.Windows.Forms.LinkLabel fileNotFoundLinkLabel;
 		  private System.Windows.Forms.Button EvaluateFilesButton;

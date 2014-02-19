@@ -92,7 +92,7 @@
 			this.outputDestinationTextBoxLabel.Location = new System.Drawing.Point(14, 147);
 			this.outputDestinationTextBoxLabel.Name = "outputDestinationTextBoxLabel";
 			this.outputDestinationTextBoxLabel.Size = new System.Drawing.Size(98, 13);
-			this.outputDestinationTextBoxLabel.TabIndex = 9;
+			this.outputDestinationTextBoxLabel.TabIndex = 11;
 			this.outputDestinationTextBoxLabel.Text = "Output Destination:";
 			// 
 			// outputDestinationTextBox
@@ -100,7 +100,7 @@
 			this.outputDestinationTextBox.Location = new System.Drawing.Point(17, 163);
 			this.outputDestinationTextBox.Name = "outputDestinationTextBox";
 			this.outputDestinationTextBox.Size = new System.Drawing.Size(580, 20);
-			this.outputDestinationTextBox.TabIndex = 10;
+			this.outputDestinationTextBox.TabIndex = 12;
 			this.outputDestinationTextBox.TextChanged += new System.EventHandler(this.TextChanged_outputDestinationTextBox);
 			// 
 			// outputDesitinationBrowseButton
@@ -108,7 +108,7 @@
 			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 162);
 			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
 			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
-			this.outputDesitinationBrowseButton.TabIndex = 11;
+			this.outputDesitinationBrowseButton.TabIndex = 13;
 			this.outputDesitinationBrowseButton.Text = "...";
 			this.outputDesitinationBrowseButton.UseVisualStyleBackColor = true;
 			this.outputDesitinationBrowseButton.Click += new System.EventHandler(this.ButtonClick_OutputDestinationBrowse);
@@ -118,7 +118,7 @@
 			this.copyFilesButton.Location = new System.Drawing.Point(17, 190);
 			this.copyFilesButton.Name = "copyFilesButton";
 			this.copyFilesButton.Size = new System.Drawing.Size(75, 23);
-			this.copyFilesButton.TabIndex = 12;
+			this.copyFilesButton.TabIndex = 14;
 			this.copyFilesButton.Text = "Copy Files";
 			this.copyFilesButton.UseVisualStyleBackColor = true;
 			this.copyFilesButton.Click += new System.EventHandler(this.ButtonClick_CopyFiles);
@@ -176,7 +176,7 @@
 			this.fileExclusionLinkLabel.Location = new System.Drawing.Point(408, 125);
 			this.fileExclusionLinkLabel.Name = "fileExclusionLinkLabel";
 			this.fileExclusionLinkLabel.Size = new System.Drawing.Size(85, 13);
-			this.fileExclusionLinkLabel.TabIndex = 13;
+			this.fileExclusionLinkLabel.TabIndex = 9;
 			this.fileExclusionLinkLabel.TabStop = true;
 			this.fileExclusionLinkLabel.Text = "File Exclusions...";
 			this.fileExclusionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ButtonClick_FileExclusions);
@@ -187,7 +187,7 @@
 			this.secludedFileCountlinkLabel.Location = new System.Drawing.Point(499, 125);
 			this.secludedFileCountlinkLabel.Name = "secludedFileCountlinkLabel";
 			this.secludedFileCountlinkLabel.Size = new System.Drawing.Size(98, 13);
-			this.secludedFileCountlinkLabel.TabIndex = 14;
+			this.secludedFileCountlinkLabel.TabIndex = 10;
 			this.secludedFileCountlinkLabel.TabStop = true;
 			this.secludedFileCountlinkLabel.Text = "[No Files Excluded]";
 			this.secludedFileCountlinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClick_SecludedFileCountlinkLabel);
@@ -210,7 +210,7 @@
 			this.Controls.Add(this.processIdComboBoxLabel);
 			this.Controls.Add(this.foundationIdComboBox);
 			this.Controls.Add(this.foundationIdComboBoxLabel);
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "ClientFileExtractionControl";
 			this.Size = new System.Drawing.Size(662, 422);
 			this.ResumeLayout(false);

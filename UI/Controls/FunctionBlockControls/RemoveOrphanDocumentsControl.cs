@@ -38,10 +38,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		#region Constructor
 
-		public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent)
-		{
-			InitializeComponent();
-		}
+		public RemoveOrphanDocumentsControl(GLMFileUtilityTool parent) : base(parent) { InitializeComponent(); }
 
 		#endregion
 
@@ -55,7 +52,7 @@ namespace UI.Controls.FunctionBlockControls
 			};
 
 			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationTextBox.Text) && state.SequesterFiles.Any();
-			undoButton.Enabled = false;
+			moveFilesBackButton.Enabled = false;
 
 			try
 			{
@@ -77,9 +74,11 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			var stateData = new StringBuilder();
 
-			stateData.AppendLine("Total Files Processed: " + state.Files.Count);
-			stateData.AppendLine("Total Sequestered Files: " + state.SequesterFiles.Count);
-			stateData.AppendLine(string.Format("Total Files Not Found: {0}",  state.FilesNotFound != null ? state.FilesNotFound.Count.ToString() : "0"));
+			stateData.AppendLine("Total files found on disk: " + state.Files.Count);
+			stateData.AppendLine(string.Format("Total file size (MB): {0}", state.TotalSize / (1024 * 1024)));
+			stateData.AppendLine("Total files on disk that are not in database: " + state.SequesterFiles.Count);
+			stateData.AppendLine(string.Format("Total files not found on disk: {0}",
+				state.FilesNotFound != null ? state.FilesNotFound.Count.ToString() : "0"));
 
 			stateDataTextBox.Text = stateData.ToString();
 
@@ -92,6 +91,8 @@ namespace UI.Controls.FunctionBlockControls
 			}
 
 			moveFilesTextBox.Text = sequesteredFiles.ToString();
+
+			FileProcessing.LogStateData(state);
 		}
 
 		private void SetProcessingFolderText()
@@ -131,15 +132,14 @@ namespace UI.Controls.FunctionBlockControls
 				}
 				catch (Exception eError)
 				{
-					MessageBox.Show(this, string.Format(EVALUATE_FILE_ERROR_FORMAT, eError.Message), EVALUATE_FILE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(this, string.Format(EVALUATE_FILE_ERROR_FORMAT, eError.Message), EVALUATE_FILE_CAPTION,
+						MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				
+
 				LoadStateData();
 			}
 		}
 
-		
-		
 		#region Event Handlers
 
 		private void ButtonClick_EvaluateFilesButton(object sender, EventArgs e)
@@ -171,11 +171,12 @@ namespace UI.Controls.FunctionBlockControls
 
 				state.MovedToDirectory = moveLocationTextBox.Text;
 				state.MovedFromDirectory = state.ClientRootDirectory;
-				undoButton.Enabled = true;
+				moveFilesBackButton.Enabled = true;
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 			finally
 			{
@@ -199,12 +200,11 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
-		private void ButtonClick_Undo(object sender, EventArgs e)
+		private void ButtonClick_MoveFilesBack(object sender, EventArgs e)
 		{
 			try
 			{
-				FileProcessing.Undo(state);
-
+				FileProcessing.MoveFilesBack(state);
 			}
 			catch (Exception eError)
 			{
@@ -245,30 +245,23 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				DataRow selectedRow = null;
 
-				if (foundationIdComboBox.SelectedValue != null)
-				{
-					selectedRow = ((DataRowView)foundationIdComboBox.SelectedValue).Row;
-				}
-				else if (!string.IsNullOrEmpty(foundationIdComboBox.Text))
-				{
-					var boundData = (DataTable)foundationIdComboBox.DataSource;
-					string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
+				var boundData = (DataTable)foundationIdComboBox.DataSource;
+				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
 
-					DataRow[] rows = boundData.Select(searchExpression);
+				DataRow[] rows = boundData.Select(searchExpression);
 
-					if (rows.Any())
-					{
-						selectedRow = rows[0];
-					}
+				if (rows.Any())
+				{
+					selectedRow = rows[0];
 				}
 
 				ChangeFoundationSelection(selectedRow);
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
-			
 		}
 
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
@@ -287,15 +280,16 @@ namespace UI.Controls.FunctionBlockControls
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_MOVE_ERROR_FORMAT, eError.Message), FILE_MOVE_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
-			
 		}
 
 		private void TextChanged_MoveLocationTextBox(object sender, EventArgs e)
 		{
 			state.OutputDirectory = moveLocationTextBox.Text;
-			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationTextBox.Text) && !string.IsNullOrWhiteSpace(moveFilesTextBox.Text);
+			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationTextBox.Text)
+			                          && !string.IsNullOrWhiteSpace(moveFilesTextBox.Text);
 		}
 
 		#endregion
@@ -312,14 +306,9 @@ namespace UI.Controls.FunctionBlockControls
 			base.OnEnter(e);
 		}
 
-		protected override void OnPaint(PaintEventArgs pe)
-		{
-			base.OnPaint(pe);
-		}
+		protected override void OnPaint(PaintEventArgs pe) { base.OnPaint(pe); }
 
 		#endregion
-
-		
 
 	}
 }

@@ -169,6 +169,21 @@ namespace API.FileIO
 			}
 		}
 
+		public static void LogStateData(FoundationDataFileState state)
+		{
+			Logger.Log(string.Format("Foundation: {0}({1})", state.FoundationUrlKey, state.FoundationId) + state.BaseDirectory, LogLevel.Info);
+			Logger.Log("Base Directory: " + state.BaseDirectory, LogLevel.Info);
+			Logger.Log("Client Root Directory: " + state.ClientRootDirectory, LogLevel.Info);
+			Logger.Log(string.Format("Files Count: {0}", state.Files != null ? state.Files.Count : 0), LogLevel.Info);
+			Logger.Log(string.Format("SequesterFiles Count: {0}", state.SequesterFiles != null ? state.SequesterFiles.Count : 0), LogLevel.Info);
+			Logger.Log(string.Format("Moved Sequestered Path: {0}", state.SequesterPath), LogLevel.Info);
+			Logger.Log(string.Format("Files Not Found Count: {0}", state.FilesNotFound != null ? state.FilesNotFound.Count : 0), LogLevel.Info);
+			Logger.Log(string.Format("Moved From Directory: {0}", state.MovedFromDirectory), LogLevel.Info);
+			Logger.Log(string.Format("Moved To Directory: {0}", state.MovedToDirectory), LogLevel.Info);
+			Logger.Log(string.Format("Copied File Directory: {0}", state.OutputDirectory), LogLevel.Info);
+			Logger.Log(string.Format("Total File Size: {0}", state.TotalSize), LogLevel.Info);
+		}
+
 		public static void MoveFilesToDestination(List<FileInfo> files, string destinationFolder, string root)
 		{
 			if (files == null || files.Count == 0)
@@ -209,7 +224,7 @@ namespace API.FileIO
 			}
 		}
 
-		public static void Undo(FoundationDataFileState state)
+		public static void MoveFilesBack(FoundationDataFileState state)
 		{
 			ClearFiles(state);
 			SetFilesFromPath(state, state.MovedToDirectory);
