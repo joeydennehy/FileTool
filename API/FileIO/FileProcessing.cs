@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using API.Logging;
 
@@ -11,8 +9,15 @@ namespace API.FileIO
 {
 	public static class FileProcessing
 	{
+
+		#region member variables
+
 		private static readonly List<string> SUB_FOLDERS;
-		
+
+		#endregion
+
+		#region Constructor
+
 		static FileProcessing()
 		{
 			SUB_FOLDERS = new List<string>
@@ -23,12 +28,54 @@ namespace API.FileIO
 			};
 		}
 
-		public static void CopyApplicationProcessFiles(FoundationDataFileState state)
-		{
-			CopyFilesToDestination(state.Files, state.OutputDirectory);
+		#endregion
 
-			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
-				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
+		#region Private Methods
+
+		private static string BuildApplicationProcessFileName(FileInfo file)
+		{
+			if (string.IsNullOrEmpty(file.DirectoryName))
+				return string.Empty;
+
+			string applicantProcessId = string.Empty;
+			var fileName = new StringBuilder();
+			bool useProcessSubFolderFormat = false;
+
+			var folders = new List<string>();
+			folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
+
+			if (folders.Count - 2 >= 0)
+			{
+				int applicantProcessValue;
+				if (int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
+				{
+					applicantProcessId = applicantProcessValue.ToString("D10");
+				}
+				else if (!string.IsNullOrWhiteSpace(folders[folders.Count - 2]))
+				{
+					applicantProcessId = folders[folders.Count - 2];
+				}
+				else
+				{
+					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
+					return string.Empty;
+				}
+
+				var rootFileFolder = new DirectoryInfo(string.Join("\\", folders.GetRange(0, folders.Count - 1)));
+				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories().ToList();
+				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s))).Any();
+			}
+
+			if (useProcessSubFolderFormat)
+			{
+				fileName.AppendFormat("{0}_{1}_{2}", applicantProcessId, folders.Last(), file.Name);
+			}
+			else
+			{
+				fileName.AppendFormat("{0}_{1}", applicantProcessId, file.Name);
+			}
+
+			return fileName.ToString();
 		}
 
 		private static void ClearFiles(FoundationDataFileState state)
@@ -38,15 +85,53 @@ namespace API.FileIO
 			state.TotalSize = 0;
 		}
 
-		public static void SetFileList(FoundationDataFileState state)
+		private static void CopyFilesToDestination(IReadOnlyCollection<FileInfo> files, string destinationFolder)
 		{
-			ClearFiles(state);
-			if (state.FoundationApplicantProcessCodes != null)
+			if (files == null || files.Count == 0)
 			{
-				foreach (string applicantProcessCode in state.FoundationApplicantProcessCodes)
+				Logger.Log("CopyFilesToDestination: no files selected to copy", LogLevel.Warn);
+				return;
+			}
+
+			if (string.IsNullOrEmpty(destinationFolder))
+			{
+				Logger.Log("CopyFilesToDestination: No destination selected for copy", LogLevel.Error);
+				throw new ArgumentNullException("destinationFolder");
+			}
+
+			if (!Directory.Exists(destinationFolder))
+			{
+				Directory.CreateDirectory(destinationFolder);
+			}
+
+			foreach (FileInfo file in files)
+			{
+				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
+				try
 				{
-					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessCode);
-					SetFilesFromPath(state, directoryPath);
+					var destinationFile = new FileInfo(fullFileName);
+					int fileCounter = 1;
+					while (destinationFile.Exists)
+					{
+						string baseFileName = destinationFile.Name.Substring(0, (destinationFile.Name.Length - destinationFile.Extension.Length));
+						int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1), StringComparison.InvariantCulture);
+						if (repetitionIndex > 0)
+						{
+							baseFileName = destinationFile.Name.Substring(0, repetitionIndex);
+						}
+
+						destinationFile = new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter, destinationFile.Extension));
+						fullFileName = destinationFile.FullName;
+						fileCounter++;
+					}
+
+					File.Copy(file.FullName, fullFileName);
+					Logger.Log("Copied file " + file.FullName + " to " + fullFileName, LogLevel.Info);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Unable to copy file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+					throw;
 				}
 			}
 		}
@@ -83,77 +168,16 @@ namespace API.FileIO
 			}
 		}
 
-		public static void ReconcileFileListToDatabase(FoundationDataFileState state, List<string> fileList)
+		#endregion
+
+		#region Public Methods
+
+		public static void CopyApplicationProcessFiles(FoundationDataFileState state)
 		{
-			ClearFiles(state);
-			SetFilesFromPath(state, state.ClientRootDirectory);
+			CopyFilesToDestination(state.Files, state.OutputDirectory);
 
-			foreach (FileInfo file in state.Files)
-			{
-				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty).ToLower();
-				if (!fileList.Contains(partialFileName))
-				{
-					state.SequesterFiles.Add(file);
-				}
-				else
-				{
-					fileList.Remove(partialFileName);
-				}
-			}
-
-			if (fileList.Count > 0)
-				state.FilesNotFound = fileList;
-		}
-
-		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)
-		{
-			if (files == null || files.Count == 0)
-			{
-				Logger.Log("CopyFilesToDestination: no files selected to copy", LogLevel.Warn);
-				return;
-			}
-
-			if (string.IsNullOrEmpty(destinationFolder))
-			{
-				Logger.Log("CopyFilesToDestination: No destination selected for copy", LogLevel.Error);
-				throw new ArgumentNullException("destinationFolder");
-			}
-
-			if (!Directory.Exists(destinationFolder))
-			{
-				Directory.CreateDirectory(destinationFolder);
-			}
-
-			foreach (FileInfo file in files)
-			{
-				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
-				try
-				{
-					var destinationFile = new FileInfo(fullFileName);
-					int fileCounter = 1;
-					while (destinationFile.Exists)
-					{
-						string baseFileName = destinationFile.Name.Substring(0,(destinationFile.Name.Length - destinationFile.Extension.Length));
-						int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1), StringComparison.InvariantCulture);
-						if (repetitionIndex > 0)
-						{
-							baseFileName = destinationFile.Name.Substring(0, repetitionIndex);
-						}
-						
-						destinationFile = new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter, destinationFile.Extension));
-						fullFileName = destinationFile.FullName;
-						fileCounter++;
-					}
-
-					File.Copy(file.FullName, fullFileName);
-					Logger.Log("Copied file " + file.FullName + " to " + fullFileName, LogLevel.Info);
-				}
-				catch (Exception eError)
-				{
-					Logger.Log(string.Format("Unable to copy file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
-					throw;
-				}
-			}
+			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
+				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
 		}
 
 		public static void MoveFilesToDestination(List<FileInfo> files, string destinationFolder, string root)
@@ -196,6 +220,41 @@ namespace API.FileIO
 			}
 		}
 
+		public static void ReconcileFileListToDatabase(FoundationDataFileState state, List<string> fileList)
+		{
+			ClearFiles(state);
+			SetFilesFromPath(state, state.ClientRootDirectory);
+
+			foreach (FileInfo file in state.Files)
+			{
+				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty).ToLower();
+				if (!fileList.Contains(partialFileName))
+				{
+					state.SequesterFiles.Add(file);
+				}
+				else
+				{
+					fileList.Remove(partialFileName);
+				}
+			}
+
+			if (fileList.Count > 0)
+				state.FilesNotFound = fileList;
+		}
+
+		public static void SetFileList(FoundationDataFileState state)
+		{
+			ClearFiles(state);
+			if (state.FoundationApplicantProcessCodes != null)
+			{
+				foreach (string applicantProcessCode in state.FoundationApplicantProcessCodes)
+				{
+					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessCode);
+					SetFilesFromPath(state, directoryPath);
+				}
+			}
+		}
+
 		public static void Undo(FoundationDataFileState state)
 		{
 			ClearFiles(state);
@@ -213,64 +272,10 @@ namespace API.FileIO
 					Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
 					throw;
 				}
-				
+
 			}
 		}
 
-		private static string BuildApplicationProcessFileName(FileInfo file)
-		{
-			if (string.IsNullOrEmpty(file.DirectoryName))
-				return string.Empty;
-			
-			string applicantProcessId = string.Empty;
-			var fileName = new StringBuilder();
-			bool useProcessSubFolderFormat = false;
-
-			var folders = new List<string>();
-			folders.AddRange(file.DirectoryName.ToLower().Split(Path.DirectorySeparatorChar));
-
-			if (folders.Count - 2 >= 0)
-			{
-				int applicantProcessValue;
-				if (int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
-				{
-					applicantProcessId = applicantProcessValue.ToString("D10");
-				}
-				else if (!string.IsNullOrWhiteSpace(folders[folders.Count - 2]))
-				{
-					applicantProcessId = folders[folders.Count - 2];
-				}
-				else
-				{
-					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed", file.FullName), LogLevel.Error);
-					return string.Empty;
-				}
-
-				var rootFileFolder = new DirectoryInfo(string.Join("\\", folders.GetRange(0, folders.Count - 1)));
-				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories().ToList();
-				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s))).Any();
-			}
-
-			if (useProcessSubFolderFormat)
-			{
-				fileName.AppendFormat("{0}_{1}_{2}", applicantProcessId, folders.Last(), file.Name);
-			}
-			else
-			{
-				fileName.AppendFormat("{0}_{1}", applicantProcessId, file.Name);
-			}
-
-			return fileName.ToString();
-
-			//if (SUB_FOLDERS.Contains(folders.Last()))
-			//	subFolderId = string.Format("_{0}", folders.Last());
-
-			//fileName.Clear();
-			//fileName.Append(applicantProcessId);
-			//fileName.Append(subFolderId);
-			//fileName.Append(string.Format("_{0}", file.Name));
-
-			//return fileName.ToString();
-		}
+		#endregion
 	}
 }

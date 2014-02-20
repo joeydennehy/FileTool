@@ -1,13 +1,12 @@
-﻿using System.Diagnostics.Eventing.Reader;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Test.API
+namespace Test.API.FileIO
 {
 	/// <summary>
 	/// Summary description for FileProcessing
@@ -140,7 +139,6 @@ namespace Test.API
 
 			state.FoundationId = 1;
 			state.FoundationUrlKey = TEST_KEY;
-			
 		}
 
 		[TestCleanup]
@@ -333,7 +331,6 @@ namespace Test.API
 			}
 			Assert.IsTrue(expectedResults.Count == 0);
 		}
-
 
 		private static void ClearFolder(string directoryPath)
 		{
