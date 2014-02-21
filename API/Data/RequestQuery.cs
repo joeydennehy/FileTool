@@ -68,7 +68,7 @@ namespace API.Data
 			}
 		}
 
-		public static void SELECT_MISMATCHED_REQUEST_ID_AND_CODE(int foundationId)
+		public static void GetRequestCodesAndIds(int foundationId)
 		{
 			RequestData = new DataTable();
 
@@ -88,7 +88,7 @@ namespace API.Data
 			}
 		}
 
-		public static void UPDATE_MISSMATCHED_REQUEST_ID_AND_CODE(int requestId)
+		public static void UpdateRequestCode(int requestId)
 		{
 			RequestData = new DataTable();
 
@@ -96,7 +96,7 @@ namespace API.Data
 			parameters.Add(DbType.Int32, "REQUEST_ID", requestId);
 			var command = new Command
 			{
-				SqlStatementId = "UPDATE_MISSMATCHED_REQUEST_ID_AND_CODE",
+				SqlStatementId = "UPDATE_MISMATCHED_REQUEST_ID_AND_CODE",
 				ParameterCollection = parameters
 			};
 

@@ -125,6 +125,21 @@ namespace API.FileIO
 			}
 		}
 
+		public static bool CheckFoundationPath(FoundationDataFileState state)
+		{
+			return Directory.Exists(state.ClientRootDirectory);
+		}
+
+		public static bool CheckDirectoryExist(string directory)
+		{
+			if (Directory.Exists(directory))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)
 		{
 			if (files == null || files.Count == 0)

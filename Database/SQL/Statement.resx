@@ -336,7 +336,7 @@ WHERE
 					SELECT 
 						ap.ApplicantProcessId,
 						ap.ApplicantProcessCode,
-						CONCAT(ap.ApplicantProcessId, ' -> ', ap.ApplicantProcessCode) AS RequestDisplayText
+						CONCAT(ap.ApplicantProcessCode, ' -> ', ap.ApplicantProcessId) AS RequestDisplayText
 					FROM
 						applicantprocess ap
 					WHERE
