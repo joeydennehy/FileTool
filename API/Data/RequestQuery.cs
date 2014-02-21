@@ -21,6 +21,12 @@ namespace API.Data
 		/// </summary>
 		public static DataTable FoundationProcessData { get; private set; }
 
+		/// <summary>
+		/// Name/Index structure for this DataTable:
+		/// RequestProcessId:[0]; RequestProcessCode:[1]; RequestDisplayText:[2]
+		/// </summary>
+		public static DataTable RequestData { get; private set; }
+
 		public static void RefreshFoundationData()
 		{
 			FoundationData = new DataTable();
@@ -60,6 +66,42 @@ namespace API.Data
 				FoundationProcessData.Load(reader);
 				reader.Close();
 			}
+		}
+
+		public static void SELECT_MISMATCHED_REQUEST_ID_AND_CODE(int foundationId)
+		{
+			RequestData = new DataTable();
+
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_MISMATCHED_REQUEST_ID_AND_CODE",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				RequestData.Load(reader);
+				reader.Close();
+			}
+		}
+
+		public static void UPDATE_MISSMATCHED_REQUEST_ID_AND_CODE(int requestId)
+		{
+			RequestData = new DataTable();
+
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "REQUEST_ID", requestId);
+			var command = new Command
+			{
+				SqlStatementId = "UPDATE_MISSMATCHED_REQUEST_ID_AND_CODE",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+			access.GetReader(command);
 		}
 
 		public static List<string> GetFoundationFileList(int foundationId)

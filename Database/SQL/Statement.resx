@@ -330,6 +330,31 @@ WHERE
 				
 		</value>
 	</data>
+
+	<data name="SELECT_MISMATCHED_REQUEST_ID_AND_CODE" xml:space="preserve">
+		<value>
+					SELECT 
+						ap.ApplicantProcessId,
+						ap.ApplicantProcessCode,
+						CONCAT(ap.ApplicantProcessId, ' -> ', ap.ApplicantProcessCode) AS RequestDisplayText
+					FROM
+						applicantprocess ap
+					WHERE
+						ap.FoundationId = @FOUNDATION_ID
+						AND
+						ap.ApplicantProcessCode != ap.ApplicantProcessId
+		</value>
+	</data>
+	<data name="UPDATE_MISMATCH_REQUEST_ID_AND_CODE" xml:space="preserve">
+		<value>
+					UPDATE 
+						applicantprocess ap
+					SET 
+						ap.ApplicantProcessCode = ap.ApplicantProcessId
+					WHERE
+						ap.ApplicantProcessId = @REQUEST_ID
+		</value>
+	</data>
 	
 	<data name="DELETE_REQEST_DOCUMENT_RECORD" xml:space="preserve">
 		<value>

@@ -7,7 +7,7 @@ using log4net;
 
 namespace API.Logging
 {
-	class Logger
+	public class Logger
 	{
 		protected static readonly ILog log;
 
