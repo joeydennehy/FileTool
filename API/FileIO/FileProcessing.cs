@@ -91,11 +91,11 @@ namespace API.FileIO
 
 		public static void UpdateMisMatchedDirectories(FoundationDataFileState state, string RequestCode, int RequestId)
 		{
-			string directoryPath = string.Format("{0}\\{1}", state.ClientRootDirectory, RequestCode);
+			string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, RequestCode);
 
 			if (Directory.Exists(directoryPath))
 			{
-				string moveDirectory = string.Format("{0}\\{1}", state.ClientRootDirectory, RequestId);
+				string moveDirectory = string.Format("{0}{1}", state.ClientRootDirectory, RequestId);
 				Directory.Move(directoryPath, moveDirectory);
 			}
 		}

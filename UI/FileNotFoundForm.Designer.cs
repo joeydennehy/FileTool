@@ -72,6 +72,7 @@
 			this.exclusionInstructionsLabel.Size = new System.Drawing.Size(38, 17);
 			this.exclusionInstructionsLabel.TabIndex = 0;
 			this.exclusionInstructionsLabel.Text = "[text]";
+			this.exclusionInstructionsLabel.Click += new System.EventHandler(this.exclusionInstructionsLabel_Click);
 			// 
 			// exclusionListPanel
 			// 

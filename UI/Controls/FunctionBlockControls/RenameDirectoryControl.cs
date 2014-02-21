@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using API.Data;
 using API.FileIO;
@@ -20,7 +16,18 @@ namespace UI.Controls.FunctionBlockControls
 		private const string RENAME_FOLDER_CAPTION = "Rename Folders";
 		private const string RENAME_FOLDER_ERROR_FORMAT = "Rename folder procedure gave the following error {0}.";
 
+		private const string INSTRUCTION_TEXT = "Click 'Rename' button to rename the mismatched directories and change the Request Code to Request Id in the database.";
+
 		private FoundationDataFileState state;
+
+		#endregion
+
+		#region Properties
+
+		public override string TitleBlockText
+		{
+			get { return "Rename File Directories"; }
+		}
 
 		#endregion
 
@@ -39,6 +46,8 @@ namespace UI.Controls.FunctionBlockControls
 				BaseDirectory = ParentControl.SourceLocation
 			};
 
+			instructionLabel.Text = INSTRUCTION_TEXT;
+
 			try
 			{
 				RequestQuery.RefreshFoundationData();
@@ -53,28 +62,62 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
+		#region Private Methods
 
-		public override string TitleBlockText { get { return "Rename File Directories"; } }
-
-		protected override void OnPaint(PaintEventArgs pe)
+		private void AppendMissMatchData(StringBuilder sb)
 		{
-			base.OnPaint(pe);
+			foreach (DataRow row in RequestQuery.RequestData.Rows)
+			{
+				sb.AppendLine(row.ItemArray[2].ToString());
+			}
+			MissMatchRequestCodeTextBox.Text = sb.ToString();
 		}
 
-		private void foundationIdComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		private void ChangeFoundationSelection(DataRow selectedRow)
 		{
-			try
-			{
-				ChangeFoundationSelection(((DataRowView)foundationIdComboBox.SelectedItem).Row);
+			var selectedFoundationId = (int)selectedRow[0];
+			var selectedUrlKey = (string)selectedRow[1];
 
-				RequestQuery.SELECT_MISMATCHED_REQUEST_ID_AND_CODE(state.FoundationId);
-				StringBuilder sb = new StringBuilder();
-				AppendMissMatchData(sb);
-			}
-			catch (Exception eError)
+			if (state.FoundationId != selectedFoundationId)
 			{
-				MessageBox.Show(this, string.Format(RENAME_FOLDER_ERROR_FORMAT, eError.Message), RENAME_FOLDER_CAPTION, MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+				state.FoundationId = selectedFoundationId;
+				state.FoundationUrlKey = selectedUrlKey;
+			}
+		}
+
+		#region Event Handlers
+
+		private void ButtonClick_RenameRecordsAndFilesButton(object sender, EventArgs e)
+		{
+			foreach (DataRow row in RequestQuery.RequestData.Rows)
+			{
+				string requestCode = row.ItemArray[1].ToString();
+				int requestId = (int)row.ItemArray[0];
+
+				try
+				{
+
+					FileProcessing.UpdateMisMatchedDirectories(state, requestCode, requestId);
+					RequestQuery.UPDATE_MISSMATCHED_REQUEST_ID_AND_CODE(requestId);
+				}
+				catch (Exception eError)
+				{
+					Logger.Log(string.Format("Error in Renameing mismatched request code ({0}): {1}", requestCode, eError.Message),
+						LogLevel.Error);
+				}
+			}
+
+			RequestQuery.SELECT_MISMATCHED_REQUEST_ID_AND_CODE(state.FoundationId);
+
+			if (RequestQuery.RequestData.Rows.Count == 0)
+			{
+				MissMatchRequestCodeTextBox.Text = "All Records Processed Successfully.";
+			}
+			else
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine(string.Format("{0} were not processed:", RequestQuery.RequestData.Rows.Count));
+				AppendMissMatchData(sb);
 			}
 		}
 
@@ -118,60 +161,28 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
-		private void ChangeFoundationSelection(DataRow selectedRow)
+		private void SelectedIndexChanged_FoundationIdComboBox(object sender, EventArgs e)
 		{
-			var selectedFoundationId = (int)selectedRow[0];
-			var selectedUrlKey = (string)selectedRow[1];
-
-			if (state.FoundationId != selectedFoundationId)
+			try
 			{
-				state.FoundationId = selectedFoundationId;
-				state.FoundationUrlKey = selectedUrlKey;
-			}
-		}
+				ChangeFoundationSelection(((DataRowView)foundationIdComboBox.SelectedItem).Row);
 
-		private void ButtonClick_RenameRecordsAndFilesButton(object sender, EventArgs e)
-		{
-			foreach (DataRow row in RequestQuery.RequestData.Rows)
-			{
-				string requestCode = row.ItemArray[1].ToString();
-				int requestId = (int)row.ItemArray[0];
-
-				try
-				{
-
-					FileProcessing.UpdateMisMatchedDirectories(state, requestCode, requestId);
-					//sRequestQuery.UPDATE_MISSMATCHED_REQUEST_ID_AND_CODE(requestId);
-				}
-				catch (Exception eError)
-				{
-					Logger.Log(string.Format("Error in Renameing mismatched request code ({0}): {1}", requestCode, eError.Message), LogLevel.Error);
-				}
-			}
-
-			RequestQuery.SELECT_MISMATCHED_REQUEST_ID_AND_CODE(state.FoundationId);
-
-			if (RequestQuery.RequestData.Rows.Count == 0)
-			{
-				MissMatchRequestCodeTextBox.Text = "All Records Processed Successfully.";
-			}
-			else
-			{
+				RequestQuery.SELECT_MISMATCHED_REQUEST_ID_AND_CODE(state.FoundationId);
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine(string.Format("{0} were not processed:", RequestQuery.RequestData.Rows.Count));
 				AppendMissMatchData(sb);
 			}
-			
+			catch (Exception eError)
+			{
+				MessageBox.Show(this, string.Format(RENAME_FOLDER_ERROR_FORMAT, eError.Message), RENAME_FOLDER_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
 		}
 
-		private void AppendMissMatchData(StringBuilder sb)
-		{
-			foreach (DataRow row in RequestQuery.RequestData.Rows)
-			{
-				sb.AppendLine(row.ItemArray[2].ToString());
-			}
-			MissMatchRequestCodeTextBox.Text = sb.ToString();
-		}
+		#endregion
+
+		#endregion
+
+		#region Protected Methods
 
 		protected override void OnEnter(EventArgs e)
 		{
@@ -179,5 +190,12 @@ namespace UI.Controls.FunctionBlockControls
 
 			base.OnEnter(e);
 		}
+
+		protected override void OnPaint(PaintEventArgs pe)
+		{
+			base.OnPaint(pe);
+		}
+
+		#endregion
 	}
 }

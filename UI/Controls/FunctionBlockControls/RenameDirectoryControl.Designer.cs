@@ -32,6 +32,7 @@
 			this.foundationIdComboBoxLabel = new System.Windows.Forms.Label();
 			this.MissMatchRequestCodeTextBox = new System.Windows.Forms.TextBox();
 			this.EvaluateFilesButton = new System.Windows.Forms.Button();
+			this.instructionLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// foundationIdComboBox
@@ -42,7 +43,7 @@
 			this.foundationIdComboBox.Name = "foundationIdComboBox";
 			this.foundationIdComboBox.Size = new System.Drawing.Size(820, 24);
 			this.foundationIdComboBox.TabIndex = 3;
-			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.foundationIdComboBox_SelectedIndexChanged);
+			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_FoundationIdComboBox);
 			this.foundationIdComboBox.DragLeave += new System.EventHandler(this.OnLeave_FoundationDropDown);
 			this.foundationIdComboBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick_comboBox);
 			// 
@@ -62,7 +63,7 @@
 			this.MissMatchRequestCodeTextBox.Multiline = true;
 			this.MissMatchRequestCodeTextBox.Name = "MissMatchRequestCodeTextBox";
 			this.MissMatchRequestCodeTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.MissMatchRequestCodeTextBox.Size = new System.Drawing.Size(820, 372);
+			this.MissMatchRequestCodeTextBox.Size = new System.Drawing.Size(820, 330);
 			this.MissMatchRequestCodeTextBox.TabIndex = 7;
 			this.MissMatchRequestCodeTextBox.WordWrap = false;
 			// 
@@ -71,15 +72,26 @@
 			this.EvaluateFilesButton.Location = new System.Drawing.Point(25, 472);
 			this.EvaluateFilesButton.Margin = new System.Windows.Forms.Padding(4);
 			this.EvaluateFilesButton.Name = "EvaluateFilesButton";
-			this.EvaluateFilesButton.Size = new System.Drawing.Size(217, 28);
+			this.EvaluateFilesButton.Size = new System.Drawing.Size(96, 28);
 			this.EvaluateFilesButton.TabIndex = 18;
-			this.EvaluateFilesButton.Text = "Rename Request Code/Folder";
+			this.EvaluateFilesButton.Text = "Rename";
 			this.EvaluateFilesButton.UseVisualStyleBackColor = true;
 			this.EvaluateFilesButton.Click += new System.EventHandler(this.ButtonClick_RenameRecordsAndFilesButton);
+			// 
+			// instructionLabel
+			// 
+			this.instructionLabel.AutoSize = true;
+			this.instructionLabel.Location = new System.Drawing.Point(22, 436);
+			this.instructionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.instructionLabel.Name = "instructionLabel";
+			this.instructionLabel.Size = new System.Drawing.Size(38, 17);
+			this.instructionLabel.TabIndex = 19;
+			this.instructionLabel.Text = "[text]";
 			// 
 			// RenameDirectoryControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.Controls.Add(this.instructionLabel);
 			this.Controls.Add(this.EvaluateFilesButton);
 			this.Controls.Add(this.MissMatchRequestCodeTextBox);
 			this.Controls.Add(this.foundationIdComboBox);
@@ -97,6 +109,7 @@
 		private System.Windows.Forms.Label foundationIdComboBoxLabel;
 		private System.Windows.Forms.TextBox MissMatchRequestCodeTextBox;
 		private System.Windows.Forms.Button EvaluateFilesButton;
+		private System.Windows.Forms.Label instructionLabel;
 
 	}
 }

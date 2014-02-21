@@ -50,6 +50,11 @@ namespace UI
 
 		#endregion
 
+		private void exclusionInstructionsLabel_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		#endregion
 
 	}
