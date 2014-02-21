@@ -91,8 +91,6 @@ namespace UI.Controls.FunctionBlockControls
 			}
 
 			moveFilesTextBox.Text = sequesteredFiles.ToString();
-
-			FileProcessing.LogStateData(state);
 		}
 
 		private void SetProcessingFolderText()
@@ -167,10 +165,12 @@ namespace UI.Controls.FunctionBlockControls
 
 			try
 			{
-				FileProcessing.MoveFilesToDestination(state.SequesterFiles, moveLocationTextBox.Text, state.ClientRootDirectory);
-
-				state.MovedToDirectory = moveLocationTextBox.Text;
-				state.MovedFromDirectory = state.ClientRootDirectory;
+				//state.MovedToDirectory = moveLocationTextBox.Text;
+				state.OutputDirectory = moveLocationTextBox.Text;
+				//state.MovedFromDirectory = state.ClientRootDirectory;
+				
+				FileProcessing.MoveFilesToDestination(state);
+				
 				moveFilesBackButton.Enabled = true;
 			}
 			catch (Exception eError)
@@ -204,7 +204,8 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			try
 			{
-				FileProcessing.MoveFilesBack(state);
+				state.OutputDirectory = state.ClientRootDirectory;
+				FileProcessing.MoveFilesToDestination(state);
 			}
 			catch (Exception eError)
 			{

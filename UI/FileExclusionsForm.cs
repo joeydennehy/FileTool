@@ -38,8 +38,8 @@ namespace UI
 		private void Initialize(FoundationDataFileState processingState)
 		{
 			state = processingState;
-			if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
-				exclusionsTextBox.Text = string.Join("\n", state.SequesterPatterns);
+			if (state.SequesterExclusionPatterns != null && state.SequesterExclusionPatterns.Count > 0)
+				exclusionsTextBox.Text = string.Join("\n", state.SequesterExclusionPatterns);
 
 			dispositionMoveRadio.Checked = !string.IsNullOrEmpty(state.SequesterPath);
 			dispositionDoNotCopyRadio.Checked = string.IsNullOrEmpty(state.SequesterPath);
@@ -53,7 +53,7 @@ namespace UI
 		{
 			string formatedExclusions = exclusions.Replace("*", "").Replace("\n", ",");
 			List<string> exclusionsList = formatedExclusions.Split(',').ToList();
-			state.SequesterPatterns = exclusionsList;
+			state.SequesterExclusionPatterns = exclusionsList;
 		}
 
 		#region Event Handlers

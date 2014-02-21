@@ -1,14 +1,13 @@
-﻿using System.Diagnostics.Eventing.Reader;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Test.API
+namespace Test.API.FileIO
 {
 	/// <summary>
 	/// Summary description for FileProcessing
@@ -66,9 +65,9 @@ namespace Test.API
 			ClearFolder(rootPath);
 
 			state = new FoundationDataFileState();
-			state.OutputDirectory = string.Format("{0}\\test", rootPath);
+			state.OutputDirectory = string.Format("{0}\\test\\", rootPath);
 
-			rootControlFolderPath = string.Format("{0}\\control\\{1}", rootPath, TEST_KEY);
+			rootControlFolderPath = string.Format("{0}\\control\\{1}\\", rootPath, TEST_KEY);
 			FileTestCases = new Dictionary<string, string>();
 
 			state.BaseDirectory = string.Format("{0}\\control\\", rootPath);
@@ -78,48 +77,48 @@ namespace Test.API
 
 			FileTestCases = new Dictionary<string, string>
 			{
-				{ string.Format("{0}\\1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}\\0000000001_application_test_app.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}\\0000000001_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}\\0000000001_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}\\0000000001_followup_test_followup.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}\\0000000001_loi_test_loi.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}\\0000000001_qualification_test_qual.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}\\0000000001_supportingdocuments_test_doc.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}0000000001_application_test_app.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}0000000001_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}0000000001_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}0000000001_followup_test_followup.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}0000000001_loi_test_loi.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}0000000001_qualification_test_qual.txt", state.OutputDirectory) },
+				{ string.Format("{0}1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}0000000001_supportingdocuments_test_doc.txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\2\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}\\0000000002_application_test_app.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\2\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}\\0000000002_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\2\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}\\0000000002_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\2\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}\\0000000002_followup_test_followup.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\2\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}\\0000000002_loi_test_loi.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\2\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}\\0000000002_qualification_test_qual.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\2\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}\\0000000002_supportingdocuments_test_doc.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}0000000002_application_test_app.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}0000000002_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}0000000002_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}0000000002_followup_test_followup.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}0000000002_loi_test_loi.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}0000000002_qualification_test_qual.txt", state.OutputDirectory) },
+				{ string.Format("{0}2\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}0000000002_supportingdocuments_test_doc.txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\3\\application\\test.txt", rootControlFolderPath), string.Format("{0}\\0000000003_test.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\3\\evaluation 1\\test.txt", rootControlFolderPath), string.Format("{0}\\0000000003_test (1).txt", state.OutputDirectory) },
-				{ string.Format("{0}\\3\\evaluation 2\\test.txt", rootControlFolderPath), string.Format("{0}\\0000000003_test (2).txt", state.OutputDirectory) },
+				{ string.Format("{0}3\\application\\test.txt", rootControlFolderPath), string.Format("{0}0000000003_test.txt", state.OutputDirectory) },
+				{ string.Format("{0}3\\evaluation 1\\test.txt", rootControlFolderPath), string.Format("{0}0000000003_test (1).txt", state.OutputDirectory) },
+				{ string.Format("{0}3\\evaluation 2\\test.txt", rootControlFolderPath), string.Format("{0}0000000003_test (2).txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\ORG-1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}ORG-1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), "" },
+				
+				{ string.Format("{0}organization-2--00010101_1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_application_test_app.txt", state.OutputDirectory) },
+				{ string.Format("{0}organization-2--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
+				{ string.Format("{0}organization-2--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
+				{ string.Format("{0}organization-2--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_followup_test_followup.txt", state.OutputDirectory) },
+				{ string.Format("{0}organization-2--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_loi_test_loi.txt", state.OutputDirectory) },
+				{ string.Format("{0}organization-2--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_qualification_test_qual.txt", state.OutputDirectory) },
+				{ string.Format("{0}organization-2--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}organization-2--00010101_1_supportingdocuments_test_doc.txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\organization-2--00010101_1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_application_test_app.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\organization-2--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\organization-2--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\organization-2--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_followup_test_followup.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\organization-2--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_loi_test_loi.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\organization-2--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_qualification_test_qual.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\organization-2--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}\\organization-2--00010101_1_supportingdocuments_test_doc.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_application_test_app.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_followup_test_followup.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_loi_test_loi.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_qualification_test_qual.txt", state.OutputDirectory) },
+				{ string.Format("{0}scholarshipactor-3--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}scholarshipactor-3--00010101_1_supportingdocuments_test_doc.txt", state.OutputDirectory) },
 
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\application\\test_app.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_application_test_app.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\evaluation 1\\test_eval 1.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_evaluation 1_test_eval 1.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\evaluation 2\\test_eval 2.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_evaluation 2_test_eval 2.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\followup\\test_followup.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_followup_test_followup.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\loi\\test_loi.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_loi_test_loi.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\qualification\\test_qual.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_qualification_test_qual.txt", state.OutputDirectory) },
-				{ string.Format("{0}\\scholarshipactor-3--00010101_1\\supportingdocuments\\test_doc.txt", rootControlFolderPath), string.Format("{0}\\scholarshipactor-3--00010101_1_supportingdocuments_test_doc.txt", state.OutputDirectory) },
-
-				{ string.Format("{0}\\emailattachments\\1.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\GuideStar\\1.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\MailMerge\\1.txt", rootControlFolderPath), "" },
-				{ string.Format("{0}\\shared\\1.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}emailattachments\\1.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}GuideStar\\1.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}MailMerge\\1.txt", rootControlFolderPath), "" },
+				{ string.Format("{0}shared\\1.txt", rootControlFolderPath), "" },
 			};
 
 			foreach (string filePath in FileTestCases.Keys)
@@ -141,7 +140,6 @@ namespace Test.API
 
 			state.FoundationId = 1;
 			state.FoundationUrlKey = TEST_KEY;
-			
 		}
 
 		[TestCleanup]
@@ -221,11 +219,42 @@ namespace Test.API
 		[TestMethod]
 		public void MoveFilesToDestinationTest()
 		{
-			FileProcessing.MoveFilesToDestination(state.Files, state.OutputDirectory, rootControlFolderPath);
+			//state.MovedToDirectory = state.OutputDirectory;
+			//state.MovedFromDirectory = rootControlFolderPath;
+			var controlFolderList = new List<string>();
+
+			foreach (KeyValuePair<string, string> fileTestCase in FileTestCases)
+			{
+				Match matchSet = Regex.Match(fileTestCase.Key, @"[\\][\d]\\");
+				if (matchSet.Success)
+				{
+					var file = new FileInfo(fileTestCase.Key);
+					state.SequesterFiles.Add(file);
+					controlFolderList.Add(string.Format("{0}{1}", state.OutputDirectory, fileTestCase.Key.Substring(rootControlFolderPath.Length)));
+				}
+			}
+
+			FileProcessing.MoveFilesToDestination(state);
 
 			string [] outputFiles = Directory.GetFiles(state.OutputDirectory, "*.*", SearchOption.AllDirectories);
 
-			Assert.IsTrue(outputFiles.Length == state.Files.Count);
+			foreach (string outputFile in outputFiles)
+			{
+				if (controlFolderList.Contains(outputFile))
+					controlFolderList.Remove(outputFile);
+			}
+
+			//All of the output files in the control list should have been removed, that means that the expected output directory
+			//contains all of the files that were moved
+			Assert.IsTrue(controlFolderList.Count == 0);
+
+			//None of the files in the sequester set should be on disk any longer.
+			foreach (FileInfo sequesterFile in state.SequesterFiles)
+			{
+				var sequesterFileInfo = new FileInfo(sequesterFile.FullName);
+				Assert.IsFalse(sequesterFileInfo.Exists);
+			}
+
 		}
 
 		[TestMethod]
@@ -324,7 +353,6 @@ namespace Test.API
 
 			Assert.IsTrue(testFileList.Count == 0);
 		}
-
 		private static void ClearFolder(string directoryPath)
 		{
 			var directory = new DirectoryInfo(directoryPath);

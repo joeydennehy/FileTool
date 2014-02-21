@@ -72,9 +72,9 @@ namespace API.FileIO
 						}
 					}
 
-					if (state.SequesterPatterns != null && state.SequesterPatterns.Count > 0)
+					if (state.SequesterExclusionPatterns != null && state.SequesterExclusionPatterns.Count > 0)
 					{
-						bool sequesterFile = state.SequesterPatterns.Any(sequesterPattern => file.Name.ToLower()
+						bool sequesterFile = state.SequesterExclusionPatterns.Any(sequesterPattern => file.Name.ToLower()
 							.Contains(sequesterPattern.ToLower()));
 						if (sequesterFile)
 						{
@@ -146,7 +146,7 @@ namespace API.FileIO
 
 			foreach (FileInfo file in files)
 			{
-				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
+				string fullFileName = string.Format("{0}{1}", destinationFolder, BuildApplicationProcessFileName(file));
 				try
 				{
 					var destinationFile = new FileInfo(fullFileName);
@@ -180,43 +180,46 @@ namespace API.FileIO
 			}
 		}
 
-		public static void LogStateData(FoundationDataFileState state)
-		{
-			Logger.Log(string.Format("Foundation: {0}({1})", state.FoundationUrlKey, state.FoundationId) + state.BaseDirectory, LogLevel.Info);
-			Logger.Log("Base Directory: " + state.BaseDirectory, LogLevel.Info);
-			Logger.Log("Client Root Directory: " + state.ClientRootDirectory, LogLevel.Info);
-			Logger.Log(string.Format("Files Count: {0}", state.Files != null ? state.Files.Count : 0), LogLevel.Info);
-			Logger.Log(string.Format("SequesterFiles Count: {0}", state.SequesterFiles != null ? state.SequesterFiles.Count : 0), LogLevel.Info);
-			Logger.Log(string.Format("Moved Sequestered Path: {0}", state.SequesterPath), LogLevel.Info);
-			Logger.Log(string.Format("Files Not Found Count: {0}", state.FilesNotFound != null ? state.FilesNotFound.Count : 0), LogLevel.Info);
-			Logger.Log(string.Format("Moved From Directory: {0}", state.MovedFromDirectory), LogLevel.Info);
-			Logger.Log(string.Format("Moved To Directory: {0}", state.MovedToDirectory), LogLevel.Info);
-			Logger.Log(string.Format("Copied File Directory: {0}", state.OutputDirectory), LogLevel.Info);
-			Logger.Log(string.Format("Total File Size: {0}", state.TotalSize), LogLevel.Info);
-		}
+		//public static void LogStateData(FoundationDataFileState state)
+		//{
+		//	Logger.Log(string.Format("Foundation: {0}({1})", state.FoundationUrlKey, state.FoundationId) + state.BaseDirectory, LogLevel.Info);
+		//	Logger.Log("Base Directory: " + state.BaseDirectory, LogLevel.Info);
+		//	Logger.Log("Client Root Directory: " + state.ClientRootDirectory, LogLevel.Info);
+		//	Logger.Log(string.Format("Files Count: {0}", state.Files != null ? state.Files.Count : 0), LogLevel.Info);
+		//	Logger.Log(string.Format("SequesterFiles Count: {0}", state.SequesterFiles != null ? state.SequesterFiles.Count : 0), LogLevel.Info);
+		//	Logger.Log(string.Format("Moved Sequestered Path: {0}", state.SequesterPath), LogLevel.Info);
+		//	Logger.Log(string.Format("Files Not Found Count: {0}", state.FilesNotFound != null ? state.FilesNotFound.Count : 0), LogLevel.Info);
+		//	Logger.Log(string.Format("Moved From Directory: {0}", state.MovedFromDirectory), LogLevel.Info);
+		//	Logger.Log(string.Format("Moved To Directory: {0}", state.MovedToDirectory), LogLevel.Info);
+		//	Logger.Log(string.Format("Copied File Directory: {0}", state.OutputDirectory), LogLevel.Info);
+		//	Logger.Log(string.Format("Total File Size: {0}", state.TotalSize), LogLevel.Info);
+		//}
 
-		public static void MoveFilesToDestination(List<FileInfo> files, string destinationFolder, string root)
+		public static void MoveFilesToDestination(FoundationDataFileState state)
 		{
-			if (files == null || files.Count == 0)
+			Logger.Log("Move unreferenced data files start", LogLevel.Info);
+			Logger.Log(string.Format("Current Task State:\r\n{0}", state), LogLevel.Info);
+
+			if (state.SequesterFiles == null || state.SequesterFiles.Count == 0)
 			{
 				Logger.Log("MoveFilesToDestination: no files selected to copy", LogLevel.Warn);
 				return;
 			}
 
-			if (string.IsNullOrEmpty(destinationFolder))
+			if (string.IsNullOrEmpty(state.OutputDirectory))
 			{
 				Logger.Log("MoveFilesToDestination: No destination selected for copy", LogLevel.Error);
 				return;
 			}
 
-			if (!Directory.Exists(destinationFolder))
+			if (!Directory.Exists(state.OutputDirectory))
 			{
-				Directory.CreateDirectory(destinationFolder);
+				Directory.CreateDirectory(state.OutputDirectory);
 			}
 
-			foreach (FileInfo file in files)
+			foreach (FileInfo file in state.SequesterFiles)
 			{
-				string directory = string.Format("{0}\\{1}", destinationFolder, file.Directory.FullName.Substring(root.Length));
+				string directory = string.Format("{0}\\{1}", state.OutputDirectory, file.Directory.FullName.Substring(state.ClientRootDirectory.Length));
 				if (!Directory.Exists(directory))
 				{
 					Directory.CreateDirectory(directory);
@@ -233,28 +236,30 @@ namespace API.FileIO
 					throw;
 				}
 			}
+
+			Logger.Log("Move unreferenced data files end", LogLevel.Info);
 		}
 
-		public static void MoveFilesBack(FoundationDataFileState state)
-		{
-			ClearFiles(state);
-			SetFilesFromPath(state, state.MovedToDirectory);
+		//public static void MoveFilesBack(FoundationDataFileState state)
+		//{
+		//	ClearFiles(state);
+		//	SetFilesFromPath(state, state.MovedToDirectory);
 
-			foreach (FileInfo file in state.Files)
-			{
-				try
-				{
-					string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory,
-						file.FullName.Substring(state.MovedToDirectory.Length));
-					File.Move(file.FullName, fullDestination);
-				}
-				catch (Exception eError)
-				{
-					Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
-					throw;
-				}
-			}
-		}
+		//	foreach (FileInfo file in state.Files)
+		//	{
+		//		try
+		//		{
+		//			string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory,
+		//				file.FullName.Substring(state.MovedToDirectory.Length));
+		//			File.Move(file.FullName, fullDestination);
+		//		}
+		//		catch (Exception eError)
+		//		{
+		//			Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
+		//			throw;
+		//		}
+		//	}
+		//}
 
 		private static string BuildApplicationProcessFileName(FileInfo file)
 		{
