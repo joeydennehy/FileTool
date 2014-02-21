@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Drawing;
+using System.Globalization;
 using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
-using API;
 using API.Config;
 
 namespace UI.Controls
@@ -15,11 +11,9 @@ namespace UI.Controls
 
 		#region Member Variables
 
-		private const string CREDENTIALS_NEEDED = "Please enter network credentials to access the specified folder share.";
-		private const string AUTHENTICATION_ERROR = "Network Authentication encountered the following error: {0}";
-		private const string AUTHENTICATION_PROMPT = "Please enter credentials for: {0}";
-		private const string VALIDATION_ERROR = "Unable to validate path {0}.";
-		private const string VALIDATION_ERROR_CAPTION = "Network Access Error";
+		private const string INVALID_PATH_ERROR = "Path not found!";
+		private const string VALIDATION_CAPTION = "Validation Error";
+		private const string VIRTUAL_PATH_MESSAGE = "Virtual path selections are not being accepted for the source location at this time.";
 
 		private readonly GLMFileUtilityTool parentControl;
 
@@ -44,37 +38,72 @@ namespace UI.Controls
 
 		#region Private Methods
 
-		private bool CheckLocationAccessAndSet(string directoryPath)
-		{
-			DirectoryInfo directory = new DirectoryInfo(directoryPath);
-
-			if (directory.Exists)
-			{
-				SourceLocation = directoryPath;
-				sourceLocationText.Text = SourceLocation;
-				parentControl.SourceLocation = SourceLocation;
-				return true;
-			}
-
-			SourceLocation = string.Empty;
-			return false;
-		}
-
 		private void Initialize()
 		{
-			CheckLocationAccessAndSet(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
+			SetLocationSelection(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
+			SetDisplayText(SourceLocation);
+		}
+
+		private void SetDisplayText(string directoryPath)
+		{
+			sourceLocationText.TextChanged -= TextChanged_SourceFolder;
+
+			sourceLocationText.Text = directoryPath;
+
+			int firstFolderLocation = sourceLocationText.Text.IndexOf('\\');
+			int lastFolderLocation = sourceLocationText.Text.LastIndexOf('\\');
+			sourceLocationText.SelectionStart = firstFolderLocation - lastFolderLocation == 0
+				? sourceLocationText.Text.Length
+				: sourceLocationText.Text.Length - 1;
+
+			sourceLocationText.SelectionLength = 0;
+
+			sourceLocationText.TextChanged += TextChanged_SourceFolder;
+		}
+
+		private void SetLocationSelection(string directoryPath)
+		{
+			try
+			{
+				if (ValidateLocationSelection(directoryPath))
+				{
+					SourceLocation = directoryPath;
+				}
+				else
+				{
+					SourceLocation = ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY);
+					SetDisplayText(SourceLocation);
+				}
+				parentControl.SourceLocation = SourceLocation;
+			}
+			catch (Exception eError)
+			{
+				MessageBox.Show(this, eError.Message, VALIDATION_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				sourceLocationText.Focus();
+			}
+
+		}
+
+		private bool ValidateLocationSelection(string directoryPath)
+		{
+			if (string.IsNullOrWhiteSpace(directoryPath))
+				return false;
+
+			if (directoryPath.StartsWith("\\"))
+				throw new ArgumentException(VIRTUAL_PATH_MESSAGE);
+
+			var directory = new DirectoryInfo(directoryPath);
+			if(!directory.Exists)
+				throw new ArgumentException(INVALID_PATH_ERROR);
+
+			return true;
 		}
 
 		#region Event Handlers
 
-		private void TextChanged_SourceFolder(object sender, EventArgs e)
-		{
-			CheckLocationAccessAndSet(sourceLocationText.Text);
-		}
-
 		private void ButtonClick_BrowseFolders(object sender, EventArgs e)
 		{
-			FolderBrowserDialog folderBrowser = new FolderBrowserDialog
+			var folderBrowser = new FolderBrowserDialog
 			{
 				ShowNewFolderButton = false
 			};
@@ -82,16 +111,38 @@ namespace UI.Controls
 			DialogResult result = folderBrowser.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				CheckLocationAccessAndSet(folderBrowser.SelectedPath);
+				SetDisplayText(folderBrowser.SelectedPath);
+				SetLocationSelection(folderBrowser.SelectedPath);
+			}
+		}
+
+		private void OnLeave_SourcePathBlockControl(object sender, EventArgs e)
+		{
+			SetLocationSelection(sourceLocationText.Text);
+		}
+
+		private void TextChanged_SourceFolder(object sender, EventArgs e)
+		{
+			string selectedPath = sourceLocationText.Text;
+			if(!selectedPath.EndsWith("\\"))
+				selectedPath = string.Format("{0}\\", selectedPath);
+
+			selectedPath = selectedPath.Replace("\\\\", "\\");
+
+			if (selectedPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+			{
+				string[] pathPartStrings = selectedPath.Split(Path.GetInvalidPathChars(), StringSplitOptions.RemoveEmptyEntries);
+				selectedPath = string.Join("", pathPartStrings);
+			}
+
+			if (string.Compare(selectedPath, sourceLocationText.Text, true, CultureInfo.CurrentCulture) != 0)
+			{
+				SetDisplayText(selectedPath);
+				SetLocationSelection(sourceLocationText.Text);
 			}
 		}
 
 		#endregion
-
-        private void sourceLabel_Click(object sender, EventArgs e)
-        {
-
-        }
 
 		#endregion
 
@@ -105,6 +156,13 @@ namespace UI.Controls
 
 		//TODO: Check Network credentials - this code does work, but the timing problem it introduces during startup
 		// will have to change when this type of code gets called.  Removing for now.
+
+		//private const string CREDENTIALS_NEEDED = "Please enter network credentials to access the specified folder share.";
+		//private const string AUTHENTICATION_ERROR = "Network Authentication encountered the following error: {0}";
+		//private const string AUTHENTICATION_PROMPT = "Please enter credentials for: {0}";
+		//private const string VALIDATION_ERROR = "Unable to validate path {0}.";
+		//private const string VALIDATION_ERROR_CAPTION = "Network Access Error";
+
 		//private NetworkCredential GetNetworkCredentials(string directoryPath)
 		//{
 		//	NetworkCredential accessCredential = null;

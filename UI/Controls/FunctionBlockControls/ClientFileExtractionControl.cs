@@ -95,7 +95,7 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				BaseDirectory = ParentControl.SourceLocation
 			};
-
+			System.Diagnostics.Debug.Print(ParentControl.SourceLocation);
 			try
 			{
 				//Bind Foundation List
@@ -219,8 +219,12 @@ namespace UI.Controls.FunctionBlockControls
 
 			if (result == DialogResult.OK)
 			{
-				state.OutputDirectory = folderBrowser.SelectedPath;
-				outputDestinationTextBox.Text = state.OutputDirectory;
+				string selectedPath = folderBrowser.SelectedPath;
+				if (!selectedPath.EndsWith("\\"))
+					selectedPath = string.Format("{0}\\", selectedPath);
+
+				state.OutputDirectory = selectedPath;
+				outputDestinationTextBox.Text = selectedPath;
 			}
 		}
 
@@ -360,7 +364,11 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void TextChanged_outputDestinationTextBox(object sender, EventArgs e)
 		{
-			state.OutputDirectory = outputDestinationTextBox.Text;
+			string selectedPath = outputDestinationTextBox.Text;
+			if (!selectedPath.EndsWith("\\"))
+				selectedPath = string.Format("{0}\\", selectedPath);
+
+			state.OutputDirectory = selectedPath;
 		}
 
 		#endregion

@@ -33,12 +33,13 @@
 			this.foundationIdComboBoxLabel = new System.Windows.Forms.Label();
 			this.moveFilesTextBox = new System.Windows.Forms.TextBox();
 			this.browseButton = new System.Windows.Forms.Button();
-			this.moveLocationText = new System.Windows.Forms.TextBox();
+			this.moveLocationTextBox = new System.Windows.Forms.TextBox();
 			this.sourceLabel = new System.Windows.Forms.Label();
 			this.moveFilesButton = new System.Windows.Forms.Button();
-			this.undoButton = new System.Windows.Forms.Button();
+			this.moveFilesBackButton = new System.Windows.Forms.Button();
 			this.stateDataTextBox = new System.Windows.Forms.TextBox();
 			this.fileNotFoundLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.EvaluateFilesButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// rootProcessingFolder
@@ -75,38 +76,38 @@
 			// 
 			// moveFilesTextBox
 			// 
-			this.moveFilesTextBox.Location = new System.Drawing.Point(275, 103);
+			this.moveFilesTextBox.Location = new System.Drawing.Point(278, 103);
 			this.moveFilesTextBox.Multiline = true;
 			this.moveFilesTextBox.Name = "moveFilesTextBox";
 			this.moveFilesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.moveFilesTextBox.Size = new System.Drawing.Size(568, 312);
+			this.moveFilesTextBox.Size = new System.Drawing.Size(565, 291);
 			this.moveFilesTextBox.TabIndex = 6;
 			this.moveFilesTextBox.WordWrap = false;
 			// 
 			// browseButton
 			// 
-			this.browseButton.Location = new System.Drawing.Point(805, 446);
+			this.browseButton.Location = new System.Drawing.Point(805, 443);
 			this.browseButton.Margin = new System.Windows.Forms.Padding(4);
 			this.browseButton.Name = "browseButton";
 			this.browseButton.Size = new System.Drawing.Size(36, 28);
 			this.browseButton.TabIndex = 9;
 			this.browseButton.Text = "...";
 			this.browseButton.UseVisualStyleBackColor = true;
-			this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+			this.browseButton.Click += new System.EventHandler(this.ButtonClick_OutputDestinationBrowse);
 			// 
-			// moveLocationText
+			// moveLocationTextBox
 			// 
-			this.moveLocationText.Location = new System.Drawing.Point(23, 447);
-			this.moveLocationText.Margin = new System.Windows.Forms.Padding(4);
-			this.moveLocationText.Name = "moveLocationText";
-			this.moveLocationText.Size = new System.Drawing.Size(772, 22);
-			this.moveLocationText.TabIndex = 8;
-			this.moveLocationText.TextChanged += new System.EventHandler(this.moveLocationText_TextChanged);
+			this.moveLocationTextBox.Location = new System.Drawing.Point(23, 446);
+			this.moveLocationTextBox.Margin = new System.Windows.Forms.Padding(4);
+			this.moveLocationTextBox.Name = "moveLocationTextBox";
+			this.moveLocationTextBox.Size = new System.Drawing.Size(772, 22);
+			this.moveLocationTextBox.TabIndex = 8;
+			this.moveLocationTextBox.TextChanged += new System.EventHandler(this.TextChanged_MoveLocationTextBox);
 			// 
 			// sourceLabel
 			// 
 			this.sourceLabel.AutoSize = true;
-			this.sourceLabel.Location = new System.Drawing.Point(19, 427);
+			this.sourceLabel.Location = new System.Drawing.Point(23, 427);
 			this.sourceLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.sourceLabel.Name = "sourceLabel";
 			this.sourceLabel.Size = new System.Drawing.Size(130, 17);
@@ -115,25 +116,25 @@
 			// 
 			// moveFilesButton
 			// 
-			this.moveFilesButton.Location = new System.Drawing.Point(23, 477);
+			this.moveFilesButton.Location = new System.Drawing.Point(144, 476);
 			this.moveFilesButton.Margin = new System.Windows.Forms.Padding(4);
 			this.moveFilesButton.Name = "moveFilesButton";
 			this.moveFilesButton.Size = new System.Drawing.Size(100, 28);
 			this.moveFilesButton.TabIndex = 13;
 			this.moveFilesButton.Text = "Move Files";
 			this.moveFilesButton.UseVisualStyleBackColor = true;
-			this.moveFilesButton.Click += new System.EventHandler(this.moveFilesButton_Click);
+			this.moveFilesButton.Click += new System.EventHandler(this.ButtonClick_MoveFiles);
 			// 
-			// undoButton
+			// moveFilesBackButton
 			// 
-			this.undoButton.Location = new System.Drawing.Point(131, 477);
-			this.undoButton.Margin = new System.Windows.Forms.Padding(4);
-			this.undoButton.Name = "undoButton";
-			this.undoButton.Size = new System.Drawing.Size(100, 28);
-			this.undoButton.TabIndex = 14;
-			this.undoButton.Text = "Undo";
-			this.undoButton.UseVisualStyleBackColor = true;
-			this.undoButton.Click += new System.EventHandler(this.undoButton_Click);
+			this.moveFilesBackButton.Location = new System.Drawing.Point(252, 476);
+			this.moveFilesBackButton.Margin = new System.Windows.Forms.Padding(4);
+			this.moveFilesBackButton.Name = "moveFilesBackButton";
+			this.moveFilesBackButton.Size = new System.Drawing.Size(130, 28);
+			this.moveFilesBackButton.TabIndex = 14;
+			this.moveFilesBackButton.Text = "Move Files Back";
+			this.moveFilesBackButton.UseVisualStyleBackColor = true;
+			this.moveFilesBackButton.Click += new System.EventHandler(this.ButtonClick_MoveFilesBack);
 			// 
 			// stateDataTextBox
 			// 
@@ -143,29 +144,40 @@
 			this.stateDataTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.stateDataTextBox.Size = new System.Drawing.Size(246, 291);
 			this.stateDataTextBox.TabIndex = 15;
-			this.stateDataTextBox.WordWrap = false;
 			// 
 			// fileNotFoundLinkLabel
 			// 
 			this.fileNotFoundLinkLabel.AutoSize = true;
-			this.fileNotFoundLinkLabel.Location = new System.Drawing.Point(20, 397);
+			this.fileNotFoundLinkLabel.Location = new System.Drawing.Point(23, 397);
 			this.fileNotFoundLinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.fileNotFoundLinkLabel.Name = "fileNotFoundLinkLabel";
-			this.fileNotFoundLinkLabel.Size = new System.Drawing.Size(107, 17);
+			this.fileNotFoundLinkLabel.Size = new System.Drawing.Size(185, 17);
 			this.fileNotFoundLinkLabel.TabIndex = 16;
 			this.fileNotFoundLinkLabel.TabStop = true;
-			this.fileNotFoundLinkLabel.Text = "Files Not Found";
-			this.fileNotFoundLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.fileNotFoundLinkLabel_LinkClicked);
+			this.fileNotFoundLinkLabel.Text = "Referenced Files Not Found";
+			this.fileNotFoundLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked_FileNotFoundLinkLabel);
+			// 
+			// EvaluateFilesButton
+			// 
+			this.EvaluateFilesButton.Location = new System.Drawing.Point(22, 476);
+			this.EvaluateFilesButton.Margin = new System.Windows.Forms.Padding(4);
+			this.EvaluateFilesButton.Name = "EvaluateFilesButton";
+			this.EvaluateFilesButton.Size = new System.Drawing.Size(114, 28);
+			this.EvaluateFilesButton.TabIndex = 17;
+			this.EvaluateFilesButton.Text = "Evaluate Files";
+			this.EvaluateFilesButton.UseVisualStyleBackColor = true;
+			this.EvaluateFilesButton.Click += new System.EventHandler(this.ButtonClick_EvaluateFilesButton);
 			// 
 			// RemoveOrphanDocumentsControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.Controls.Add(this.EvaluateFilesButton);
 			this.Controls.Add(this.fileNotFoundLinkLabel);
 			this.Controls.Add(this.stateDataTextBox);
-			this.Controls.Add(this.undoButton);
+			this.Controls.Add(this.moveFilesBackButton);
 			this.Controls.Add(this.moveFilesButton);
 			this.Controls.Add(this.browseButton);
-			this.Controls.Add(this.moveLocationText);
+			this.Controls.Add(this.moveLocationTextBox);
 			this.Controls.Add(this.sourceLabel);
 			this.Controls.Add(this.moveFilesTextBox);
 			this.Controls.Add(this.rootProcessingFolder);
@@ -185,12 +197,13 @@
         private System.Windows.Forms.Label foundationIdComboBoxLabel;
         private System.Windows.Forms.TextBox moveFilesTextBox;
         private System.Windows.Forms.Button browseButton;
-        public System.Windows.Forms.TextBox moveLocationText;
+        public System.Windows.Forms.TextBox moveLocationTextBox;
         private System.Windows.Forms.Label sourceLabel;
         private System.Windows.Forms.Button moveFilesButton;
-        private System.Windows.Forms.Button undoButton;
+        private System.Windows.Forms.Button moveFilesBackButton;
         private System.Windows.Forms.TextBox stateDataTextBox;
 		  private System.Windows.Forms.LinkLabel fileNotFoundLinkLabel;
+		  private System.Windows.Forms.Button EvaluateFilesButton;
 
     }
 }

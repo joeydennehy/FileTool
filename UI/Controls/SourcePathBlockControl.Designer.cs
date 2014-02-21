@@ -28,54 +28,50 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.sourceLabel = new System.Windows.Forms.Label();
-            this.sourceLocationText = new System.Windows.Forms.TextBox();
-            this.browseButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
-            // 
-            // sourceLabel
-            // 
-            this.sourceLabel.AutoSize = true;
-            this.sourceLabel.Location = new System.Drawing.Point(19, 17);
-            this.sourceLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.sourceLabel.Name = "sourceLabel";
-            this.sourceLabel.Size = new System.Drawing.Size(115, 17);
-            this.sourceLabel.TabIndex = 0;
-            this.sourceLabel.Text = "Source Location:";
-            this.sourceLabel.Click += new System.EventHandler(this.sourceLabel_Click);
-            // 
-            // sourceLocationText
-            // 
-            this.sourceLocationText.Location = new System.Drawing.Point(23, 37);
-            this.sourceLocationText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.sourceLocationText.Name = "sourceLocationText";
-            this.sourceLocationText.Size = new System.Drawing.Size(772, 22);
-            this.sourceLocationText.TabIndex = 1;
-            this.sourceLocationText.TextChanged += new System.EventHandler(this.TextChanged_SourceFolder);
-            // 
-            // browseButton
-            // 
-            this.browseButton.Location = new System.Drawing.Point(805, 36);
-            this.browseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(36, 28);
-            this.browseButton.TabIndex = 2;
-            this.browseButton.Text = "...";
-            this.browseButton.UseVisualStyleBackColor = true;
-            this.browseButton.Click += new System.EventHandler(this.ButtonClick_BrowseFolders);
-            // 
-            // SourcePathBlockControl
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.browseButton);
-            this.Controls.Add(this.sourceLocationText);
-            this.Controls.Add(this.sourceLabel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.Name = "SourcePathBlockControl";
-            this.Size = new System.Drawing.Size(860, 86);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			this.sourceLabel = new System.Windows.Forms.Label();
+			this.sourceLocationText = new System.Windows.Forms.TextBox();
+			this.browseButton = new System.Windows.Forms.Button();
+			this.SuspendLayout();
+			// 
+			// sourceLabel
+			// 
+			this.sourceLabel.AutoSize = true;
+			this.sourceLabel.Location = new System.Drawing.Point(14, 14);
+			this.sourceLabel.Name = "sourceLabel";
+			this.sourceLabel.Size = new System.Drawing.Size(88, 13);
+			this.sourceLabel.TabIndex = 0;
+			this.sourceLabel.Text = "Source Location:";
+			// 
+			// sourceLocationText
+			// 
+			this.sourceLocationText.Location = new System.Drawing.Point(17, 30);
+			this.sourceLocationText.Name = "sourceLocationText";
+			this.sourceLocationText.Size = new System.Drawing.Size(580, 20);
+			this.sourceLocationText.TabIndex = 1;
+			this.sourceLocationText.TextChanged += new System.EventHandler(this.TextChanged_SourceFolder);
+			// 
+			// browseButton
+			// 
+			this.browseButton.Location = new System.Drawing.Point(604, 29);
+			this.browseButton.Name = "browseButton";
+			this.browseButton.Size = new System.Drawing.Size(27, 23);
+			this.browseButton.TabIndex = 2;
+			this.browseButton.Text = "...";
+			this.browseButton.UseVisualStyleBackColor = true;
+			this.browseButton.Click += new System.EventHandler(this.ButtonClick_BrowseFolders);
+			// 
+			// SourcePathBlockControl
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.browseButton);
+			this.Controls.Add(this.sourceLocationText);
+			this.Controls.Add(this.sourceLabel);
+			this.Name = "SourcePathBlockControl";
+			this.Size = new System.Drawing.Size(645, 70);
+			this.Leave += new System.EventHandler(this.OnLeave_SourcePathBlockControl);
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 

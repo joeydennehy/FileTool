@@ -32,10 +32,11 @@ namespace UI
 		private void Initialize(FoundationDataFileState processingState)
 		{
 			state = processingState;
+
 			if (state.FilesNotFound != null && state.FilesNotFound.Count > 0)
 				notFoundTextBox.Text = string.Join("\n", state.FilesNotFound);
 
-
+			deleteRecordButton.Enabled = false;
 			exclusionInstructionsLabel.Text = SEQUESTER_KEYWORD_TEXT;
 		}
 

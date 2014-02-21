@@ -34,7 +34,7 @@
 			this.processIdComboBox = new System.Windows.Forms.ComboBox();
 			this.outputDestinationTextBoxLabel = new System.Windows.Forms.Label();
 			this.outputDestinationTextBox = new System.Windows.Forms.TextBox();
-			this.outputDesitinationBrowseButton = new System.Windows.Forms.Button();
+			this.outputDestinationBrowseButton = new System.Windows.Forms.Button();
 			this.copyFilesButton = new System.Windows.Forms.Button();
 			this.fileCountLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.ApplicantProcessIdsLabel = new System.Windows.Forms.Label();
@@ -103,15 +103,15 @@
 			this.outputDestinationTextBox.TabIndex = 12;
 			this.outputDestinationTextBox.TextChanged += new System.EventHandler(this.TextChanged_outputDestinationTextBox);
 			// 
-			// outputDesitinationBrowseButton
+			// outputDestinationBrowseButton
 			// 
-			this.outputDesitinationBrowseButton.Location = new System.Drawing.Point(604, 162);
-			this.outputDesitinationBrowseButton.Name = "outputDesitinationBrowseButton";
-			this.outputDesitinationBrowseButton.Size = new System.Drawing.Size(29, 23);
-			this.outputDesitinationBrowseButton.TabIndex = 13;
-			this.outputDesitinationBrowseButton.Text = "...";
-			this.outputDesitinationBrowseButton.UseVisualStyleBackColor = true;
-			this.outputDesitinationBrowseButton.Click += new System.EventHandler(this.ButtonClick_OutputDestinationBrowse);
+			this.outputDestinationBrowseButton.Location = new System.Drawing.Point(604, 162);
+			this.outputDestinationBrowseButton.Name = "outputDestinationBrowseButton";
+			this.outputDestinationBrowseButton.Size = new System.Drawing.Size(29, 23);
+			this.outputDestinationBrowseButton.TabIndex = 13;
+			this.outputDestinationBrowseButton.Text = "...";
+			this.outputDestinationBrowseButton.UseVisualStyleBackColor = true;
+			this.outputDestinationBrowseButton.Click += new System.EventHandler(this.ButtonClick_OutputDestinationBrowse);
 			// 
 			// copyFilesButton
 			// 
@@ -203,7 +203,7 @@
 			this.Controls.Add(this.ApplicantProcessIdsLabel);
 			this.Controls.Add(this.fileCountLinkLabel);
 			this.Controls.Add(this.copyFilesButton);
-			this.Controls.Add(this.outputDesitinationBrowseButton);
+			this.Controls.Add(this.outputDestinationBrowseButton);
 			this.Controls.Add(this.outputDestinationTextBox);
 			this.Controls.Add(this.outputDestinationTextBoxLabel);
 			this.Controls.Add(this.processIdComboBox);
@@ -226,7 +226,7 @@
 		private System.Windows.Forms.ComboBox processIdComboBox;
 		private System.Windows.Forms.Label outputDestinationTextBoxLabel;
 		private System.Windows.Forms.TextBox outputDestinationTextBox;
-		private System.Windows.Forms.Button outputDesitinationBrowseButton;
+		private System.Windows.Forms.Button outputDestinationBrowseButton;
 		private System.Windows.Forms.Button copyFilesButton;
 		private System.Windows.Forms.LinkLabel fileCountLinkLabel;
 		private System.Windows.Forms.Label ApplicantProcessIdsLabel;
