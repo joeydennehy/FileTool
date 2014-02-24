@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using API.FileIO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -233,8 +234,8 @@ namespace Test.API.FileIO
 					controlFolderList.Add(string.Format("{0}{1}", state.OutputDirectory, fileTestCase.Key.Substring(rootControlFolderPath.Length)));
 				}
 			}
-
-			FileProcessing.MoveFilesToDestination(state);
+			var output = new StringBuilder();
+			FileProcessing.MoveFilesToDestination(state, ref output);
 
 			string [] outputFiles = Directory.GetFiles(state.OutputDirectory, "*.*", SearchOption.AllDirectories);
 

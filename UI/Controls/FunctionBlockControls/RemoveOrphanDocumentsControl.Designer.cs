@@ -40,25 +40,25 @@
 			this.stateDataTextBox = new System.Windows.Forms.TextBox();
 			this.fileNotFoundLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.EvaluateFilesButton = new System.Windows.Forms.Button();
+			this.fileStatisticsLabel = new System.Windows.Forms.Label();
+			this.unreferencedFilesLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// rootProcessingFolder
 			// 
 			this.rootProcessingFolder.AutoSize = true;
-			this.rootProcessingFolder.Location = new System.Drawing.Point(19, 63);
-			this.rootProcessingFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.rootProcessingFolder.Location = new System.Drawing.Point(14, 51);
 			this.rootProcessingFolder.Name = "rootProcessingFolder";
-			this.rootProcessingFolder.Size = new System.Drawing.Size(141, 17);
+			this.rootProcessingFolder.Size = new System.Drawing.Size(106, 13);
 			this.rootProcessingFolder.TabIndex = 5;
 			this.rootProcessingFolder.Text = "Root Process Folder:";
 			// 
 			// foundationIdComboBox
 			// 
 			this.foundationIdComboBox.FormattingEnabled = true;
-			this.foundationIdComboBox.Location = new System.Drawing.Point(23, 34);
-			this.foundationIdComboBox.Margin = new System.Windows.Forms.Padding(4);
+			this.foundationIdComboBox.Location = new System.Drawing.Point(14, 28);
 			this.foundationIdComboBox.Name = "foundationIdComboBox";
-			this.foundationIdComboBox.Size = new System.Drawing.Size(820, 24);
+			this.foundationIdComboBox.Size = new System.Drawing.Size(616, 21);
 			this.foundationIdComboBox.TabIndex = 4;
 			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedValueChanged_FoundationDropDown);
 			this.foundationIdComboBox.Leave += new System.EventHandler(this.OnLeave_FoundationDropDown);
@@ -67,29 +67,28 @@
 			// foundationIdComboBoxLabel
 			// 
 			this.foundationIdComboBoxLabel.AutoSize = true;
-			this.foundationIdComboBoxLabel.Location = new System.Drawing.Point(19, 14);
-			this.foundationIdComboBoxLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.foundationIdComboBoxLabel.Location = new System.Drawing.Point(14, 11);
 			this.foundationIdComboBoxLabel.Name = "foundationIdComboBoxLabel";
-			this.foundationIdComboBoxLabel.Size = new System.Drawing.Size(100, 17);
+			this.foundationIdComboBoxLabel.Size = new System.Drawing.Size(77, 13);
 			this.foundationIdComboBoxLabel.TabIndex = 3;
 			this.foundationIdComboBoxLabel.Text = "Foundation ID:";
 			// 
 			// moveFilesTextBox
 			// 
-			this.moveFilesTextBox.Location = new System.Drawing.Point(278, 103);
+			this.moveFilesTextBox.Location = new System.Drawing.Point(208, 105);
+			this.moveFilesTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.moveFilesTextBox.Multiline = true;
 			this.moveFilesTextBox.Name = "moveFilesTextBox";
 			this.moveFilesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.moveFilesTextBox.Size = new System.Drawing.Size(565, 291);
+			this.moveFilesTextBox.Size = new System.Drawing.Size(425, 216);
 			this.moveFilesTextBox.TabIndex = 6;
 			this.moveFilesTextBox.WordWrap = false;
 			// 
 			// browseButton
 			// 
-			this.browseButton.Location = new System.Drawing.Point(805, 443);
-			this.browseButton.Margin = new System.Windows.Forms.Padding(4);
+			this.browseButton.Location = new System.Drawing.Point(604, 360);
 			this.browseButton.Name = "browseButton";
-			this.browseButton.Size = new System.Drawing.Size(36, 28);
+			this.browseButton.Size = new System.Drawing.Size(27, 23);
 			this.browseButton.TabIndex = 9;
 			this.browseButton.Text = "...";
 			this.browseButton.UseVisualStyleBackColor = true;
@@ -97,29 +96,26 @@
 			// 
 			// moveLocationTextBox
 			// 
-			this.moveLocationTextBox.Location = new System.Drawing.Point(23, 446);
-			this.moveLocationTextBox.Margin = new System.Windows.Forms.Padding(4);
+			this.moveLocationTextBox.Location = new System.Drawing.Point(14, 362);
 			this.moveLocationTextBox.Name = "moveLocationTextBox";
-			this.moveLocationTextBox.Size = new System.Drawing.Size(772, 22);
+			this.moveLocationTextBox.Size = new System.Drawing.Size(584, 20);
 			this.moveLocationTextBox.TabIndex = 8;
 			this.moveLocationTextBox.TextChanged += new System.EventHandler(this.TextChanged_MoveLocationTextBox);
 			// 
 			// sourceLabel
 			// 
 			this.sourceLabel.AutoSize = true;
-			this.sourceLabel.Location = new System.Drawing.Point(23, 427);
-			this.sourceLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.sourceLabel.Location = new System.Drawing.Point(14, 347);
 			this.sourceLabel.Name = "sourceLabel";
-			this.sourceLabel.Size = new System.Drawing.Size(130, 17);
+			this.sourceLabel.Size = new System.Drawing.Size(100, 13);
 			this.sourceLabel.TabIndex = 7;
 			this.sourceLabel.Text = "Move File Location:";
 			// 
 			// moveFilesButton
 			// 
-			this.moveFilesButton.Location = new System.Drawing.Point(144, 476);
-			this.moveFilesButton.Margin = new System.Windows.Forms.Padding(4);
+			this.moveFilesButton.Location = new System.Drawing.Point(106, 387);
 			this.moveFilesButton.Name = "moveFilesButton";
-			this.moveFilesButton.Size = new System.Drawing.Size(100, 28);
+			this.moveFilesButton.Size = new System.Drawing.Size(86, 23);
 			this.moveFilesButton.TabIndex = 13;
 			this.moveFilesButton.Text = "Move Files";
 			this.moveFilesButton.UseVisualStyleBackColor = true;
@@ -127,10 +123,9 @@
 			// 
 			// moveFilesBackButton
 			// 
-			this.moveFilesBackButton.Location = new System.Drawing.Point(252, 476);
-			this.moveFilesBackButton.Margin = new System.Windows.Forms.Padding(4);
+			this.moveFilesBackButton.Location = new System.Drawing.Point(198, 387);
 			this.moveFilesBackButton.Name = "moveFilesBackButton";
-			this.moveFilesBackButton.Size = new System.Drawing.Size(130, 28);
+			this.moveFilesBackButton.Size = new System.Drawing.Size(86, 23);
 			this.moveFilesBackButton.TabIndex = 14;
 			this.moveFilesBackButton.Text = "Move Files Back";
 			this.moveFilesBackButton.UseVisualStyleBackColor = true;
@@ -138,20 +133,20 @@
 			// 
 			// stateDataTextBox
 			// 
-			this.stateDataTextBox.Location = new System.Drawing.Point(23, 103);
+			this.stateDataTextBox.Location = new System.Drawing.Point(14, 105);
+			this.stateDataTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.stateDataTextBox.Multiline = true;
 			this.stateDataTextBox.Name = "stateDataTextBox";
 			this.stateDataTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.stateDataTextBox.Size = new System.Drawing.Size(246, 291);
+			this.stateDataTextBox.Size = new System.Drawing.Size(186, 216);
 			this.stateDataTextBox.TabIndex = 15;
 			// 
 			// fileNotFoundLinkLabel
 			// 
 			this.fileNotFoundLinkLabel.AutoSize = true;
-			this.fileNotFoundLinkLabel.Location = new System.Drawing.Point(23, 397);
-			this.fileNotFoundLinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.fileNotFoundLinkLabel.Location = new System.Drawing.Point(14, 323);
 			this.fileNotFoundLinkLabel.Name = "fileNotFoundLinkLabel";
-			this.fileNotFoundLinkLabel.Size = new System.Drawing.Size(185, 17);
+			this.fileNotFoundLinkLabel.Size = new System.Drawing.Size(140, 13);
 			this.fileNotFoundLinkLabel.TabIndex = 16;
 			this.fileNotFoundLinkLabel.TabStop = true;
 			this.fileNotFoundLinkLabel.Text = "Referenced Files Not Found";
@@ -159,18 +154,37 @@
 			// 
 			// EvaluateFilesButton
 			// 
-			this.EvaluateFilesButton.Location = new System.Drawing.Point(22, 476);
-			this.EvaluateFilesButton.Margin = new System.Windows.Forms.Padding(4);
+			this.EvaluateFilesButton.Location = new System.Drawing.Point(14, 387);
 			this.EvaluateFilesButton.Name = "EvaluateFilesButton";
-			this.EvaluateFilesButton.Size = new System.Drawing.Size(114, 28);
+			this.EvaluateFilesButton.Size = new System.Drawing.Size(86, 23);
 			this.EvaluateFilesButton.TabIndex = 17;
 			this.EvaluateFilesButton.Text = "Evaluate Files";
 			this.EvaluateFilesButton.UseVisualStyleBackColor = true;
 			this.EvaluateFilesButton.Click += new System.EventHandler(this.ButtonClick_EvaluateFilesButton);
 			// 
+			// fileStatisticsLabel
+			// 
+			this.fileStatisticsLabel.AutoSize = true;
+			this.fileStatisticsLabel.Location = new System.Drawing.Point(14, 87);
+			this.fileStatisticsLabel.Name = "fileStatisticsLabel";
+			this.fileStatisticsLabel.Size = new System.Drawing.Size(71, 13);
+			this.fileStatisticsLabel.TabIndex = 18;
+			this.fileStatisticsLabel.Text = "File Statistics:";
+			// 
+			// unreferencedFilesLabel
+			// 
+			this.unreferencedFilesLabel.AutoSize = true;
+			this.unreferencedFilesLabel.Location = new System.Drawing.Point(208, 87);
+			this.unreferencedFilesLabel.Name = "unreferencedFilesLabel";
+			this.unreferencedFilesLabel.Size = new System.Drawing.Size(99, 13);
+			this.unreferencedFilesLabel.TabIndex = 19;
+			this.unreferencedFilesLabel.Text = "Unreferenced Files:";
+			// 
 			// RemoveOrphanDocumentsControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.Controls.Add(this.unreferencedFilesLabel);
+			this.Controls.Add(this.fileStatisticsLabel);
 			this.Controls.Add(this.EvaluateFilesButton);
 			this.Controls.Add(this.fileNotFoundLinkLabel);
 			this.Controls.Add(this.stateDataTextBox);
@@ -183,7 +197,7 @@
 			this.Controls.Add(this.rootProcessingFolder);
 			this.Controls.Add(this.foundationIdComboBox);
 			this.Controls.Add(this.foundationIdComboBoxLabel);
-			this.Margin = new System.Windows.Forms.Padding(5);
+			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.Name = "RemoveOrphanDocumentsControl";
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -204,6 +218,8 @@
         private System.Windows.Forms.TextBox stateDataTextBox;
 		  private System.Windows.Forms.LinkLabel fileNotFoundLinkLabel;
 		  private System.Windows.Forms.Button EvaluateFilesButton;
+		  private System.Windows.Forms.Label fileStatisticsLabel;
+		  private System.Windows.Forms.Label unreferencedFilesLabel;
 
     }
 }

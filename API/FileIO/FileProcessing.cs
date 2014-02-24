@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using API.Data;
 using API.Logging;
+using log4net.Core;
 
 namespace API.FileIO
 {
@@ -195,31 +196,66 @@ namespace API.FileIO
 		//	Logger.Log(string.Format("Total File Size: {0}", state.TotalSize), LogLevel.Info);
 		//}
 
-		public static void MoveFilesToDestination(FoundationDataFileState state)
+		public static void MoveFilesToDestination(FoundationDataFileState state, ref StringBuilder outputData, bool cleanSequesterFolder = false)
 		{
+			if(outputData == null)
+				outputData = new StringBuilder();
+			var movedFilesOutput = new StringBuilder();
+			var errorFilesOutput = new StringBuilder();
+
+			int movedFileCount = 0, errorCount = 0;
+
 			Logger.Log("Move unreferenced data files start", LogLevel.Info);
 			Logger.Log(string.Format("Current Task State:\r\n{0}", state), LogLevel.Info);
 
 			if (state.SequesterFiles == null || state.SequesterFiles.Count == 0)
 			{
-				Logger.Log("MoveFilesToDestination: no files selected to copy", LogLevel.Warn);
+				const string OUTPUT_WARNING = "MoveFilesToDestination: no files selected to copy";
+				Logger.Log(OUTPUT_WARNING, LogLevel.Warn);
+				outputData.AppendLine(OUTPUT_WARNING);
 				return;
 			}
 
 			if (string.IsNullOrEmpty(state.OutputDirectory))
 			{
-				Logger.Log("MoveFilesToDestination: No destination selected for copy", LogLevel.Error);
+				const string OUTPUT_ERROR = "MoveFilesToDestination: No destination selected for copy";
+				Logger.Log(OUTPUT_ERROR, LogLevel.Error);
+				outputData.AppendLine(OUTPUT_ERROR);
 				return;
 			}
+			string outputFolder = state.OutputDirectory;
+			if (outputFolder.LastIndexOf(state.FoundationUrlKey, StringComparison.CurrentCulture) < 0)
+				outputFolder = string.Format("{0}\\{1}", outputFolder, state.FoundationUrlKey);
 
-			if (!Directory.Exists(state.OutputDirectory))
+			if (!Directory.Exists(outputFolder))
 			{
-				Directory.CreateDirectory(state.OutputDirectory);
+				Directory.CreateDirectory(outputFolder);
+			}
+			else
+			{
+				if (cleanSequesterFolder)
+				{
+					foreach (var directory in Directory.GetDirectories(outputFolder))
+					{
+						var subFolder = new DirectoryInfo(directory);
+						subFolder.Delete(true);
+					}
+					foreach (var file in Directory.GetFiles(outputFolder))
+					{
+						var fileInfo = new FileInfo(file);
+						fileInfo.Delete();
+					}
+				}
+				else
+				{
+					throw new IOException("Directory Not Empty");
+				}
 			}
 
 			foreach (FileInfo file in state.SequesterFiles)
 			{
-				string directory = string.Format("{0}\\{1}", state.OutputDirectory, file.Directory.FullName.Substring(state.ClientRootDirectory.Length));
+				
+				string directory = string.Format("{0}\\{1}", outputFolder, file.Directory.FullName.Substring(state.ClientRootDirectory.Length-1));
 				if (!Directory.Exists(directory))
 				{
 					Directory.CreateDirectory(directory);
@@ -228,13 +264,33 @@ namespace API.FileIO
 				try
 				{
 					File.Move(file.FullName, fullDestinationPath);
-					Logger.Log("Moved file " + file.FullName + " to " + fullDestinationPath, LogLevel.Info);
+					string movedFileOutput = string.Format("Moved file " + file.FullName + " to " + fullDestinationPath);
+					movedFileCount += 1;
+					movedFilesOutput.AppendLine(movedFileOutput);
+					Logger.Log(movedFileOutput, LogLevel.Info);
 				}
 				catch (Exception eError)
 				{
-					Logger.Log(string.Format("Unable to move file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
-					throw;
+					string errorText = string.Format("Unable to move file {0}.  Error: {1} ", file.FullName, eError.Message);
+					errorCount += 1;
+					errorFilesOutput.AppendLine(errorText);
+					Logger.Log(string.Format(errorText), LogLevel.Error);
 				}
+			}
+
+			outputData.AppendLine("File Move Details:");
+			outputData.AppendLine(string.Format("Total number of files moved: {0}", movedFileCount));
+			outputData.AppendLine(string.Format("Total number of errors encountered: {0}", errorCount));
+
+			outputData.AppendLine("Files Moved:");
+			outputData.Append(movedFilesOutput);
+			outputData.AppendLine();
+
+			if (errorCount > 0)
+			{
+				outputData.AppendLine("Errors Encountered:");
+				outputData.Append(errorFilesOutput);
+				outputData.AppendLine();
 			}
 
 			Logger.Log("Move unreferenced data files end", LogLevel.Info);

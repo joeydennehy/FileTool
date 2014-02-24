@@ -37,19 +37,20 @@
 			this.fileListRichText.Location = new System.Drawing.Point(0, 0);
 			this.fileListRichText.Name = "fileListRichText";
 			this.fileListRichText.ReadOnly = true;
-			this.fileListRichText.Size = new System.Drawing.Size(483, 483);
+			this.fileListRichText.Size = new System.Drawing.Size(843, 483);
 			this.fileListRichText.TabIndex = 0;
 			this.fileListRichText.Text = "";
+			this.fileListRichText.WordWrap = false;
 			// 
 			// FileListDisplayForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(483, 483);
+			this.ClientSize = new System.Drawing.Size(843, 483);
 			this.Controls.Add(this.fileListRichText);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "FileListDisplayForm";
-			this.Text = "FileListDisplayForm";
+			this.Text = "File List";
 			this.ResumeLayout(false);
 
 		}
