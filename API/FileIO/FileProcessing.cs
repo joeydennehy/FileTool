@@ -125,6 +125,33 @@ namespace API.FileIO
 			}
 		}
 
+		public static void CleanUpFolders(FoundationDataFileState state)
+		{
+			string[] validDirectories =
+			{
+				"loi", "application", "qualification", "evaluation 1", "evaluation 2", "followup",
+				"supportingdocuments"
+			};
+
+			string [] directories = Directory.GetDirectories(state.ClientRootDirectory);
+
+			foreach (string directory in directories)
+			{
+				if (!directory.Contains("shared"))
+				{
+					string[] subDirectories = Directory.GetDirectories(directory);
+
+					foreach (string subDirectory in subDirectories)
+					{
+						if (!validDirectories.Any(dir => subDirectory.Contains(dir)))
+						{
+							Directory.Delete(subDirectory,true);
+						}
+					}
+				}
+			}
+		}
+
 		public static bool CheckFoundationPath(FoundationDataFileState state)
 		{
 			return Directory.Exists(state.ClientRootDirectory);

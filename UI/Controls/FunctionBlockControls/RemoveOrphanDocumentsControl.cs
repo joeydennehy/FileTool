@@ -170,7 +170,7 @@ namespace UI.Controls.FunctionBlockControls
 				//state.MovedFromDirectory = state.ClientRootDirectory;
 				
 				FileProcessing.MoveFilesToDestination(state);
-				
+				//FileProcessing.CleanUpFolders(state);
 				moveFilesBackButton.Enabled = true;
 			}
 			catch (Exception eError)
