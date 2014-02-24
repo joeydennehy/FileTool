@@ -189,7 +189,7 @@ namespace API.FileIO
 
 			foreach (FileInfo file in files)
 			{
-				string fullFileName = string.Format("{0}{1}", destinationFolder, BuildApplicationProcessFileName(file));
+				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
 				try
 				{
 					var destinationFile = new FileInfo(fullFileName);
@@ -387,18 +387,13 @@ namespace API.FileIO
 				}
 				else
 				{
-					Logger.Log(
-					           String.Format(
-					                         "BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed",
-						           file.FullName), LogLevel.Error);
+					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed",file.FullName), LogLevel.Error);
 					return string.Empty;
 				}
 
 				var rootFileFolder = new DirectoryInfo(string.Join("\\", folders.GetRange(0, folders.Count - 1)));
-				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories()
-					.ToList();
-				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s)))
-					.Any();
+				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories().ToList();
+				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s))).Any();
 			}
 
 			if (useProcessSubFolderFormat)
