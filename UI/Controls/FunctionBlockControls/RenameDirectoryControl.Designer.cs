@@ -30,7 +30,7 @@
 		{
 			this.foundationIdComboBox = new System.Windows.Forms.ComboBox();
 			this.foundationIdComboBoxLabel = new System.Windows.Forms.Label();
-			this.MissMatchRequestCodeTextBox = new System.Windows.Forms.TextBox();
+			this.MisMatchRequestCodeTextBox = new System.Windows.Forms.TextBox();
 			this.EvaluateFilesButton = new System.Windows.Forms.Button();
 			this.instructionLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
@@ -45,6 +45,7 @@
 			this.foundationIdComboBox.TabIndex = 3;
 			this.foundationIdComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged_FoundationIdComboBox);
 			this.foundationIdComboBox.DragLeave += new System.EventHandler(this.OnLeave_FoundationDropDown);
+			this.foundationIdComboBox.Leave += new System.EventHandler(this.OnLeave_FoundationDropDown);
 			this.foundationIdComboBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick_comboBox);
 			// 
 			// foundationIdComboBoxLabel
@@ -57,15 +58,15 @@
 			this.foundationIdComboBoxLabel.TabIndex = 2;
 			this.foundationIdComboBoxLabel.Text = "Foundation ID:";
 			// 
-			// MissMatchRequestCodeTextBox
+			// MisMatchRequestCodeTextBox
 			// 
-			this.MissMatchRequestCodeTextBox.Location = new System.Drawing.Point(25, 93);
-			this.MissMatchRequestCodeTextBox.Multiline = true;
-			this.MissMatchRequestCodeTextBox.Name = "MissMatchRequestCodeTextBox";
-			this.MissMatchRequestCodeTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.MissMatchRequestCodeTextBox.Size = new System.Drawing.Size(820, 330);
-			this.MissMatchRequestCodeTextBox.TabIndex = 7;
-			this.MissMatchRequestCodeTextBox.WordWrap = false;
+			this.MisMatchRequestCodeTextBox.Location = new System.Drawing.Point(25, 93);
+			this.MisMatchRequestCodeTextBox.Multiline = true;
+			this.MisMatchRequestCodeTextBox.Name = "MisMatchRequestCodeTextBox";
+			this.MisMatchRequestCodeTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.MisMatchRequestCodeTextBox.Size = new System.Drawing.Size(820, 330);
+			this.MisMatchRequestCodeTextBox.TabIndex = 7;
+			this.MisMatchRequestCodeTextBox.WordWrap = false;
 			// 
 			// EvaluateFilesButton
 			// 
@@ -93,7 +94,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.Controls.Add(this.instructionLabel);
 			this.Controls.Add(this.EvaluateFilesButton);
-			this.Controls.Add(this.MissMatchRequestCodeTextBox);
+			this.Controls.Add(this.MisMatchRequestCodeTextBox);
 			this.Controls.Add(this.foundationIdComboBox);
 			this.Controls.Add(this.foundationIdComboBoxLabel);
 			this.Margin = new System.Windows.Forms.Padding(5);
@@ -107,7 +108,7 @@
 
 		private System.Windows.Forms.ComboBox foundationIdComboBox;
 		private System.Windows.Forms.Label foundationIdComboBoxLabel;
-		private System.Windows.Forms.TextBox MissMatchRequestCodeTextBox;
+		private System.Windows.Forms.TextBox MisMatchRequestCodeTextBox;
 		private System.Windows.Forms.Button EvaluateFilesButton;
 		private System.Windows.Forms.Label instructionLabel;
 

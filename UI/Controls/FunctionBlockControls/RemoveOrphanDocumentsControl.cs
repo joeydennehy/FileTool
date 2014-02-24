@@ -188,7 +188,7 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				FileProcessing.MoveFilesToDestination(state, ref fileOutput, true);
-				
+				//FileProcessing.CleanUpFolders(state);
 				moveFilesBackButton.Enabled = true;
 
 				try
