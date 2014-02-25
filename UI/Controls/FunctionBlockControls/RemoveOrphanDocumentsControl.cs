@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -7,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using API.Config;
 using API.Data;
 using API.FileIO;
 using API.Logging;
@@ -60,6 +60,8 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				BaseDirectory = ParentControl.SourceLocation
 			};
+
+			moveLocationTextBox.Text = ApplicationConfiguration.GetSetting(ApplicationConfiguration.OUTPOUT_PATH_KEY);
 
 			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationTextBox.Text) && state.SequesterFiles.Any();
 			moveFilesBackButton.Enabled = false;
@@ -160,6 +162,7 @@ namespace UI.Controls.FunctionBlockControls
 			try
 			{
 				EvaluateFiles();
+				CheckToEnableMoveButton();
 			}
 			catch (Exception eError)
 			{
@@ -251,6 +254,12 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
+		private void CheckToEnableMoveButton()
+		{
+			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationTextBox.Text)
+											  && !string.IsNullOrWhiteSpace(moveFilesTextBox.Text);
+		}
+
 		private void LinkClicked_FileNotFoundLinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var fileNotFound = new FileNotFoundForm(state);
@@ -326,8 +335,7 @@ namespace UI.Controls.FunctionBlockControls
 		private void TextChanged_MoveLocationTextBox(object sender, EventArgs e)
 		{
 			state.OutputDirectory = moveLocationTextBox.Text;
-			moveFilesButton.Enabled = !string.IsNullOrWhiteSpace(moveLocationTextBox.Text)
-			                          && !string.IsNullOrWhiteSpace(moveFilesTextBox.Text);
+			CheckToEnableMoveButton();
 		}
 
 		#endregion

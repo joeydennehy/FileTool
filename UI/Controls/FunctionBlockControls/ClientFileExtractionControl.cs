@@ -96,6 +96,9 @@ namespace UI.Controls.FunctionBlockControls
 				BaseDirectory = ParentControl.SourceLocation
 			};
 			System.Diagnostics.Debug.Print(ParentControl.SourceLocation);
+
+			outputDestinationTextBox.Text = ApplicationConfiguration.GetSetting(ApplicationConfiguration.OUTPOUT_PATH_KEY);
+
 			try
 			{
 				//Bind Foundation List

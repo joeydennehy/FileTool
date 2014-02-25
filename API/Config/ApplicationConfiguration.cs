@@ -11,6 +11,7 @@ namespace API.Config
 	{
 		private const string FILE_MASK_KEY = "FileMaskedConfig";
 		public const string BASE_UPLOAD_PATH_KEY = "BaseUploadDirectory";
+		public const string OUTPOUT_PATH_KEY = "OutputDirectory";
 
 		private static Hashtable fileMaskSettings;
 
