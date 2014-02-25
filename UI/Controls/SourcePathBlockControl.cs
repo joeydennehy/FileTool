@@ -50,12 +50,7 @@ namespace UI.Controls
 
 			sourceLocationText.Text = directoryPath;
 
-			int firstFolderLocation = sourceLocationText.Text.IndexOf('\\');
-			int lastFolderLocation = sourceLocationText.Text.LastIndexOf('\\');
-			sourceLocationText.SelectionStart = firstFolderLocation - lastFolderLocation == 0
-				? sourceLocationText.Text.Length
-				: sourceLocationText.Text.Length - 1;
-
+			sourceLocationText.SelectionStart = sourceLocationText.Text.Length;
 			sourceLocationText.SelectionLength = 0;
 
 			sourceLocationText.TextChanged += TextChanged_SourceFolder;
@@ -89,9 +84,6 @@ namespace UI.Controls
 			if (string.IsNullOrWhiteSpace(directoryPath))
 				return false;
 
-			if (directoryPath.StartsWith("\\"))
-				throw new ArgumentException(VIRTUAL_PATH_MESSAGE);
-
 			var directory = new DirectoryInfo(directoryPath);
 			if(!directory.Exists)
 				throw new ArgumentException(INVALID_PATH_ERROR);
@@ -124,10 +116,8 @@ namespace UI.Controls
 		private void TextChanged_SourceFolder(object sender, EventArgs e)
 		{
 			string selectedPath = sourceLocationText.Text;
-			if(!selectedPath.EndsWith("\\"))
-				selectedPath = string.Format("{0}\\", selectedPath);
-
-			selectedPath = selectedPath.Replace("\\\\", "\\");
+			if (selectedPath.EndsWith("\\"))
+				selectedPath = selectedPath.TrimEnd('\\');
 
 			if (selectedPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
 			{
