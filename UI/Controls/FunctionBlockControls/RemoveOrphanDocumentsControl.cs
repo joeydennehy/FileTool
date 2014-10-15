@@ -134,7 +134,7 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void EvaluateFiles()
 		{
-			List<string> fileList = RequestQuery.GetFoundationFileList(state.FoundationId);
+			Dictionary<string, string> fileList = RequestQuery.GetFoundationFileList(state.FoundationId);
 			stateDataTextBox.Text = fileList.Any() ? "Processing..." : "No Files Found";
 
 			if (fileList.Any())
@@ -175,7 +175,7 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
-		private void ButtonClick_MoveFiles(object sender, EventArgs e)
+		/*private void ButtonClick_MoveFiles(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			string outputFileName = string.Empty;
@@ -221,7 +221,7 @@ namespace UI.Controls.FunctionBlockControls
 				Cursor = Cursors.Default;
 				MessageBox.Show(this, string.Format(FILE_MOVE_COMPLETED, outputFileName), FILE_MOVE_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
-		}
+		}*/
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
 		{
@@ -239,7 +239,7 @@ namespace UI.Controls.FunctionBlockControls
 			}
 		}
 
-		private void ButtonClick_MoveFilesBack(object sender, EventArgs e)
+		/*private void ButtonClick_MoveFilesBack(object sender, EventArgs e)
 		{
 			try
 			{
@@ -252,7 +252,7 @@ namespace UI.Controls.FunctionBlockControls
 				MessageBox.Show(this, string.Format(EVALUATE_FILE_ERROR_FORMAT, eError.Message), EVALUATE_FILE_CAPTION,
 					MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-		}
+		}*/
 
 		private void CheckToEnableMoveButton()
 		{
@@ -260,7 +260,7 @@ namespace UI.Controls.FunctionBlockControls
 											  && !string.IsNullOrWhiteSpace(moveFilesTextBox.Text);
 		}
 
-		private void LinkClicked_FileNotFoundLinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
+		/*private void LinkClicked_FileNotFoundLinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var fileNotFound = new FileNotFoundForm(state);
 			DialogResult result = fileNotFound.ShowDialog();
@@ -269,7 +269,7 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				FileProcessing.DeleteRecords(state);
 			}
-		}
+		}*/
 
 		private void MouseClick_comboBox(object sender, MouseEventArgs e)
 		{

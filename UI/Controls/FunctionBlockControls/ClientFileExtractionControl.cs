@@ -109,9 +109,9 @@ namespace UI.Controls.FunctionBlockControls
 				foundationIdComboBox.ValueMember = "FoundationId";
 
 				//Bind File Types
-				fileTypeComboBox.DataSource = new BindingSource(ApplicationConfiguration.FileMaskSettings, null);
+			/*	fileTypeComboBox.DataSource = new BindingSource(ApplicationConfiguration.FileMaskSettings, null);
 				fileTypeComboBox.DisplayMember = "Key";
-				fileTypeComboBox.ValueMember = "Value";
+				fileTypeComboBox.ValueMember = "Value";*/
 			}
 			catch (Exception eError)
 			{
@@ -191,11 +191,11 @@ namespace UI.Controls.FunctionBlockControls
 		
 		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var fileExclusions = new FileExclusionsForm(state);
+			//var fileExclusions = new FileExclusionsForm(state);
 
-			DialogResult result =fileExclusions.ShowDialog();
+			//DialogResult result =fileExclusions.ShowDialog();
 
-			if (result == DialogResult.OK)
+			/*if (result == DialogResult.OK)
 			{
 				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
 			}
@@ -207,7 +207,7 @@ namespace UI.Controls.FunctionBlockControls
 			else
 			{
 				secludedFileCountlinkLabel.Text = NO_FILE_EXCLUSIONS;
-			}
+			}*/
 			
 		}
 
@@ -240,9 +240,9 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void LinkClick_SecludedFileCountlinkLabel(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var fileListDisplay = new FileListDisplayForm(state.SequesterFiles);
+			/*var fileListDisplay = new FileListDisplayForm(state.SequesterFiles);
 
-			fileListDisplay.ShowDialog(this);
+			fileListDisplay.ShowDialog(this);*/
 		}
 
 		private void MouseClick_comboBox(object sender, MouseEventArgs e)
@@ -292,12 +292,9 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedIndexChanged_FileTypeComboBox(object sender, EventArgs e)
 		{
-			string selectedFilePattern = ((KeyValuePair<string, string>)((ComboBox)sender).SelectedItem).Value;
-
-			if (string.Compare(state.FileMask, selectedFilePattern, StringComparison.InvariantCultureIgnoreCase) != 0)
+			if (((ComboBox)sender).SelectedItem != null)
 			{
-				state.FileMask = selectedFilePattern;
-
+				state.FileType = ((ComboBox)sender).SelectedItem.ToString();
 				SelectedIndexChanged_ProcessIdComboBox(processIdComboBox, new EventArgs());
 			}
 		}
@@ -305,6 +302,23 @@ namespace UI.Controls.FunctionBlockControls
 		private void SelectedValueChanged_FoundationDropDown(object sender, EventArgs e)
 		{
 			ChangeFoundationSelection(((DataRowView)foundationIdComboBox.SelectedItem).Row);
+			string[] validDirectories = {"requests", "organizations", "mergetemplates", "attachments", "shareddocuments"};
+			fileTypeComboBox.DataSource = null;
+			if (Directory.Exists(state.ClientRootDirectory))
+			{
+				List<string> directories = Directory.GetDirectories(string.Format("{0}", state.ClientRootDirectory))
+					.ToList();
+				for (int x = 0; x < directories.Count(); ++x)
+				{
+					directories[x] = new DirectoryInfo(directories[x]).Name;
+				}
+
+				directories = directories.Where(validDirectories.Contains)
+					.ToList();
+				directories.Insert(0, "All");
+				fileTypeComboBox.DataSource = directories;
+				fileTypeComboBox.SelectedIndex = 0;
+			}
 		}
 
 		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)
@@ -320,24 +334,69 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				Cursor = Cursors.WaitCursor;
 
-				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
+				//ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
 				fileCountLinkLabel.Text = WORKING;
 
 				state.FoundationProcessId = foundationProcessId;
 
 				try
 				{
-					state.FoundationApplicantProcessCodes = RequestQuery.RetrieveApplicationProcessInfo(foundationProcessId);
+					if (string.IsNullOrEmpty(state.FileType) || state.FileType == "All")
+					{
+						if (foundationProcessId == -999)
+						{
+							state.RequestFiles = RequestQuery.RetrieveAllRequestInfo(state.FoundationId);
+							state.RequestSupportingFiles = RequestQuery.RetrieveAllRequestSupportingInfo(state.FoundationId);
+						}
+						else
+						{
+							state.RequestFiles = RequestQuery.RetrieveRequestInfo(foundationProcessId);
+							state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(foundationProcessId);
+						}
+						state.OrganizationSupportingFiles = RequestQuery.RetrieveAllOrganizationSupportingInfo(state.FoundationId);
+						state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfo(state.FoundationId);
+						state.AttachmentFiles = RequestQuery.RetrieveAllAttachmentInfo(state.FoundationId);
+						state.SharedFiles = RequestQuery.RetrieveAllSharedInfo(state.FoundationId);
+					}
+					else
+					{
+						switch (state.FileType)
+						{
+							case "requests":
+								if (foundationProcessId == -999)
+								{
+									state.RequestFiles = RequestQuery.RetrieveAllRequestInfo(state.FoundationId);
+									state.RequestSupportingFiles = RequestQuery.RetrieveAllRequestSupportingInfo(state.FoundationId);
+								}
+								else
+								{
+									state.RequestFiles = RequestQuery.RetrieveRequestInfo(foundationProcessId);
+									state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(foundationProcessId);
+								}
+								break;
+							case "organizations":
+								state.OrganizationSupportingFiles = RequestQuery.RetrieveAllOrganizationSupportingInfo(state.FoundationId);
+								break;
+							case "mergetemplates":
+								state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfo(state.FoundationId);
+								break;
+							case "attachments":
+								state.AttachmentFiles = RequestQuery.RetrieveAllAttachmentInfo(state.FoundationId);
+								break;
+							case "shareddocuments":
+								state.SharedFiles = RequestQuery.RetrieveAllAttachmentInfo(state.FoundationId);
+								break;
+						}
+					}
+					
 				}
 				catch (Exception eError)
 				{
 					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 
-				ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessCodes.Count);
+				//ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessCodes.Count);
 
-				if (state.FoundationApplicantProcessCodes.Count > 0)
-				{
 					FileProcessing.SetFileList(state);
 
 					if (state.Files != null && state.Files.Count > 0)
@@ -349,11 +408,7 @@ namespace UI.Controls.FunctionBlockControls
 					{
 						fileCountLinkLabel.Text = NO_FILE_COUNT;
 					}
-				}
-				else
-				{
-					fileCountLinkLabel.Text = NO_FILE_COUNT;
-				}
+
 			}
 			catch (Exception eError)
 			{

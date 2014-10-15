@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
+using API.FileIO;
 using DataProvider.MySQL;
 using MySql.Data.MySqlClient;
 
@@ -63,57 +65,30 @@ namespace API.Data
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
+				
+
 				FoundationProcessData.Load(reader);
+
+				DataRow row = FoundationProcessData.NewRow();
+				row["ProcessDisplayText"] = "All";
+				row["FoundationProcessId"] = -999;
+
+				FoundationProcessData.Rows.InsertAt(row, 0);
+
 				reader.Close();
 			}
 		}
 
-		public static void GetRequestCodesAndIds(int foundationId)
+		public static Dictionary<string, string> GetFoundationFileList(int foundationId)
 		{
-			RequestData = new DataTable();
-
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
-			var command = new Command
-			{
-				SqlStatementId = "SELECT_MISMATCHED_REQUEST_ID_AND_CODE",
-				ParameterCollection = parameters
-			};
-
-			var access = new DataAccess();
-			using (MySqlDataReader reader = access.GetReader(command))
-			{
-				RequestData.Load(reader);
-				reader.Close();
-			}
-		}
-
-		public static void UpdateRequestCode(int requestId)
-		{
-			RequestData = new DataTable();
-
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "REQUEST_ID", requestId);
-			var command = new Command
-			{
-				SqlStatementId = "UPDATE_MISMATCHED_REQUEST_ID_AND_CODE",
-				ParameterCollection = parameters
-			};
-
-			var access = new DataAccess();
-			access.GetReader(command);
-		}
-
-		public static List<string> GetFoundationFileList(int foundationId)
-		{
-			var fileList = new List<string>();
+			var fileList = new Dictionary<string, string>();
 
 			var queryIds = new List<string>
 			{
 				"SELECT_SHARED_FILES_BY_FOUNDATION_ID",
 				"SELECT_ORG_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID",
-				"SELECT_APPLICATION_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID",
-				"SELECT_REQUEST_FILES_BY_URL_KEY",
+				"SELECT_REQUEST_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID",
+				"SELECT_REQUEST_FILES_BY_FOUNDATION_ID",
 			};
 
 			var parameters = new ParameterSet();
@@ -134,13 +109,14 @@ namespace API.Data
 					{
 						if (!reader.IsDBNull(0))
 						{
-							string partialFileName = reader.GetString(0)
+							string filePath = reader.GetString(0);
+							string fileName = (!reader.IsDBNull(1) ? reader.GetString(1) : "")
 								.Split(new[] {"[:|:]"}, StringSplitOptions.None)[0];
-							string fileName = Path.GetFileName(partialFileName);
+							
 
-							if (!string.IsNullOrEmpty(fileName) && !fileList.Contains(partialFileName))
+							if (!string.IsNullOrEmpty(fileName) && !fileList.Keys.Contains(filePath))
 							{
-								fileList.Add(partialFileName.ToLower());
+								fileList.Add(filePath, fileName);
 							}
 						}
 					}
@@ -150,19 +126,19 @@ namespace API.Data
 			return fileList;
 		}
 
-		public static List<string> RetrieveApplicationProcessInfo(int foundationProcess)
+		public static List<FoundationDataFileState.FileInfo> RetrieveRequestInfo(int foundationProcess)
 		{
 			var parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);
 			var command = new Command
 			{
-				SqlStatementId = "SELECT_APPLICATION_PROCESS_INFO",
+				SqlStatementId = "SELECT_REQUEST_INFO",
 				ParameterCollection = parameters
 			};
 
 			var access = new DataAccess();
 
-			var foundationProcesses = new List<string>();
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
@@ -170,12 +146,267 @@ namespace API.Data
 				{
 					if (!reader.IsDBNull(0))
 					{
-						foundationProcesses.Add(reader.GetString(0));
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							AnswerId = reader.GetInt32(0),
+							SubmissionId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							RequestId = reader.IsDBNull(2) ? -1 : reader.GetInt32(2),
+							FileName = reader.IsDBNull(3) ? "" : reader.GetString(3).Split(new string[] { "[:|:]" }, StringSplitOptions.None)[0],
+							Question = reader.IsDBNull(5) ? "" : reader.GetString(5)
+						};
+						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
+												 + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
 					}
 				}
 			}
 
-			return foundationProcesses;
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllRequestInfo(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_REQUEST_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							AnswerId = reader.GetInt32(0),
+							SubmissionId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							RequestId = reader.IsDBNull(2) ? -1 : reader.GetInt32(2),
+							FileName = reader.IsDBNull(3) ? "" : reader.GetString(3).Split(new string[] { "[:|:]" }, StringSplitOptions.None)[0]
+						};
+						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
+						                   + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveRequestSupportingInfo(int foundationProcess)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_PROCESS", foundationProcess);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_REQUEST_SUPPORTING_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							RequestId = reader.GetInt32(0),
+							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2)
+						};
+						fileIds.FilePath = "\\Requests\\Supporting\\" + fileIds.RequestId + "_RS_" + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllRequestSupportingInfo(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_REQUEST_SUPPORTING_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							RequestId = reader.GetInt32(0),
+							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2)
+						};
+						fileIds.FilePath = "\\Requests\\Supporting\\" + fileIds.RequestId + "_RS_" + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllOrganizationSupportingInfo(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_ORGANIZATION_SUPPORTING_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							OrganizationId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
+							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2)
+						};
+						fileIds.FilePath = "\\Organizations\\" + fileIds.OrganizationId + "_OS_" + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllAttachmentInfo(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_ATTACHMENT_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							AttachmentId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
+							FileName = reader.IsDBNull(1) ? "" : reader.GetString(1)
+						};
+						fileIds.FilePath = "\\Attachments\\" + fileIds.AttachmentId + "_" + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllMergeTemplateInfo(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_MERGE_TEMPLATE_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							MergeTemplateId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
+							FileName = reader.IsDBNull(1) ? "" : reader.GetString(1)
+						};
+						fileIds.FilePath = "\\Merge_Templates\\" + fileIds.MergeTemplateId + "_" + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
+		}
+
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllSharedInfo(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_SHARED_INFO",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var fileIds = new FoundationDataFileState.FileInfo
+						{
+							DocumentId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
+							FileName = reader.IsDBNull(1) ? "" : reader.GetString(1)
+
+						};
+						fileIds.FilePath = "\\Shared_Documents\\" + fileIds.FileName;
+						requestSupporitngFiles.Add(fileIds);
+					}
+				}
+			}
+
+			return requestSupporitngFiles;
 		}
 
 		public static void DeleteRequestRecords(int foundationId, string requestCode, string stageName, string fileName)

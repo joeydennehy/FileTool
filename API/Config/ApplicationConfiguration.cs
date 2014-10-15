@@ -9,7 +9,7 @@ namespace API.Config
 {
 	public static class ApplicationConfiguration
 	{
-		private const string FILE_MASK_KEY = "FileMaskedConfig";
+		//private const string FILE_MASK_KEY = "FileMaskedConfig";
 		public const string BASE_UPLOAD_PATH_KEY = "BaseUploadDirectory";
 		public const string OUTPOUT_PATH_KEY = "OutputDirectory";
 
@@ -30,7 +30,7 @@ namespace API.Config
 			return value;
 		}
 
-		public static Dictionary<string,string> FileMaskSettings
+		/*public static Dictionary<string,string> FileMaskSettings
 		{
 			get
 			{
@@ -45,6 +45,6 @@ namespace API.Config
 
 				return sl.ToDictionary(d => d.Key, d => d.Value);
 			}
-		}
+		}*/
 	}
 }

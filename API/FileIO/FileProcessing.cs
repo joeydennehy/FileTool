@@ -6,33 +6,21 @@ using System.Text;
 using System.Windows.Forms;
 using API.Data;
 using API.Logging;
-using log4net.Core;
 
 namespace API.FileIO
 {
 	public static class FileProcessing
 	{
-		private static readonly List<string> SUB_FOLDERS;
 		private const string RECORDS_DELETE_CAPTION = "Records Delete";
 		private const string RECORDS_DELETE_ERROR_FORMAT = "Records Delete procedure gave the following error {0}.";
 
-		static FileProcessing()
-		{
-			SUB_FOLDERS = new List<string>
-			{
-				"followup",
-				"loi",
-				"qualification"
-			};
-		}
-
 		public static void CopyApplicationProcessFiles(FoundationDataFileState state)
 		{
-			CopyFilesToDestination(state.Files, state.OutputDirectory);
+			CopyFilesToDestination(state, state.OutputDirectory);
 
 			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
 			{
-				CopyFilesToDestination(state.SequesterFiles, state.SequesterPath);
+				CopyFilesToDestination(state, state.SequesterPath);
 			}
 		}
 
@@ -46,71 +34,127 @@ namespace API.FileIO
 		public static void SetFileList(FoundationDataFileState state)
 		{
 			ClearFiles(state);
-			if (state.FoundationApplicantProcessCodes != null)
+			if (string.IsNullOrEmpty(state.FileType) || state.FileType == "All")
 			{
-				foreach (string applicantProcessCode in state.FoundationApplicantProcessCodes)
+				SetRequestFiles(state);
+				SetOrganizationSupportingFiles(state);
+				SetAttachmentFiles(state);
+				SetMergeTemplateFiles(state);
+				SetSharedDocumentFiles(state);
+			}
+			else
+			{
+				switch (state.FileType)
 				{
-					string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, applicantProcessCode);
-					SetFilesFromPath(state, directoryPath);
+					case "requests":
+						SetRequestFiles(state);
+						break;
+					case "organizations":
+						SetOrganizationSupportingFiles(state);
+						break;
+					case "attachments":
+						SetAttachmentFiles(state);
+						break;
+					case "mergetemplates":
+						SetMergeTemplateFiles(state);
+						break;
+					case "shareddocuments":
+						SetSharedDocumentFiles(state);
+						break;
 				}
 			}
 		}
 
-		private static void SetFilesFromPath(FoundationDataFileState state, string directoryPath)
+		private static void SetRequestFiles(FoundationDataFileState state)
 		{
-			if (Directory.Exists(directoryPath))
+			string directoryPath = "";
+			List<string> pathChecked = new List<string>();
+
+			foreach (FoundationDataFileState.FileInfo requestFile in state.RequestFiles)
 			{
-				string[] directoryFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
-				foreach (string directoryFile in directoryFiles)
+				directoryPath = string.Format("{0}requests\\request.{1}\\submission.{2}", state.ClientRootDirectory,
+					requestFile.RequestId, requestFile.SubmissionId);
+				if (!pathChecked.Contains(directoryPath))
 				{
-					var file = new FileInfo(directoryFile);
-					if (string.Compare(state.FileMask, "*.*", StringComparison.InvariantCulture) != 0)
-					{
-						if (!state.FileMask.ToLower()
-							.Contains(file.Extension.ToLower()))
-						{
-							continue;
-						}
-					}
+					SetFilesFromPath(state, directoryPath);
+					pathChecked.Add(directoryPath);
+				}
+			}
 
-					if (state.SequesterExclusionPatterns != null && state.SequesterExclusionPatterns.Count > 0)
-					{
-						bool sequesterFile = state.SequesterExclusionPatterns.Any(sequesterPattern => file.Name.ToLower()
-							.Contains(sequesterPattern.ToLower()));
-						if (sequesterFile)
-						{
-							state.SequesterFiles.Add(file);
-							continue;
-						}
-					}
+			foreach (FoundationDataFileState.FileInfo requestSupportingFile in state.RequestSupportingFiles)
+			{
+				directoryPath = string.Format("{0}requests\\request.{1}\\documents", state.ClientRootDirectory,
+					requestSupportingFile.RequestId);
+				if (!pathChecked.Contains(directoryPath))
+				{
+					SetFilesFromPath(state, directoryPath);
+					pathChecked.Add(directoryPath);
+				}
+			}
+		}
 
+		private static void SetOrganizationSupportingFiles(FoundationDataFileState state)
+		{
+			string directoryPath = "";
+			List<string> pathChecked = new List<string>();
+
+			foreach (FoundationDataFileState.FileInfo orgSupportingFile in state.OrganizationSupportingFiles)
+			{
+				directoryPath = string.Format("{0}organizations\\organization.{1}\\documents", state.ClientRootDirectory,
+					orgSupportingFile.OrganizationId);
+				if (!pathChecked.Contains(directoryPath))
+				{
+					SetFilesFromPath(state, directoryPath);
+					pathChecked.Add(directoryPath);
+				}
+			}
+		}
+
+		private static void SetAttachmentFiles(FoundationDataFileState state)
+		{
+			string directoryPath = string.Format("{0}attachments", state.ClientRootDirectory);
+			SetFilesFromPath(state, directoryPath);
+		}
+
+		private static void SetMergeTemplateFiles(FoundationDataFileState state)
+		{
+			string directoryPath = string.Format("{0}mergetemplates", state.ClientRootDirectory);
+			SetFilesFromPath(state, directoryPath);
+		}
+
+		private static void SetSharedDocumentFiles(FoundationDataFileState state)
+		{
+			string directoryPath = string.Format("{0}shareddocuments", state.ClientRootDirectory);
+			SetFilesFromPath(state, directoryPath);
+		}
+	
+
+	private static void SetFilesFromPath(FoundationDataFileState state, string FilePath)
+		{
+			if (Directory.Exists(FilePath))
+			{
+				string[] files = Directory.GetFiles(FilePath, "*.*", SearchOption.AllDirectories)
+					.ToArray();
+
+				foreach (string fileString in files)
+				{
+					var file = new FileInfo(fileString);
 					state.Files.Add(file);
 					state.TotalSize += file.Length;
 				}
 			}
 		}
 
-		public static void UpdateMisMatchedDirectories(FoundationDataFileState state, string RequestCode, int RequestId)
-		{
-			string directoryPath = string.Format("{0}{1}", state.ClientRootDirectory, RequestCode);
-
-			if (Directory.Exists(directoryPath))
-			{
-				string moveDirectory = string.Format("{0}{1}", state.ClientRootDirectory, RequestId);
-				Directory.Move(directoryPath, moveDirectory);
-			}
-		}
-
-		public static void ReconcileFileListToDatabase(FoundationDataFileState state, List<string> fileList)
+		public static void ReconcileFileListToDatabase(FoundationDataFileState state, Dictionary<string, string> fileList)
 		{
 			ClearFiles(state);
 			SetFilesFromPath(state, state.ClientRootDirectory);
 
 			foreach (FileInfo file in state.Files)
 			{
-				string partialFileName = file.FullName.Replace(state.ClientRootDirectory, string.Empty)
+				string partialFileName = "\\" + file.FullName.Replace(state.ClientRootDirectory, string.Empty)
 					.ToLower();
-				if (!fileList.Contains(partialFileName))
+				if (!fileList.Keys.Contains(partialFileName))
 				{
 					state.SequesterFiles.Add(file);
 				}
@@ -126,7 +170,7 @@ namespace API.FileIO
 			}
 		}
 
-		public static void CleanUpFolders(FoundationDataFileState state)
+		/*public static void CleanUpFolders(FoundationDataFileState state)
 		{
 			string[] validDirectories =
 			{
@@ -134,7 +178,7 @@ namespace API.FileIO
 				"supportingdocuments"
 			};
 
-			string [] directories = Directory.GetDirectories(state.ClientRootDirectory);
+			string[] directories = Directory.GetDirectories(state.ClientRootDirectory);
 
 			foreach (string directory in directories)
 			{
@@ -146,7 +190,7 @@ namespace API.FileIO
 					{
 						if (!validDirectories.Any(dir => subDirectory.Contains(dir)))
 						{
-							Directory.Delete(subDirectory,true);
+							Directory.Delete(subDirectory, true);
 						}
 					}
 				}
@@ -166,11 +210,11 @@ namespace API.FileIO
 			}
 
 			return false;
-		}
+		}*/
 
-		private static void CopyFilesToDestination(List<FileInfo> files, string destinationFolder)
+		private static void CopyFilesToDestination(FoundationDataFileState state, string destinationFolder)
 		{
-			if (files == null || files.Count == 0)
+			if (state.Files == null || state.Files.Count == 0)
 			{
 				Logger.Log("CopyFilesToDestination: no files selected to copy", LogLevel.Warn);
 				return;
@@ -187,41 +231,90 @@ namespace API.FileIO
 				Directory.CreateDirectory(destinationFolder);
 			}
 
-			foreach (FileInfo file in files)
+			foreach (FoundationDataFileState.FileInfo file in state.RequestFiles)
 			{
-				string fullFileName = string.Format("{0}\\{1}", destinationFolder, BuildApplicationProcessFileName(file));
-				try
-				{
-					var destinationFile = new FileInfo(fullFileName);
-					int fileCounter = 1;
-					while (destinationFile.Exists)
-					{
-						string baseFileName = destinationFile.Name.Substring(0,
-							(destinationFile.Name.Length - destinationFile.Extension.Length));
-						int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1),
-							StringComparison.InvariantCulture);
-						if (repetitionIndex > 0)
-						{
-							baseFileName = destinationFile.Name.Substring(0, repetitionIndex);
-						}
+				string sourcePath = string.Format("{0}requests\\request.{1}\\submission.{2}\\answer.{3}", state.ClientRootDirectory,
+					file.RequestId, file.SubmissionId, file.AnswerId);
+				CopyFile(sourcePath, destinationFolder, file);
+			}
 
-						destinationFile =
-							new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter,
-								destinationFile.Extension));
-						fullFileName = destinationFile.FullName;
-						fileCounter++;
-					}
+			foreach (FoundationDataFileState.FileInfo file in state.RequestSupportingFiles)
+			{
+				string sourcePath = string.Format("{0}requests\\request.{1}\\documents\\document.{2}", state.ClientRootDirectory,
+					file.RequestId, file.DocumentId);
+				CopyFile(sourcePath, destinationFolder, file);
+			}
 
-					File.Copy(file.FullName, fullFileName);
-					Logger.Log("Copied file " + file.FullName + " to " + fullFileName, LogLevel.Info);
-				}
-				catch (Exception eError)
-				{
-					Logger.Log(string.Format("Unable to copy file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
-					throw;
-				}
+			foreach (FoundationDataFileState.FileInfo file in state.OrganizationSupportingFiles)
+			{
+				string sourcePath = string.Format("{0}organizations\\organization.{1}\\documents\\document.{2}", state.ClientRootDirectory,
+					file.OrganizationId, file.DocumentId);
+				CopyFile(sourcePath, destinationFolder, file);
+			}
+
+			foreach (FoundationDataFileState.FileInfo file in state.AttachmentFiles)
+			{
+				string sourcePath = string.Format("{0}attachments\\attachment.{1}", state.ClientRootDirectory, file.AttachmentId);
+				CopyFile(sourcePath, destinationFolder, file);
+			}
+
+			foreach (FoundationDataFileState.FileInfo file in state.MergeTemplateFiles)
+			{
+				string sourcePath = string.Format("{0}mergetemplates\\mergetemplate.{1}", state.ClientRootDirectory, file.MergeTemplateId);
+				CopyFile(sourcePath, destinationFolder, file);
+			}
+
+			foreach (FoundationDataFileState.FileInfo file in state.SharedFiles)
+			{
+				string sourcePath = string.Format("{0}shareddocuments\\document.{1}", state.ClientRootDirectory, file.DocumentId);
+				CopyFile(sourcePath, destinationFolder, file);
 			}
 		}
+
+		private static void CopyFile(string sourcePath, string destinationFolder, FoundationDataFileState.FileInfo file)
+		{
+			string fullFileName = string.Format("{0}{1}", destinationFolder, BuildFilePath(file));
+			string directory = Path.GetDirectoryName(fullFileName);
+			if (directory == null || !Directory.Exists(directory))
+			{
+				Directory.CreateDirectory(directory);
+			}
+
+			try
+			{
+				var destinationFile = new FileInfo(fullFileName);
+				int fileCounter = 1;
+				while (destinationFile.Exists)
+				{
+					string baseFileName = destinationFile.Name.Substring(0,
+						(destinationFile.Name.Length - destinationFile.Extension.Length));
+					int repetitionIndex = destinationFile.Name.LastIndexOf(string.Format(" ({0})", fileCounter - 1),
+						StringComparison.InvariantCulture);
+					if (repetitionIndex > 0)
+					{
+						baseFileName = destinationFile.Name.Substring(0, repetitionIndex);
+					}
+
+					destinationFile =
+						new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter,
+							destinationFile.Extension));
+					fullFileName = destinationFile.FullName;
+					fileCounter++;
+				}
+				try
+				{
+					File.Copy(sourcePath, fullFileName);
+					Logger.Log("Copied file " + sourcePath + " to " + fullFileName, LogLevel.Info);
+				}
+				catch (Exception e) { }
+			}
+			catch (Exception eError)
+			{
+				Logger.Log(string.Format("Unable to copy file {0}.  Error: {1} ", sourcePath, eError.Message), LogLevel.Error);
+				throw;
+			}
+		}
+
 
 		//public static void LogStateData(FoundationDataFileState state)
 		//{
@@ -238,10 +331,13 @@ namespace API.FileIO
 		//	Logger.Log(string.Format("Total File Size: {0}", state.TotalSize), LogLevel.Info);
 		//}
 
-		public static void MoveFilesToDestination(FoundationDataFileState state, ref StringBuilder outputData, bool cleanSequesterFolder = false)
+		/*public static void MoveFilesToDestination(FoundationDataFileState state, ref StringBuilder outputData,
+			bool cleanSequesterFolder = false)
 		{
-			if(outputData == null)
+			if (outputData == null)
+			{
 				outputData = new StringBuilder();
+			}
 			var movedFilesOutput = new StringBuilder();
 			var errorFilesOutput = new StringBuilder();
 
@@ -267,7 +363,9 @@ namespace API.FileIO
 			}
 			string outputFolder = state.OutputDirectory;
 			if (outputFolder.LastIndexOf(state.FoundationUrlKey, StringComparison.CurrentCulture) < 0)
+			{
 				outputFolder = string.Format("{0}\\{1}", outputFolder, state.FoundationUrlKey);
+			}
 
 			if (!Directory.Exists(outputFolder))
 			{
@@ -277,12 +375,12 @@ namespace API.FileIO
 			{
 				if (cleanSequesterFolder)
 				{
-					foreach (var directory in Directory.GetDirectories(outputFolder))
+					foreach (string directory in Directory.GetDirectories(outputFolder))
 					{
 						var subFolder = new DirectoryInfo(directory);
 						subFolder.Delete(true);
 					}
-					foreach (var file in Directory.GetFiles(outputFolder))
+					foreach (string file in Directory.GetFiles(outputFolder))
 					{
 						var fileInfo = new FileInfo(file);
 						fileInfo.Delete();
@@ -296,8 +394,8 @@ namespace API.FileIO
 
 			foreach (FileInfo file in state.SequesterFiles)
 			{
-				
-				string directory = string.Format("{0}\\{1}", outputFolder, file.Directory.FullName.Substring(state.ClientRootDirectory.Length-1));
+				string directory = string.Format("{0}\\{1}", outputFolder,
+					file.Directory.FullName.Substring(state.ClientRootDirectory.Length - 1));
 				if (!Directory.Exists(directory))
 				{
 					Directory.CreateDirectory(directory);
@@ -336,7 +434,7 @@ namespace API.FileIO
 			}
 
 			Logger.Log("Move unreferenced data files end", LogLevel.Info);
-		}
+		}*/
 
 		//public static void MoveFilesBack(FoundationDataFileState state)
 		//{
@@ -359,147 +457,17 @@ namespace API.FileIO
 		//	}
 		//}
 
-		private static string BuildApplicationProcessFileName(FileInfo file)
+		private static string BuildFilePath(FoundationDataFileState.FileInfo file)
 		{
-			if (string.IsNullOrEmpty(file.DirectoryName))
+			if (string.IsNullOrEmpty(file.FileName))
 			{
 				return string.Empty;
 			}
 
-			string applicantProcessId = string.Empty;
 			var fileName = new StringBuilder();
-			bool useProcessSubFolderFormat = false;
-
-			var folders = new List<string>();
-			folders.AddRange(file.DirectoryName.ToLower()
-				.Split(Path.DirectorySeparatorChar));
-
-			if (folders.Count - 2 >= 0)
-			{
-				int applicantProcessValue;
-				if (int.TryParse(folders[folders.Count - 2], out applicantProcessValue))
-				{
-					applicantProcessId = applicantProcessValue.ToString("D10");
-				}
-				else if (!string.IsNullOrWhiteSpace(folders[folders.Count - 2]))
-				{
-					applicantProcessId = folders[folders.Count - 2];
-				}
-				else
-				{
-					Logger.Log(String.Format("BuildApplicationProcessFileName: the folder location for File {0} is invalid and can not be processed",file.FullName), LogLevel.Error);
-					return string.Empty;
-				}
-
-				var rootFileFolder = new DirectoryInfo(string.Join("\\", folders.GetRange(0, folders.Count - 1)));
-				List<DirectoryInfo> subFolders = rootFileFolder.GetDirectories().ToList();
-				useProcessSubFolderFormat = subFolders.Where(sub => SUB_FOLDERS.Any(s => sub.FullName.Contains(s))).Any();
-			}
-
-			if (useProcessSubFolderFormat)
-			{
-				fileName.AppendFormat("{0}_{1}_{2}", applicantProcessId, folders.Last(), file.Name);
-			}
-			else
-			{
-				fileName.AppendFormat("{0}_{1}", applicantProcessId, file.Name);
-			}
+			fileName.Append(string.Format("{0}", file.FilePath));
 
 			return fileName.ToString();
-
-			//if (SUB_FOLDERS.Contains(folders.Last()))
-			//	subFolderId = string.Format("_{0}", folders.Last());
-
-			//fileName.Clear();
-			//fileName.Append(applicantProcessId);
-			//fileName.Append(subFolderId);
-			//fileName.Append(string.Format("_{0}", file.Name));
-
-			//return fileName.ToString();
-		}
-
-		public static void DeleteRecords(FoundationDataFileState state)
-		{
-			List<string> fileList = state.FilesNotFound;
-
-			foreach (string file in fileList)
-			{
-				string[] splitPath = file.Split('\\');
-
-				if (splitPath[1] == "supportingdocuments")
-				{
-					DeleteSupportingRecords(splitPath);
-				}
-				else if (splitPath[0].Contains("shared"))
-				{
-					DeleteSharedRecords(splitPath);
-				}
-				else
-				{
-					DeleteRequestRecords(splitPath, state);
-				}
-			}
-		}
-
-		private static void DeleteSupportingRecords(string[] splitPath)
-		{
-			try
-			{
-				if (splitPath[0].Contains("ORG-"))
-				{
-					int organizationId = Int32.Parse(splitPath[0].Substring(4));
-					string fileName = splitPath[splitPath.Length - 1];
-
-					RequestQuery.DeleteOrganizationSupportingRecords(organizationId, fileName);
-				}
-				else
-				{
-					int requestId = Int32.Parse(splitPath[0]);
-					string fileName = splitPath[splitPath.Length - 1];
-
-					RequestQuery.DeleteRequestSupportingRecords(requestId, fileName);
-				}
-			}
-
-			catch (Exception eError)
-			{
-				MessageBox.Show(string.Format(RECORDS_DELETE_ERROR_FORMAT, eError.Message), RECORDS_DELETE_CAPTION,
-					MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
-
-		private static void DeleteSharedRecords(string[] splitPath)
-		{
-			try
-			{
-				string fileName = splitPath[splitPath.Length - 1];
-
-				RequestQuery.DeleteSharedRecords(fileName);
-			}
-
-			catch (Exception eError)
-			{
-				MessageBox.Show(string.Format(RECORDS_DELETE_ERROR_FORMAT, eError.Message), RECORDS_DELETE_CAPTION,
-					MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
-
-		private static void DeleteRequestRecords(string[] splitPath, FoundationDataFileState state)
-		{
-			try
-			{
-				string requestProcessCode = splitPath[0];
-				string stageName = splitPath[1];
-				string fileName = splitPath[splitPath.Length - 1];
-
-				RequestQuery.DeleteRequestRecords(state.FoundationId, requestProcessCode, stageName, fileName);
-			}
-
-			catch (Exception eError)
-			{
-				MessageBox.Show(string.Format(RECORDS_DELETE_ERROR_FORMAT, eError.Message), RECORDS_DELETE_CAPTION,
-					MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
 		}
 	}
 }

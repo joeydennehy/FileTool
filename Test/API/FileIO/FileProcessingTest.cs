@@ -218,7 +218,7 @@ namespace Test.API.FileIO
 			Assert.IsTrue(testFileList.Count == 0);
 		}
 
-		[TestMethod]
+		/*[TestMethod]
 		public void MoveFilesToDestinationTest()
 		{
 			var controlFolderList = new List<string>();
@@ -255,7 +255,7 @@ namespace Test.API.FileIO
 				Assert.IsFalse(sequesterFileInfo.Exists);
 			}
 
-		}
+		}*/
 
 		[TestMethod]
 		public void CopyFilesToDestinationTest_AllRequestProcessFiles()

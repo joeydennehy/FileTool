@@ -82,18 +82,6 @@
     <Compile Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.Designer.cs">
       <DependentUpon>RemoveOrphanDocumentsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FunctionBlockControls\RenameDirectoryControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FunctionBlockControls\RenameDirectoryControl.Designer.cs">
-      <DependentUpon>RenameDirectoryControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FunctionBlockControls\RenameFilesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FunctionBlockControls\RenameFilesControl.Designer.cs">
-      <DependentUpon>RenameFilesControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SourcePathBlockControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,12 +129,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.resx">
       <DependentUpon>RemoveOrphanDocumentsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FunctionBlockControls\RenameDirectoryControl.resx">
-      <DependentUpon>RenameDirectoryControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FunctionBlockControls\RenameFilesControl.resx">
-      <DependentUpon>RenameFilesControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SourcePathBlockControl.resx">
       <DependentUpon>SourcePathBlockControl.cs</DependentUpon>

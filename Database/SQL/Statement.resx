@@ -171,14 +171,109 @@ WHERE
 		</value>
 	</data>
 
-	<data name="SELECT_APPLICATION_PROCESS_INFO" xml:space="preserve">
+	<data name="SELECT_REQUEST_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				ap.ApplicantProcessCode
-			FROM 
-				applicantprocess ap
+				answer.AnswerId, submission.SubmissionId, applicantprocess.ApplicantProcessId, answer.`Value`, stage.Name, element.Label
+			FROM answer
+			LEFT JOIN element on answer.ElementId = element.ElementId
+			LEFT JOIN submission on answer.SubmissionId = submission.SubmissionId
+			LEFT JOIN applicantprocess on submission.RequestId = applicantprocess.ApplicantProcessId
+			LEFT JOIN stage on submission.StageId = stage.StageId
+			WHERE 
+				element.Type in (17, 18)
+			AND
+				NULLIF(answer.`Value`, '') IS NOT NULL
+			AND
+				answer.`Value` != '[:|:]'
+			AND 
+				applicantprocess.FoundationProcessId = @FOUNDATION_PROCESS
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_REQUEST_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				answer.AnswerId, submission.SubmissionId, applicantprocess.ApplicantProcessId, answer.`Value`, stage.Name, element.Label
+			FROM answer
+			LEFT JOIN element on answer.ElementId = element.ElementId
+			LEFT JOIN submission on answer.SubmissionId = submission.SubmissionId
+			LEFT JOIN applicantprocess on submission.RequestId = applicantprocess.ApplicantProcessId
+			LEFT JOIN stage on submission.StageId = stage.StageId
+			WHERE 
+				element.Type in (17, 18)
+			AND
+				NULLIF(answer.`Value`, '') IS NOT NULL
+			AND
+				answer.`Value` != '[:|:]'
+			AND 
+				applicantprocess.FoundationId = @FOUNDATION_ID
+		</value>
+	</data>
+	
+	<data name="SELECT_REQUEST_SUPPORTING_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				document.ApplicantProcessId, document.DocumentId, document.Name
+			FROM document
+			LEFT JOIN applicantprocess on document.ApplicantProcessId = applicantprocess.ApplicantProcessId
+			WHERE 
+				applicantprocess.FoundationProcessId = @FOUNDATION_PROCESS
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_REQUEST_SUPPORTING_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				document.ApplicantProcessId, document.DocumentId, document.Name
+			FROM document
+			WHERE 
+				document.FoundationId = @FOUNDATION_ID
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_ORGANIZATION_SUPPORTING_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				document.OrganizationId, document.DocumentId, document.Name
+			FROM document
+			WHERE 
+				document.FoundationId = @FOUNDATION_ID
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_ATTACHMENT_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				attachment.AttachmentId, attachment.Name
+			FROM attachment
+			WHERE 
+				attachment.FoundationId = @FOUNDATION_ID
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_MERGE_TEMPLATE_INFO" xml:space="preserve">
+		<value>
+			SELECT 
+				mergetemplate.MergeTemplateId, mergetemplate.Name
+			FROM mergetemplate
+			WHERE 
+				mergetemplate.FoundationId = @FOUNDATION_ID
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_SHARED_INFO" xml:space="preserve">
+		<value>
+			SELECT
+				d.DocumentId, d.FilePath
+			FROM
+				document d
 			WHERE
-				ap.FoundationProcessId = @FOUNDATION_PROCESS
+				d.FoundationId = @FOUNDATION_ID
+				AND
+				NULLIF(d.ApplicantProcessId, '') IS NULL
+				AND
+				NULLIF(d.OrganizationId, '') IS NULL
 		</value>
 	</data>
 
@@ -197,11 +292,11 @@ WHERE
 		</value>
 	</data>
 
-	<data name="SELECT_APPLICATION_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID" xml:space="preserve">
+	<data name="SELECT_REQUEST_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
-				DISTINCT
-					CONCAT(ap.ApplicantProcessCode, '\\supportingdocuments\\', d.FilePath) AS FileName
+				CONCAT('\\requests\\request.', d.ApplicantProcessId, '\\documents\\document.', d.DocumentId) AS FileName,
+					d.FilePath
 			FROM
 				document d
 				LEFT OUTER JOIN applicantprocess ap ON (d.ApplicantProcessId = ap.ApplicantProcessId)
@@ -218,7 +313,8 @@ WHERE
 		<value>
 			SELECT
 				DISTINCT
-					CONCAT('ORG-', d.OrganizationId, '\\supportingdocuments\\', d.FilePath) AS FileName
+					CONCAT('\\organizations\\organization.', d.OrganizationId, '\\documents\\document.', d.DocumentId) AS FileName,
+					d.FilePath
 			FROM
 				document d
 			WHERE
@@ -230,21 +326,18 @@ WHERE
 		</value>
 	</data>
 
-	<data name="SELECT_REQUEST_FILES_BY_URL_KEY" xml:space="preserve">
+	<data name="SELECT_REQUEST_FILES_BY_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
 				DISTINCT
-					CONCAT(ap.ApplicantProcessCode, '\\', st.Name, '\\', an.Value) AS FileName
+					CONCAT('\\requests\\request.', su.RequestId, '\\submission.', su.SubmissionId, '\\answer.', an.AnswerId) AS FileName,
+					an.Value
 			FROM
 				submission su
-				LEFT OUTER JOIN applicantprocess ap ON (su.RequestId = ap.ApplicantProcessId)
-				LEFT OUTER JOIN stage st ON (su.StageId = st.StageId)
 				LEFT OUTER JOIN answer an ON (su.SubmissionId = an.SubmissionId)
 				LEFT OUTER JOIN element em ON (an.ElementId = em.ElementId)
 			WHERE
 				su.FoundationId = @FOUNDATION_ID
-				AND
-				NULLIF(ap.ApplicantProcessCode, '') IS NOT NULL
 				AND
 				NULLIF(an.Value, '') IS NOT NULL
 				AND
@@ -257,13 +350,14 @@ WHERE
 	<data name="SELECT_SHARED_FILES_BY_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
-				CONCAT('\\Shared\\' , d.FilePath) AS FileName
+				CONCAT('\\shareddocuments\\document.' , d.DocumentId) AS FileName,
+				d.FilePath
 			FROM
 				document d
 			WHERE
 				d.FoundationId = @FOUNDATION_ID
 				AND
-				d.DocumentTypeId = 9
+				d.Type = 9
 			ORDER BY
 				FileName
 		</value>

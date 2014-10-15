@@ -12,19 +12,40 @@ namespace API.FileIO
 	{
 		public string BaseDirectory { get; set; }
 		public string FileMask { get; set; }
-		public List<FileInfo> Files { get; set; }
+		public List<global::System.IO.FileInfo> Files { get; set; }
 		public int FoundationId { get; set; }
 		public int FoundationProcessId { get; set; }
 		public string FoundationUrlKey { get; set; }
 		public string OutputDirectory { get; set; }
 		public List<string> SequesterExclusionPatterns { get; set; }
-		public List<FileInfo> SequesterFiles { get; set; }
+		public List<global::System.IO.FileInfo> SequesterFiles { get; set; }
 		public string SequesterPath { get; set; }
 		public long TotalSize { get; set; }
+		public string FileType { get; set; }
 		
-		public List<string> FilesNotFound { get; set; }
+		public Dictionary<string, string> FilesNotFound { get; set; }
 		public List<string> FoundationApplicantProcessCodes { get; set; }
-		
+
+		public struct FileInfo
+		{
+			public int DocumentId;
+			public int AnswerId;
+			public int SubmissionId;
+			public int RequestId;
+			public int AttachmentId;
+			public int MergeTemplateId;
+			public int OrganizationId;
+			public string FileName;
+			public string FilePath;
+			public string Question;
+		}
+
+		public List<FileInfo> RequestFiles { get; set; }
+		public List<FileInfo> RequestSupportingFiles { get; set; }
+		public List<FileInfo> OrganizationSupportingFiles { get; set; }
+		public List<FileInfo> AttachmentFiles { get; set; }
+		public List<FileInfo> SharedFiles { get; set; }
+		public List<FileInfo> MergeTemplateFiles { get; set; }
 		
 		//public string MovedToDirectory { get; set; }
 		//public string MovedFromDirectory { get; set; }
@@ -47,9 +68,9 @@ namespace API.FileIO
 		{
 			FileMask = "*.*";
 
-			Files = new List<FileInfo>();
+			Files = new List<global::System.IO.FileInfo>();
 			FoundationApplicantProcessCodes = new List<string>();
-			SequesterFiles = new List<FileInfo>();
+			SequesterFiles = new List<global::System.IO.FileInfo>();
 		}
 
 		public override string ToString()

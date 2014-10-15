@@ -22,8 +22,6 @@ namespace UI
 
 		private ClientFileExtractionControl clientFileExtractionControl;
 		private RemoveOrphanDocumentsControl removeOrphanDocumentsControl;
-		private RenameDirectoryControl renameDirectoryControl;
-		private RenameFilesControl renameFilesControl;
 		
 		#endregion
 
@@ -57,19 +55,13 @@ namespace UI
 			panelControls = new Dictionary<string, FunctionBlockBaseControl>();
 			clientFileExtractionControl = new ClientFileExtractionControl(this);
 			removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl(this);
-			renameDirectoryControl = new RenameDirectoryControl(this);
-			renameFilesControl = new RenameFilesControl(this);
 
 			panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
 			panelControls.Add(removeOrphanDocumentsControl.Name, removeOrphanDocumentsControl);
-			panelControls.Add(renameDirectoryControl.Name, renameDirectoryControl);
-			panelControls.Add(renameFilesControl.Name, renameFilesControl);
 
 			//Add client ID to the associated task button on the UI (used by NavigationButtonClick Event to switch controls)
 			btnNavFileExtraction.Tag = clientFileExtractionControl.Name;
-			btnNavRemoveDocs.Tag = removeOrphanDocumentsControl.Name;
-			btnNavRenameDirectory.Tag = renameDirectoryControl.Name;
-			btnNavRenameFiles.Tag = renameFilesControl.Name;
+			//btnNavRemoveDocs.Tag = removeOrphanDocumentsControl.Name;
 
 			//Set the initial Display task
 			SetDisplayTask(clientFileExtractionControl.Name);
