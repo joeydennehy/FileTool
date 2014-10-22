@@ -30,6 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\Lib\Aspose\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>..\Lib\Aspose\Aspose.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\Lib\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\Lib\Logging\log4net-1.2.13\bin\net-cp\4.0\release\log4net.dll</HintPath>
     </Reference>

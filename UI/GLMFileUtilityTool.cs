@@ -21,7 +21,8 @@ namespace UI
 		private TitleBlockControl titleBlockControl;
 
 		private ClientFileExtractionControl clientFileExtractionControl;
-		private RemoveOrphanDocumentsControl removeOrphanDocumentsControl;
+		//private RemoveOrphanDocumentsControl removeOrphanDocumentsControl;
+		private ProcessMergeFieldDocumentsControl processMergeFieldDocumentsControl;
 		
 		#endregion
 
@@ -54,14 +55,17 @@ namespace UI
 			//Set up the functional block controls
 			panelControls = new Dictionary<string, FunctionBlockBaseControl>();
 			clientFileExtractionControl = new ClientFileExtractionControl(this);
-			removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl(this);
+			//removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl(this);
+			processMergeFieldDocumentsControl = new ProcessMergeFieldDocumentsControl(this);
 
 			panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
-			panelControls.Add(removeOrphanDocumentsControl.Name, removeOrphanDocumentsControl);
+			//panelControls.Add(removeOrphanDocumentsControl.Name, removeOrphanDocumentsControl);
+			panelControls.Add(processMergeFieldDocumentsControl.Name, processMergeFieldDocumentsControl);
 
 			//Add client ID to the associated task button on the UI (used by NavigationButtonClick Event to switch controls)
 			btnNavFileExtraction.Tag = clientFileExtractionControl.Name;
 			//btnNavRemoveDocs.Tag = removeOrphanDocumentsControl.Name;
+			btnNavProcessMergeTemplates.Tag = processMergeFieldDocumentsControl.Name;
 
 			//Set the initial Display task
 			SetDisplayTask(clientFileExtractionControl.Name);

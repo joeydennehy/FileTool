@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Forms;
-using API.Data;
 using API.Logging;
+using Aspose.Words;
 
 namespace API.FileIO
 {
@@ -40,6 +41,7 @@ namespace API.FileIO
 				SetOrganizationSupportingFiles(state);
 				SetAttachmentFiles(state);
 				SetMergeTemplateFiles(state);
+				SetCustomPrintPacketFiles(state);
 				SetSharedDocumentFiles(state);
 			}
 			else
@@ -57,6 +59,9 @@ namespace API.FileIO
 						break;
 					case "mergetemplates":
 						SetMergeTemplateFiles(state);
+						break;
+					case "settingvalues":
+						SetCustomPrintPacketFiles(state);
 						break;
 					case "shareddocuments":
 						SetSharedDocumentFiles(state);
@@ -116,6 +121,12 @@ namespace API.FileIO
 			SetFilesFromPath(state, directoryPath);
 		}
 
+		private static void SetCustomPrintPacketFiles(FoundationDataFileState state)
+		{
+			string directoryPath = string.Format("{0}settingvalues", state.ClientRootDirectory);
+			SetFilesFromPath(state, directoryPath);
+		}
+
 		private static void SetMergeTemplateFiles(FoundationDataFileState state)
 		{
 			string directoryPath = string.Format("{0}mergetemplates", state.ClientRootDirectory);
@@ -127,9 +138,8 @@ namespace API.FileIO
 			string directoryPath = string.Format("{0}shareddocuments", state.ClientRootDirectory);
 			SetFilesFromPath(state, directoryPath);
 		}
-	
 
-	private static void SetFilesFromPath(FoundationDataFileState state, string FilePath)
+		private static void SetFilesFromPath(FoundationDataFileState state, string FilePath)
 		{
 			if (Directory.Exists(FilePath))
 			{
@@ -168,6 +178,16 @@ namespace API.FileIO
 			{
 				state.FilesNotFound = fileList;
 			}
+		}
+
+		public static IEnumerable<FileInfo> BuildMergeTemplateFileInfo(DataTable mergeTemplateData, string rootDirectory)
+		{
+			return (from DataRow row in mergeTemplateData.Rows select new FileInfo(string.Format("{0}\\{1}\\mergetemplates\\mergetemplate.{2}", rootDirectory, row[1], row[2]))).ToList();
+		}
+
+		public static IEnumerable<FileInfo> BuildCustomPrintPacketInfo(DataTable customPrintPacketData, string rootDirectory)
+		{
+			return (from DataRow row in customPrintPacketData.Rows select new FileInfo(string.Format("{0}\\{1}\\settingvalues\\settingvalue.{2}", rootDirectory, row[1], row[2]))).ToList();
 		}
 
 		/*public static void CleanUpFolders(FoundationDataFileState state)
@@ -315,6 +335,21 @@ namespace API.FileIO
 			}
 		}
 
+		public static void WriteToCsv(string destination, StringBuilder fileOutput)
+		{
+			var destinationFileInfo = new FileInfo(destination);
+			if (destinationFileInfo.Exists)
+			{
+				destinationFileInfo.Delete();
+			}
+
+			//destinationFileInfo.Create();
+			using (var outfile = destinationFileInfo.OpenWrite())
+			{
+				Byte[] outputData = new UTF8Encoding(true).GetBytes(fileOutput.ToString());
+				outfile.Write(outputData, 0, outputData.Length);
+			}
+		}
 
 		//public static void LogStateData(FoundationDataFileState state)
 		//{
@@ -468,6 +503,41 @@ namespace API.FileIO
 			fileName.Append(string.Format("{0}", file.FilePath));
 
 			return fileName.ToString();
+		}
+	}
+
+	public static class DocumentProcessing
+	{
+		private static readonly License WORDS_LICENSE = new License();
+		private static readonly Aspose.Cells.License CELLS_LICENSE = new Aspose.Cells.License();
+		private static readonly Aspose.Pdf.License PDF_LICENSE = new Aspose.Pdf.License();
+
+		static DocumentProcessing()
+		{
+			WORDS_LICENSE.SetLicense("Aspose.Total.lic");
+			CELLS_LICENSE.SetLicense("Aspose.Total.lic");
+			PDF_LICENSE.SetLicense("Aspose.Total.lic");
+		}
+
+		public static List<string> GetMergeFieldIds(string mergeTemplateFilePath)
+		{
+			var template = new Document(mergeTemplateFilePath);
+			string[] mergeFields = template.MailMerge.GetFieldNames();
+			var reportFieldIds = mergeFields.Where(mergefield => mergefield.StartsWith("RF_")).ToList();
+			
+			return reportFieldIds;
+		}
+
+		public static string GetSha256(string text, int length = 0)
+		{
+			var sha256 = new SHA256Managed();
+
+			byte[] bytes = Encoding.UTF8.GetBytes(text);
+			bytes = sha256.ComputeHash(bytes);
+
+			string hash = bytes.Aggregate(String.Empty, (current, b) => current + String.Format("{0:x2}", b));
+
+			return length > 0 ? hash.Substring(0, length) : hash;
 		}
 	}
 }

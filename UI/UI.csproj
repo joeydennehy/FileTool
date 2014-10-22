@@ -76,6 +76,12 @@
     <Compile Include="Controls\FunctionBlockControls\FunctionBlockBaseControl.Designer.cs">
       <DependentUpon>FunctionBlockBaseControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FunctionBlockControls\ProcessMergeFieldDocumentsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FunctionBlockControls\ProcessMergeFieldDocumentsControl.Designer.cs">
+      <DependentUpon>ProcessMergeFieldDocumentsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     <EmbeddedResource Include="Controls\FunctionBlockControls\FunctionBlockBaseControl.resx">
       <DependentUpon>FunctionBlockBaseControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\ProcessMergeFieldDocumentsControl.resx">
+      <DependentUpon>ProcessMergeFieldDocumentsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.resx">
       <DependentUpon>RemoveOrphanDocumentsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -170,6 +179,7 @@
   <ItemGroup>
     <None Include="App.config">
       <CustomToolNamespace>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\Xml\Schemas\DotNetConfig45.xsd</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +209,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>COPY $(SolutionDir)Lib\Aspose\*.lic $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

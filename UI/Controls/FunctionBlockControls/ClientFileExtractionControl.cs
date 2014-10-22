@@ -354,7 +354,7 @@ namespace UI.Controls.FunctionBlockControls
 							state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(foundationProcessId);
 						}
 						state.OrganizationSupportingFiles = RequestQuery.RetrieveAllOrganizationSupportingInfo(state.FoundationId);
-						state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfo(state.FoundationId);
+						state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfoByFoundation(state.FoundationId);
 						state.AttachmentFiles = RequestQuery.RetrieveAllAttachmentInfo(state.FoundationId);
 						state.SharedFiles = RequestQuery.RetrieveAllSharedInfo(state.FoundationId);
 					}
@@ -378,7 +378,7 @@ namespace UI.Controls.FunctionBlockControls
 								state.OrganizationSupportingFiles = RequestQuery.RetrieveAllOrganizationSupportingInfo(state.FoundationId);
 								break;
 							case "mergetemplates":
-								state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfo(state.FoundationId);
+								state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfoByFoundation(state.FoundationId);
 								break;
 							case "attachments":
 								state.AttachmentFiles = RequestQuery.RetrieveAllAttachmentInfo(state.FoundationId);

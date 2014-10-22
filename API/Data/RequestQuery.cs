@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using API.FileIO;
 using DataProvider.MySQL;
@@ -11,6 +10,8 @@ namespace API.Data
 {
 	public static class RequestQuery
 	{
+		public static DataTable CustomPrintPacketData { get; private set; }
+
 		/// <summary>
 		/// Name/Index structure for this DataTable:
 		/// FoundationId:[0]; UrlKey:[1]; Name:[2]; FoundationDisplayText:[3]
@@ -25,9 +26,37 @@ namespace API.Data
 
 		/// <summary>
 		/// Name/Index structure for this DataTable:
+		/// FoundationId:[0]; UrlKey:[1]; MergeTemplateId:[2]
+		/// </summary>
+		public static DataTable MergeTemplateData { get; private set; }
+
+		/// <summary>
+		/// Name/Index structure for this DataTable
+		/// FoundationId:[0]; ReportFieldTemplateId:[1]; ReportFieldTemplateIdHash:[2]; ReportFieldName[3]
+		/// </summary>
+		public static DataTable ReportFieldData { get; private set; }
+
+		/// <summary>
+		/// Name/Index structure for this DataTable:
 		/// RequestProcessId:[0]; RequestProcessCode:[1]; RequestDisplayText:[2]
 		/// </summary>
 		public static DataTable RequestData { get; private set; }
+
+		public static void RefreshCustomPrintPacketData()
+		{
+			CustomPrintPacketData = new DataTable();
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_CUSTOM_PRINT_PACKET_INFO"
+			};
+			var access = new DataAccess();
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				CustomPrintPacketData.Load(reader);
+				reader.Close();
+			}
+		}
 
 		public static void RefreshFoundationData()
 		{
@@ -79,6 +108,86 @@ namespace API.Data
 			}
 		}
 
+		public static void RefreshMergeTemplateData()
+		{
+			MergeTemplateData = new DataTable();
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_MERGE_TEMPLATE_INFO"
+			};
+			var access = new DataAccess();
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				MergeTemplateData.Load(reader);
+				reader.Close();
+			}
+		}
+
+		public static void RefreshReportFieldData()
+		{
+			ReportFieldData = new DataTable();
+			ReportFieldData.Columns.Add("FoundationId");
+			ReportFieldData.Columns.Add("ReportFieldTemplateId");
+			ReportFieldData.Columns.Add("ReportFieldTemplateIdHash");
+			ReportFieldData.Columns.Add("ReportFieldTemplateName");
+			ReportFieldData.PrimaryKey = new[] {ReportFieldData.Columns[2]};
+
+			for (int i =0; i < 250000; i++)
+			{
+				var dataRow = ReportFieldData.NewRow();
+				dataRow["FoundationId"] = string.Empty;
+				dataRow["ReportFieldTemplateId"] = string.Empty;
+				dataRow["ReportFieldTemplateIdHash"] = string.Format("RF_{0}", DocumentProcessing.GetSha256(i.ToString(), 10));
+				dataRow["ReportFieldTemplateName"] = string.Empty;
+
+				ReportFieldData.Rows.Add(dataRow);
+			}
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_REPORT_FIELD_TEMPLATE_INFO"
+			};
+			var access = new DataAccess();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					string foundationId = reader.IsDBNull(0) ? string.Empty : reader.GetString(0);
+					string reportFieldTemplateId = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
+					string reportFieldTemplateName = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
+					string reportFieldHash = string.IsNullOrWhiteSpace(reportFieldTemplateId)
+						? string.Empty
+						: string.Format("RF_{0}", DocumentProcessing.GetSha256(reportFieldTemplateId, 10));
+
+					var dataRow = ReportFieldData.Rows.Find(reportFieldHash);
+					if (dataRow != null)
+					{
+						dataRow["FoundationId"] = foundationId;
+						dataRow["ReportFieldTemplateId"] = reportFieldTemplateId;
+						dataRow["ReportFieldTemplateName"] = reportFieldTemplateName;
+					}
+				}
+			}
+		}
+
+		public static string GetCustomPrintPacketFileName(int settingValueId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "SETTING_VALUE_ID", settingValueId);
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_CUSTOM_PRINT_PACKET_FILE_NAME_BY_ID",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			return access.GetStringValue(command);
+		}
+
 		public static Dictionary<string, string> GetFoundationFileList(int foundationId)
 		{
 			var fileList = new Dictionary<string, string>();
@@ -124,6 +233,22 @@ namespace API.Data
 			}
 
 			return fileList;
+		}
+
+		public static string GetMergeTemplateFileName(int mergeTemplateId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.Int32, "MERGE_TEMPLATE_ID", mergeTemplateId);
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_MERGE_TEMPLATE_FILE_NAME_BY_ID",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			return access.GetStringValue(command);
 		}
 
 		public static List<FoundationDataFileState.FileInfo> RetrieveRequestInfo(int foundationProcess)
@@ -340,19 +465,19 @@ namespace API.Data
 			return requestSupporitngFiles;
 		}
 
-		public static List<FoundationDataFileState.FileInfo> RetrieveAllMergeTemplateInfo(int foundationId)
+		public static List<FoundationDataFileState.FileInfo> RetrieveAllMergeTemplateInfoByFoundation(int foundationId)
 		{
 			var parameters = new ParameterSet();
 			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
 			var command = new Command
 			{
-				SqlStatementId = "SELECT_ALL_MERGE_TEMPLATE_INFO",
+				SqlStatementId = "SELECT_ALL_MERGE_TEMPLATE_INFO_BY_FOUNDATION",
 				ParameterCollection = parameters
 			};
 
 			var access = new DataAccess();
 
-			var requestSupporitngFiles = new List<FoundationDataFileState.FileInfo>();
+			var requestSupportingFiles = new List<FoundationDataFileState.FileInfo>();
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
@@ -366,12 +491,12 @@ namespace API.Data
 							FileName = reader.IsDBNull(1) ? "" : reader.GetString(1)
 						};
 						fileIds.FilePath = "\\Merge_Templates\\" + fileIds.MergeTemplateId + "_" + fileIds.FileName;
-						requestSupporitngFiles.Add(fileIds);
+						requestSupportingFiles.Add(fileIds);
 					}
 				}
 			}
 
-			return requestSupporitngFiles;
+			return requestSupportingFiles;
 		}
 
 		public static List<FoundationDataFileState.FileInfo> RetrieveAllSharedInfo(int foundationId)

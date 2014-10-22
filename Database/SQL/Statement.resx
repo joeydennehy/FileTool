@@ -252,13 +252,66 @@ WHERE
 		</value>
 	</data>
 
-	<data name="SELECT_ALL_MERGE_TEMPLATE_INFO" xml:space="preserve">
+	<data name="SELECT_ALL_MERGE_TEMPLATE_INFO_BY_FOUNDATION" xml:space="preserve">
 		<value>
 			SELECT 
 				mergetemplate.MergeTemplateId, mergetemplate.Name
 			FROM mergetemplate
 			WHERE 
 				mergetemplate.FoundationId = @FOUNDATION_ID
+		</value>
+	</data>
+	
+	<data name ="SELECT_MERGE_TEMPLATE_FILE_NAME_BY_ID" xml:space="preserve">
+		<value>
+			SELECT
+				mt.FilePath
+			FROM
+				mergetemplate mt
+			WHERE
+				mt.MergeTemplateId = @MERGE_TEMPLATE_ID
+		</value>
+	</data>
+	
+	<data name="SELECT_CUSTOM_PRINT_PACKET_FILE_NAME_BY_ID" xml:space="preserve">
+		<value>
+			SELECT
+				sv.Value
+			FROM
+				settingvalue sv
+			WHERE
+				sv.SettingValueId = @SETTING_VALUE_ID
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_MERGE_TEMPLATE_INFO" xml:space="preserve">
+		<value>
+			SELECT
+				mt.FoundationId
+				,f.UrlKey
+				,mt.MergeTemplateId
+			FROM
+				mergetemplate mt
+				JOIN foundation f USING(FoundationId)
+			ORDER BY 
+				f.UrlKey
+				,mt.MergeTemplateId
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_CUSTOM_PRINT_PACKET_INFO" xml:space="preserve">
+		<value>
+			SELECT
+				sv.FoundationId
+				,f.UrlKey
+				,sv.SettingValueId
+			FROM
+				settingvalue sv
+				JOIN foundation f USING(FoundationId)	
+				JOIN setting s ON (sv.SettingId = s.SettingId AND s.Type='file')
+			ORDER BY
+				f.UrlKey
+				,sv.SettingValueId
 		</value>
 	</data>
 
@@ -276,7 +329,33 @@ WHERE
 				NULLIF(d.OrganizationId, '') IS NULL
 		</value>
 	</data>
-
+	
+	<!--
+	<data name="SELECT_ALL_REPORT_FIELD_INFO" xml:space="preserve">
+		<value>
+			SELECT
+				rf.FoundationId
+				,rf.ReportFieldId
+				,rf.ReportFieldTemplateId
+				,cf.Label1
+			FROM 
+				reportfield rf
+				LEFT OUTER JOIN customfield cf ON (cf.CustomFieldId = rf.CustomFieldId)
+		</value>
+	</data>
+-->
+	
+	<data name="SELECT_ALL_REPORT_FIELD_TEMPLATE_INFO" xml:space="preserve">
+		<value>
+			SELECT
+				rft.FoundationId
+				,rft.ReportFieldTemplateId
+				,rft.name
+			FROM
+				reportfieldtemplate rft
+		</value>
+	</data>
+	
 	<data name="SELECT_FOUNDATION_PROCESS_INFO" xml:space="preserve">
 		<value>
 			SELECT 

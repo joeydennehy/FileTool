@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <Data>
+    <LicensedTo>Foundant Technologies</LicensedTo>
+    <LicenseType>Developer OEM</LicenseType>
+    <LicenseNote>Limited to 1 developer.</LicenseNote>
+    <OrderID>131120172304</OrderID>
+    <OEM>This is a redistributable license</OEM>
+    <Products>
+      <Product>Aspose.Total</Product>
+    </Products>
+    <EditionType>Enterprise</EditionType>
+    <SerialNumber>370b4d1c-c7b1-47d4-8a15-0d1a6e95bdb8</SerialNumber>
+    <SubscriptionExpiry>20141121</SubscriptionExpiry>
+    <LicenseVersion>2.2</LicenseVersion>
+  </Data>
+  <Signature>m6XEm/v1BqCuYylKph7l95kAv9xfjc4I8ec7HQxBeln7IVu67uyjk/4SSw4nMmTPDHaesGY0jmWoqa1XegwV5MrxVjChln8Uhk7OYdVBCuegVUdwqQpG2WUUqqaZk4v5v+P7JebfEk1Dm+zJXfeflJ/Tdc7S16kMQ/0SypzdJo0=</Signature>
+</License>
