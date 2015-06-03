@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -18,36 +19,44 @@ namespace UI.Controls.FunctionBlockControls
 		private const string FILE_COPY_CAPTION = "File Copy";
 		private const string FILE_COPY_COMPLETE = "File copy has completed.";
 		private const string FILE_COPY_ERROR_FORMAT = "File copy procedure gave the following error {0}.";
-		private const string FILE_DELETE_ERROR_FORMAT = "Unable to remove file: {0} due to the following error: {1}. /r/n The copy process will abort.";
+
+		private const string FILE_DELETE_ERROR_FORMAT =
+			"Unable to remove file: {0} due to the following error: {1}. /r/n The copy process will abort.";
+
 		private const string FILE_COUNT_FORMAT = "[{0} files, totaling {1:n} MB]";
 		private const string FILE_EXCLUDED_COUNT_FORMAT = "[{0} files]";
 		private const string NO_FILE_COUNT = "[No Files Found]";
 		private const string NO_FILE_EXCLUSIONS = "[No Files Excluded]";
 		private const string VALIDATION_ERROR_CAPTION = "Invalid Processing State";
-		private const string VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT = "{0}   WARNING!: Cannot find or access specified folder.";
-		private const string VALIDATION_ERROR_FOLDER_NOT_EMPTY = "Warning: All files in the destination folder will be removed, do you wish to proceed?";
+
+		private const string VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT =
+			"{0}   WARNING!: Cannot find or access specified folder.";
+
+		private const string VALIDATION_ERROR_FOLDER_NOT_EMPTY =
+			"Warning: All files in the destination folder will be removed, do you wish to proceed?";
+
 		private const string VALIDATION_ERROR_OUTPUT_NOT_SELECTED = "Please select an output destination before continuing.";
 		private const string WORKING = "[Working...]";
-	
+
 		private FoundationDataFileState state;
 
 		#endregion
 
 		#region Constructor
 
-		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent)
-		{
-			InitializeComponent();
-		}
+		public ClientFileExtractionControl(GLMFileUtilityTool parent) : base(parent) { InitializeComponent(); }
 
 		#endregion
 
 		#region Properties
 
-		public override string TitleBlockText { get { return "Extract Client Files"; } }
+		public override string TitleBlockText
+		{
+			get { return "Extract Client Files"; }
+		}
 
 		#endregion
-		
+
 		#region Private Methods
 
 		private void BindFoundationProcessData()
@@ -64,11 +73,12 @@ namespace UI.Controls.FunctionBlockControls
 
 				processIdComboBox.DataSource = RequestQuery.FoundationProcessData;
 				processIdComboBox.DisplayMember = "ProcessDisplayText";
-				processIdComboBox.ValueMember = "FoundationProcessId";
+				processIdComboBox.ValueMember = "ProcessId";
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 		}
 
@@ -95,7 +105,7 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				BaseDirectory = ParentControl.SourceLocation
 			};
-			System.Diagnostics.Debug.Print(ParentControl.SourceLocation);
+			Debug.Print(ParentControl.SourceLocation);
 
 			outputDestinationTextBox.Text = ApplicationConfiguration.GetSetting(ApplicationConfiguration.OUTPOUT_PATH_KEY);
 
@@ -109,13 +119,14 @@ namespace UI.Controls.FunctionBlockControls
 				foundationIdComboBox.ValueMember = "FoundationId";
 
 				//Bind File Types
-			/*	fileTypeComboBox.DataSource = new BindingSource(ApplicationConfiguration.FileMaskSettings, null);
+				/*	fileTypeComboBox.DataSource = new BindingSource(ApplicationConfiguration.FileMaskSettings, null);
 				fileTypeComboBox.DisplayMember = "Key";
 				fileTypeComboBox.ValueMember = "Value";*/
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 		}
 
@@ -123,10 +134,9 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			var rootDirectory = new DirectoryInfo(state.ClientRootDirectory);
 
-			rootProcessingFolder.Text = rootDirectory.Exists 
-				? state.ClientRootDirectory 
-				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.ClientRootDirectory)
-			;
+			rootProcessingFolder.Text = rootDirectory.Exists
+				? state.ClientRootDirectory
+				: String.Format(VALIDATION_ERROR_FOLDER_NOT_FOUND_FORMAT, state.ClientRootDirectory);
 		}
 
 		#region Event Handlers
@@ -135,13 +145,8 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			if (string.IsNullOrEmpty(state.OutputDirectory))
 			{
-				MessageBox.Show(
-					this, 
-					VALIDATION_ERROR_OUTPUT_NOT_SELECTED, 
-					VALIDATION_ERROR_CAPTION, 
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Exclamation
-				);
+				MessageBox.Show(this, VALIDATION_ERROR_OUTPUT_NOT_SELECTED, VALIDATION_ERROR_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation);
 				return;
 			}
 
@@ -150,9 +155,11 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				var outputDirectory = new DirectoryInfo(state.OutputDirectory);
 
-				if (outputDirectory.Exists && outputDirectory.GetFiles().Any())
+				if (outputDirectory.Exists && outputDirectory.GetFiles()
+					.Any())
 				{
-					DialogResult prompt = MessageBox.Show(this, VALIDATION_ERROR_FOLDER_NOT_EMPTY, FILE_COPY_CAPTION, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+					DialogResult prompt = MessageBox.Show(this, VALIDATION_ERROR_FOLDER_NOT_EMPTY, FILE_COPY_CAPTION,
+						MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
 					if (prompt == DialogResult.Yes)
 					{
@@ -164,7 +171,8 @@ namespace UI.Controls.FunctionBlockControls
 							}
 							catch (Exception eError)
 							{
-								MessageBox.Show(this, string.Format(FILE_DELETE_ERROR_FORMAT, fileInfo.Name, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+								MessageBox.Show(this, string.Format(FILE_DELETE_ERROR_FORMAT, fileInfo.Name, eError.Message), FILE_COPY_CAPTION,
+									MessageBoxButtons.OK, MessageBoxIcon.Error);
 								return;
 							}
 						}
@@ -181,14 +189,15 @@ namespace UI.Controls.FunctionBlockControls
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 			finally
 			{
 				Cursor = Cursors.Default;
 			}
 		}
-		
+
 		private void ButtonClick_FileExclusions(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			//var fileExclusions = new FileExclusionsForm(state);
@@ -208,7 +217,6 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				secludedFileCountlinkLabel.Text = NO_FILE_EXCLUSIONS;
 			}*/
-			
 		}
 
 		private void ButtonClick_OutputDestinationBrowse(object sender, EventArgs e)
@@ -224,7 +232,9 @@ namespace UI.Controls.FunctionBlockControls
 			{
 				string selectedPath = folderBrowser.SelectedPath;
 				if (!selectedPath.EndsWith("\\"))
+				{
 					selectedPath = string.Format("{0}\\", selectedPath);
+				}
 
 				state.OutputDirectory = selectedPath;
 				outputDestinationTextBox.Text = selectedPath;
@@ -252,7 +262,9 @@ namespace UI.Controls.FunctionBlockControls
 			if (control != null)
 			{
 				if (control.DroppedDown)
+				{
 					return;
+				}
 
 				control.DroppedDown = true;
 			}
@@ -265,7 +277,9 @@ namespace UI.Controls.FunctionBlockControls
 			if (control != null)
 			{
 				if (control.DroppedDown || e.KeyCode == Keys.Down || e.KeyCode == Keys.Up)
+				{
 					return;
+				}
 
 				control.DroppedDown = true;
 			}
@@ -281,10 +295,12 @@ namespace UI.Controls.FunctionBlockControls
 
 				string searchExpression = string.Format("FoundationDisplayText like '%{0}%' ", foundationIdComboBox.Text);
 
-				var rows = boundData.Select(searchExpression);
+				DataRow[] rows = boundData.Select(searchExpression);
 
 				if (rows.Any())
+				{
 					selectedRow = rows[0];
+				}
 
 				ChangeFoundationSelection(selectedRow);
 			}
@@ -323,12 +339,12 @@ namespace UI.Controls.FunctionBlockControls
 
 		private void SelectedIndexChanged_ProcessIdComboBox(object sender, EventArgs e)
 		{
-			int foundationProcessId = -1;
+			int processId = -1;
 
 			if (((ComboBox)sender).SelectedItem != null)
 			{
-				var selectedRow = ((DataRowView)((ComboBox)sender).SelectedItem).Row;
-				foundationProcessId = (int)selectedRow[0];
+				DataRow selectedRow = ((DataRowView)((ComboBox)sender).SelectedItem).Row;
+				processId = (int)selectedRow[0];
 			}
 			try
 			{
@@ -337,21 +353,21 @@ namespace UI.Controls.FunctionBlockControls
 				//ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, "");
 				fileCountLinkLabel.Text = WORKING;
 
-				state.FoundationProcessId = foundationProcessId;
+				state.ProcessId = processId;
 
 				try
 				{
 					if (string.IsNullOrEmpty(state.FileType) || state.FileType == "All")
 					{
-						if (foundationProcessId == -999)
+						if (processId == -999)
 						{
 							state.RequestFiles = RequestQuery.RetrieveAllRequestInfo(state.FoundationId);
 							state.RequestSupportingFiles = RequestQuery.RetrieveAllRequestSupportingInfo(state.FoundationId);
 						}
 						else
 						{
-							state.RequestFiles = RequestQuery.RetrieveRequestInfo(foundationProcessId);
-							state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(foundationProcessId);
+							state.RequestFiles = RequestQuery.RetrieveRequestInfo(processId);
+							state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(processId);
 						}
 						state.OrganizationSupportingFiles = RequestQuery.RetrieveAllOrganizationSupportingInfo(state.FoundationId);
 						state.MergeTemplateFiles = RequestQuery.RetrieveAllMergeTemplateInfoByFoundation(state.FoundationId);
@@ -363,15 +379,15 @@ namespace UI.Controls.FunctionBlockControls
 						switch (state.FileType)
 						{
 							case "requests":
-								if (foundationProcessId == -999)
+								if (processId == -999)
 								{
 									state.RequestFiles = RequestQuery.RetrieveAllRequestInfo(state.FoundationId);
 									state.RequestSupportingFiles = RequestQuery.RetrieveAllRequestSupportingInfo(state.FoundationId);
 								}
 								else
 								{
-									state.RequestFiles = RequestQuery.RetrieveRequestInfo(foundationProcessId);
-									state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(foundationProcessId);
+									state.RequestFiles = RequestQuery.RetrieveRequestInfo(processId);
+									state.RequestSupportingFiles = RequestQuery.RetrieveRequestSupportingInfo(processId);
 								}
 								break;
 							case "organizations":
@@ -388,31 +404,31 @@ namespace UI.Controls.FunctionBlockControls
 								break;
 						}
 					}
-					
 				}
 				catch (Exception eError)
 				{
-					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION,
+						MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 
 				//ApplicantProcessIdsLabel.Text = string.Format(APPLICANT_PROCESS_FORMAT, state.FoundationApplicantProcessCodes.Count);
 
-					FileProcessing.SetFileList(state);
+				FileProcessing.SetFileList(state);
 
-					if (state.Files != null && state.Files.Count > 0)
-					{
-						fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count,
-							(float)state.TotalSize / (1024 * 1024));
-					}
-					else
-					{
-						fileCountLinkLabel.Text = NO_FILE_COUNT;
-					}
-
+				if (state.Files != null && state.Files.Count > 0)
+				{
+					fileCountLinkLabel.Text = string.Format(FILE_COUNT_FORMAT, state.Files.Count,
+						(float)state.TotalSize / (1024 * 1024));
+				}
+				else
+				{
+					fileCountLinkLabel.Text = NO_FILE_COUNT;
+				}
 			}
 			catch (Exception eError)
 			{
-				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, string.Format(FILE_COPY_ERROR_FORMAT, eError.Message), FILE_COPY_CAPTION, MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 			finally
 			{
@@ -424,7 +440,9 @@ namespace UI.Controls.FunctionBlockControls
 		{
 			string selectedPath = outputDestinationTextBox.Text;
 			if (!selectedPath.EndsWith("\\"))
+			{
 				selectedPath = string.Format("{0}\\", selectedPath);
+			}
 
 			state.OutputDirectory = selectedPath;
 		}

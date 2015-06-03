@@ -14,7 +14,7 @@ namespace API.FileIO
 		public string FileMask { get; set; }
 		public List<global::System.IO.FileInfo> Files { get; set; }
 		public int FoundationId { get; set; }
-		public int FoundationProcessId { get; set; }
+		public int ProcessId { get; set; }
 		public string FoundationUrlKey { get; set; }
 		public string OutputDirectory { get; set; }
 		public List<string> SequesterExclusionPatterns { get; set; }
@@ -79,7 +79,7 @@ namespace API.FileIO
 
 			stateOutput.AppendFormat("Foundation URL Key: {0}\r\n", string.IsNullOrWhiteSpace(FoundationUrlKey) ? "Not Found!" : FoundationUrlKey);
 			stateOutput.AppendFormat("Foundation ID: {0}\r\n", FoundationId >= 0 ? "Not Found!" : FoundationId.ToString(CultureInfo.CurrentCulture));
-			stateOutput.AppendFormat("Foundation Process ID: {0}\r\n", FoundationProcessId >= 0 ? "Not Selected!" : FoundationProcessId.ToString(CultureInfo.CurrentCulture));
+			stateOutput.AppendFormat("Foundation Process ID: {0}\r\n", ProcessId >= 0 ? "Not Selected!" : ProcessId.ToString(CultureInfo.CurrentCulture));
 			stateOutput.AppendFormat("Base Directory: {0}\r\n", string.IsNullOrWhiteSpace(BaseDirectory) ? "Not Found!" : BaseDirectory);
 			stateOutput.AppendFormat("File Mask {0}\r\n", FileMask);
 			stateOutput.AppendFormat("Total File Count: {0}\r\n", Files != null ? Files.Count : 0);

@@ -174,91 +174,116 @@ WHERE
 	<data name="SELECT_REQUEST_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				answer.AnswerId, submission.SubmissionId, applicantprocess.ApplicantProcessId, answer.`Value`, stage.Name, element.Label
-			FROM answer
-			LEFT JOIN element on answer.ElementId = element.ElementId
-			LEFT JOIN submission on answer.SubmissionId = submission.SubmissionId
-			LEFT JOIN applicantprocess on submission.RequestId = applicantprocess.ApplicantProcessId
-			LEFT JOIN stage on submission.StageId = stage.StageId
+				a.AnswerId
+				,s.SubmissionId
+				,r.RequestId
+				,a.`Value`
+				,st.Name
+				,e.Label
+			FROM 
+				answer a
+				LEFT JOIN element e on (a.ElementGuid = e.ElementGuid)
+				LEFT JOIN submission s on (a.SubmissionId = s.SubmissionId)
+				LEFT JOIN request r on (s.RequestId = r.RequestId)
+				LEFT JOIN stage st on (s.StageId = st.StageId)
 			WHERE 
-				element.Type in (17, 18)
-			AND
-				NULLIF(answer.`Value`, '') IS NOT NULL
-			AND
-				answer.`Value` != '[:|:]'
-			AND 
-				applicantprocess.FoundationProcessId = @FOUNDATION_PROCESS
+				e.Type in (17, 18)
+				AND
+				NULLIF(a.`Value`, '') IS NOT NULL
+				AND
+				a.`Value` != '[:|:]'
+				AND 
+				r.ProcessId = @FOUNDATION_PROCESS
 		</value>
 	</data>
 
 	<data name="SELECT_ALL_REQUEST_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				answer.AnswerId, submission.SubmissionId, applicantprocess.ApplicantProcessId, answer.`Value`, stage.Name, element.Label
-			FROM answer
-			LEFT JOIN element on answer.ElementId = element.ElementId
-			LEFT JOIN submission on answer.SubmissionId = submission.SubmissionId
-			LEFT JOIN applicantprocess on submission.RequestId = applicantprocess.ApplicantProcessId
-			LEFT JOIN stage on submission.StageId = stage.StageId
+				a.AnswerId
+				,s.SubmissionId
+				,r.RequestId
+				,a.`Value`
+				,st.Name
+				,e.Label
+			FROM 
+				answer a
+				LEFT JOIN element e on (a.ElementGuid = e.ElementGuid)
+				LEFT JOIN submission s on (a.SubmissionId = s.SubmissionId)
+				LEFT JOIN request r on (s.RequestId = r.RequestId)
+				LEFT JOIN stage st on (s.StageId = st.StageId)
 			WHERE 
-				element.Type in (17, 18)
-			AND
-				NULLIF(answer.`Value`, '') IS NOT NULL
-			AND
-				answer.`Value` != '[:|:]'
-			AND 
-				applicantprocess.FoundationId = @FOUNDATION_ID
+				e.Type in (17, 18)
+				AND
+				NULLIF(a.`Value`, '') IS NOT NULL
+				AND
+				a.`Value` != '[:|:]'
+				AND 
+				r.FoundationId = @FOUNDATION_ID
 		</value>
 	</data>
 	
 	<data name="SELECT_REQUEST_SUPPORTING_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				document.ApplicantProcessId, document.DocumentId, document.Name
-			FROM document
-			LEFT JOIN applicantprocess on document.ApplicantProcessId = applicantprocess.ApplicantProcessId
+				d.RequestId
+				,d.DocumentId
+				,document.Name
+			FROM 
+				document d
+				LEFT JOIN request r on (d.RequestId = r.RequestId)
 			WHERE 
-				applicantprocess.FoundationProcessId = @FOUNDATION_PROCESS
+				r.ProcessId = @FOUNDATION_PROCESS
 		</value>
 	</data>
 
 	<data name="SELECT_ALL_REQUEST_SUPPORTING_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				document.ApplicantProcessId, document.DocumentId, document.Name
-			FROM document
+				d.RequestId
+				,d.DocumentId
+				,d.Name
+			FROM 
+				document d
 			WHERE 
-				document.FoundationId = @FOUNDATION_ID
+				d.FoundationId = @FOUNDATION_ID
 		</value>
 	</data>
 
 	<data name="SELECT_ALL_ORGANIZATION_SUPPORTING_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				document.OrganizationId, document.DocumentId, document.Name
-			FROM document
+				d.OrganizationId
+				,d.DocumentId
+				,d.Name
+			FROM 
+				document d
 			WHERE 
-				document.FoundationId = @FOUNDATION_ID
+				d.FoundationId = @FOUNDATION_ID
 		</value>
 	</data>
 
 	<data name="SELECT_ALL_ATTACHMENT_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				attachment.AttachmentId, attachment.Name
-			FROM attachment
+				a.AttachmentId
+				,a.Name
+			FROM 
+				attachment a
 			WHERE 
-				attachment.FoundationId = @FOUNDATION_ID
+				a.FoundationId = @FOUNDATION_ID
 		</value>
 	</data>
 
 	<data name="SELECT_ALL_MERGE_TEMPLATE_INFO_BY_FOUNDATION" xml:space="preserve">
 		<value>
 			SELECT 
-				mergetemplate.MergeTemplateId, mergetemplate.Name
-			FROM mergetemplate
+				mt.MergeTemplateId
+				,mt.Name
+			FROM 
+				mergetemplate mt
 			WHERE 
-				mergetemplate.FoundationId = @FOUNDATION_ID
+				mt.FoundationId = @FOUNDATION_ID
 		</value>
 	</data>
 	
@@ -324,7 +349,7 @@ WHERE
 			WHERE
 				d.FoundationId = @FOUNDATION_ID
 				AND
-				NULLIF(d.ApplicantProcessId, '') IS NULL
+				NULLIF(d.RequestId, '') IS NULL
 				AND
 				NULLIF(d.OrganizationId, '') IS NULL
 		</value>
@@ -359,30 +384,30 @@ WHERE
 	<data name="SELECT_FOUNDATION_PROCESS_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				fp.FoundationProcessId 
-				,fp.Name 
-				,CONCAT(fp.FoundationProcessId, ' - ', fp.Name) AS ProcessDisplayText
+				p.ProcessId
+				,p.Name 
+				,CONCAT(p.ProcessId, ' - ', p.Name) AS ProcessDisplayText
 			FROM 
-				foundationprocess fp
+				process p
 			WHERE
-				fp.FoundationId = @FOUNDATION_ID 
+				p.FoundationId = @FOUNDATION_ID 
 			ORDER BY 
-				fp.Name
+				p.Name
 		</value>
 	</data>
 
 	<data name="SELECT_REQUEST_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
-				CONCAT('\\requests\\request.', d.ApplicantProcessId, '\\documents\\document.', d.DocumentId) AS FileName,
+				CONCAT('\\requests\\request.', d.RequestId, '\\documents\\document.', d.DocumentId) AS FileName,
 					d.FilePath
 			FROM
 				document d
-				LEFT OUTER JOIN applicantprocess ap ON (d.ApplicantProcessId = ap.ApplicantProcessId)
+				LEFT OUTER JOIN request r ON (d.RequestId = r.RequestId)
 			WHERE
 				d.FoundationId = @FOUNDATION_ID
 				AND
-				NULLIF(d.ApplicantProcessId, '') IS NOT NULL
+				NULLIF(d.RequestId, '') IS NOT NULL
 			ORDER BY
 				FileName
 		</value>
@@ -414,7 +439,7 @@ WHERE
 			FROM
 				submission su
 				LEFT OUTER JOIN answer an ON (su.SubmissionId = an.SubmissionId)
-				LEFT OUTER JOIN element em ON (an.ElementId = em.ElementId)
+				LEFT OUTER JOIN element em ON (an.ElementGuid = em.ElementGuid)
 			WHERE
 				su.FoundationId = @FOUNDATION_ID
 				AND
@@ -446,12 +471,12 @@ WHERE
 		<value>
 			SELECT 
 				DocumentId 
-					FROM 
-						document d 
-					WHERE 
-						d.ApplicantProcessId = @REQUESET_ID
-						AND
-						d.Name like '%@FILE_NAME%'
+			FROM 
+				document d 
+			WHERE 
+				d.RequestId = @REQUEST_ID
+				AND
+				d.Name like '%@FILE_NAME%'
 		</value>
 	</data>
 	
@@ -459,12 +484,12 @@ WHERE
 		<value>
 			SELECT 
 				DocumentId 
-					FROM 
-						document d 
-					WHERE 
-						d.ApplicantProcessId = @ORGANIZATION_ID
-						AND
-						d.Name like '%@FILE_NAME%'
+			FROM 
+				document d 
+			WHERE 
+				d.OrganizationId = @ORGANIZATION_ID
+				AND
+				d.Name like '%@FILE_NAME%'
 		</value>
 	</data>
 	
@@ -472,18 +497,18 @@ WHERE
 		<value>
 			SELECT 
 				DocumentId 
-					FROM 
-						document d 
-					WHERE 
-						NULLIF(d.ApplicantProcessId, '') IS NULL
-						AND
-						NULLIF(d.OrganizationId, '') IS NULL
-						AND
-						d.Name like '%@FILE_NAME%'
+			FROM 
+				document d 
+			WHERE 
+				NULLIF(d.RequestId, '') IS NULL
+				AND
+				NULLIF(d.OrganizationId, '') IS NULL
+				AND
+				d.Name like '%@FILE_NAME%'
 		</value>
 	</data>
 
-	<data name="SELECT_REQEST_ANSWER_ID" xml:space="preserve">
+	<!--<data name="SELECT_REQEST_ANSWER_ID" xml:space="preserve">
 		<value>
 					SELECT DISTINCT
 						an.AnswerID
@@ -502,9 +527,9 @@ WHERE
 								an.Value like CONCAT('%', @FILE_NAME, '%')
 				
 		</value>
-	</data>
+	</data>-->
 
-	<data name="SELECT_MISMATCHED_REQUEST_ID_AND_CODE" xml:space="preserve">
+	<!--<data name="SELECT_MISMATCHED_REQUEST_ID_AND_CODE" xml:space="preserve">
 		<value>
 					SELECT 
 						ap.ApplicantProcessId,
@@ -517,8 +542,9 @@ WHERE
 						AND
 						ap.ApplicantProcessCode != ap.ApplicantProcessId
 		</value>
-	</data>
-	<data name="UPDATE_MISMATCH_REQUEST_ID_AND_CODE" xml:space="preserve">
+	</data>-->
+	
+	<!--<data name="UPDATE_MISMATCH_REQUEST_ID_AND_CODE" xml:space="preserve">
 		<value>
 					UPDATE 
 						applicantprocess ap
@@ -527,7 +553,7 @@ WHERE
 					WHERE
 						ap.ApplicantProcessId = @REQUEST_ID
 		</value>
-	</data>
+	</data>-->
 	
 	<data name="DELETE_REQEST_DOCUMENT_RECORD" xml:space="preserve">
 		<value>

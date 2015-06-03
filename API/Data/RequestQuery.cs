@@ -20,7 +20,7 @@ namespace API.Data
 
 		/// <summary>
 		/// Name/Index structure for this DataTable:
-		/// FoundationProcessId:[0]; Name:[1]; ProcessDisplayText:[2]
+		/// ProcessId:[0]; Name:[1]; ProcessDisplayText:[2]
 		/// </summary>
 		public static DataTable FoundationProcessData { get; private set; }
 
@@ -94,13 +94,11 @@ namespace API.Data
 
 			using (MySqlDataReader reader = access.GetReader(command))
 			{
-				
-
 				FoundationProcessData.Load(reader);
 
 				DataRow row = FoundationProcessData.NewRow();
 				row["ProcessDisplayText"] = "All";
-				row["FoundationProcessId"] = -999;
+				row["ProcessId"] = -999;
 
 				FoundationProcessData.Rows.InsertAt(row, 0);
 
@@ -133,9 +131,9 @@ namespace API.Data
 			ReportFieldData.Columns.Add("ReportFieldTemplateName");
 			ReportFieldData.PrimaryKey = new[] {ReportFieldData.Columns[2]};
 
-			for (int i =0; i < 250000; i++)
+			for (int i = 0; i < 250000; i++)
 			{
-				var dataRow = ReportFieldData.NewRow();
+				DataRow dataRow = ReportFieldData.NewRow();
 				dataRow["FoundationId"] = string.Empty;
 				dataRow["ReportFieldTemplateId"] = string.Empty;
 				dataRow["ReportFieldTemplateIdHash"] = string.Format("RF_{0}", DocumentProcessing.GetSha256(i.ToString(), 10));
@@ -161,7 +159,7 @@ namespace API.Data
 						? string.Empty
 						: string.Format("RF_{0}", DocumentProcessing.GetSha256(reportFieldTemplateId, 10));
 
-					var dataRow = ReportFieldData.Rows.Find(reportFieldHash);
+					DataRow dataRow = ReportFieldData.Rows.Find(reportFieldHash);
 					if (dataRow != null)
 					{
 						dataRow["FoundationId"] = foundationId;
@@ -219,9 +217,9 @@ namespace API.Data
 						if (!reader.IsDBNull(0))
 						{
 							string filePath = reader.GetString(0);
-							string fileName = (!reader.IsDBNull(1) ? reader.GetString(1) : "")
-								.Split(new[] {"[:|:]"}, StringSplitOptions.None)[0];
-							
+							string fileName =
+								(!reader.IsDBNull(1) ? reader.GetString(1) : "").Split(new[] {"[:|:]"}, StringSplitOptions.None)[0];
+
 
 							if (!string.IsNullOrEmpty(fileName) && !fileList.Keys.Contains(filePath))
 							{
@@ -276,11 +274,14 @@ namespace API.Data
 							AnswerId = reader.GetInt32(0),
 							SubmissionId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
 							RequestId = reader.IsDBNull(2) ? -1 : reader.GetInt32(2),
-							FileName = reader.IsDBNull(3) ? "" : reader.GetString(3).Split(new string[] { "[:|:]" }, StringSplitOptions.None)[0],
+							FileName = reader.IsDBNull(3)
+								? ""
+								: reader.GetString(3)
+									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0],
 							Question = reader.IsDBNull(5) ? "" : reader.GetString(5)
 						};
 						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
-												 + fileIds.FileName;
+						                   + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
 					}
 				}
@@ -314,7 +315,10 @@ namespace API.Data
 							AnswerId = reader.GetInt32(0),
 							SubmissionId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
 							RequestId = reader.IsDBNull(2) ? -1 : reader.GetInt32(2),
-							FileName = reader.IsDBNull(3) ? "" : reader.GetString(3).Split(new string[] { "[:|:]" }, StringSplitOptions.None)[0]
+							FileName = reader.IsDBNull(3)
+								? ""
+								: reader.GetString(3)
+									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0]
 						};
 						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
 						                   + fileIds.FileName;
@@ -523,7 +527,6 @@ namespace API.Data
 						{
 							DocumentId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
 							FileName = reader.IsDBNull(1) ? "" : reader.GetString(1)
-
 						};
 						fileIds.FilePath = "\\Shared_Documents\\" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
@@ -534,134 +537,134 @@ namespace API.Data
 			return requestSupporitngFiles;
 		}
 
-		public static void DeleteRequestRecords(int foundationId, string requestCode, string stageName, string fileName)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
-			parameters.Add(DbType.String, "REQUEST_PROCESS_CODE", requestCode);
-			parameters.Add(DbType.String, "STAGE_NAME", stageName);
-			parameters.Add(DbType.String, "FILE_NAME", fileName);
-			var command = new Command
-			{
-				SqlStatementId = "SELECT_REQEST_ANSWER_ID",
-				ParameterCollection = parameters
-			};
+		//public static void DeleteRequestRecords(int foundationId, string requestCode, string stageName, string fileName)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+		//	parameters.Add(DbType.String, "@REQUEST_PROCESS_ID", requestCode);
+		//	parameters.Add(DbType.String, "STAGE_NAME", stageName);
+		//	parameters.Add(DbType.String, "FILE_NAME", fileName);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "SELECT_REQEST_ANSWER_ID",
+		//		ParameterCollection = parameters
+		//	};
 
-			var access = new DataAccess();
+		//	var access = new DataAccess();
 
-			using (MySqlDataReader reader = access.GetReader(command))
-			{
-				while (reader.Read())
-				{
-					if (!reader.IsDBNull(0))
-					{
-						DeleteAnswer(reader.GetInt32(0));
-					}
-				}
-			}
-		}
+		//	using (MySqlDataReader reader = access.GetReader(command))
+		//	{
+		//		while (reader.Read())
+		//		{
+		//			if (!reader.IsDBNull(0))
+		//			{
+		//				DeleteAnswer(reader.GetInt32(0));
+		//			}
+		//		}
+		//	}
+		//}
 
-		public static void DeleteRequestSupportingRecords(int requestId, string fileName)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "REQUEST_ID", requestId);
-			parameters.Add(DbType.String, "FILE_NAME", fileName);
-			var command = new Command
-			{
-				SqlStatementId = "SELECT_REQUEST_DOCUMENT_ID",
-				ParameterCollection = parameters
-			};
+		//public static void DeleteRequestSupportingRecords(int requestId, string fileName)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.Int32, "REQUEST_ID", requestId);
+		//	parameters.Add(DbType.String, "FILE_NAME", fileName);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "SELECT_REQUEST_DOCUMENT_ID",
+		//		ParameterCollection = parameters
+		//	};
 
-			ExecuteDeleteCommand(command);
-		}
+		//	ExecuteDeleteCommand(command);
+		//}
 
-		public static void DeleteOrganizationSupportingRecords(int organizationId, string fileName)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "ORGANIZATION_ID", organizationId);
-			parameters.Add(DbType.String, "FILE_NAME", fileName);
-			var command = new Command
-			{
-				SqlStatementId = "SELECT_ORGANIZATION_DOCUMENT_ID",
-				ParameterCollection = parameters
-			};
+		//public static void DeleteOrganizationSupportingRecords(int organizationId, string fileName)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.Int32, "ORGANIZATION_ID", organizationId);
+		//	parameters.Add(DbType.String, "FILE_NAME", fileName);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "SELECT_ORGANIZATION_DOCUMENT_ID",
+		//		ParameterCollection = parameters
+		//	};
 
-			ExecuteDeleteCommand(command);
-		}
+		//	ExecuteDeleteCommand(command);
+		//}
 
-		public static void DeleteSharedRecords(string fileName)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.String, "FILE_NAME", fileName);
-			var command = new Command
-			{
-				SqlStatementId = "SELECT_SHARED_DOCUMENT_ID",
-				ParameterCollection = parameters
-			};
+		//public static void DeleteSharedRecords(string fileName)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.String, "FILE_NAME", fileName);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "SELECT_SHARED_DOCUMENT_ID",
+		//		ParameterCollection = parameters
+		//	};
 
-			ExecuteDeleteCommand(command);
-		}
+		//	ExecuteDeleteCommand(command);
+		//}
 
-		private static void DeleteDocument(int documentId)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "DOCUMENT_ID", documentId);
-			var command = new Command
-			{
-				SqlStatementId = "DELETE_DOCUMENT_ROLE",
-				ParameterCollection = parameters
-			};
+		//private static void DeleteDocument(int documentId)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.Int32, "DOCUMENT_ID", documentId);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "DELETE_DOCUMENT_ROLE",
+		//		ParameterCollection = parameters
+		//	};
 
-			var access = new DataAccess();
+		//	var access = new DataAccess();
 
-			access.GetReader(command);
-		}
+		//	access.GetReader(command);
+		//}
 
-		private static void DeleteDocumentRole(int documentId)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "DOCUMENT_ID", documentId);
-			var command = new Command
-			{
-				SqlStatementId = "DELETE_DOCUMENT_ROLE",
-				ParameterCollection = parameters
-			};
+		//private static void DeleteDocumentRole(int documentId)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.Int32, "DOCUMENT_ID", documentId);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "DELETE_DOCUMENT_ROLE",
+		//		ParameterCollection = parameters
+		//	};
 
-			var access = new DataAccess();
+		//	var access = new DataAccess();
 
-			access.GetReader(command);
-		}
+		//	access.GetReader(command);
+		//}
 
-		private static void DeleteAnswer(int answerId)
-		{
-			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "ANSWER_ID", answerId);
-			var command = new Command
-			{
-				SqlStatementId = "DELETE_REQEST_DOCUMENT_RECORD",
-				ParameterCollection = parameters
-			};
+		//private static void DeleteAnswer(int answerId)
+		//{
+		//	var parameters = new ParameterSet();
+		//	parameters.Add(DbType.Int32, "ANSWER_ID", answerId);
+		//	var command = new Command
+		//	{
+		//		SqlStatementId = "DELETE_REQEST_DOCUMENT_RECORD",
+		//		ParameterCollection = parameters
+		//	};
 
-			var access = new DataAccess();
+		//	var access = new DataAccess();
 
-			access.GetReader(command);
-		}
+		//	access.GetReader(command);
+		//}
 
-		private static void ExecuteDeleteCommand(Command command)
-		{
-			var access = new DataAccess();
+		//private static void ExecuteDeleteCommand(Command command)
+		//{
+		//	var access = new DataAccess();
 
-			using (MySqlDataReader reader = access.GetReader(command))
-			{
-				while (reader.Read())
-				{
-					if (!reader.IsDBNull(0))
-					{
-						DeleteDocumentRole(reader.GetInt32(0));
-						DeleteDocument(reader.GetInt32(0));
-					}
-				}
-			}
-		}
+		//	using (MySqlDataReader reader = access.GetReader(command))
+		//	{
+		//		while (reader.Read())
+		//		{
+		//			if (!reader.IsDBNull(0))
+		//			{
+		//				DeleteDocumentRole(reader.GetInt32(0));
+		//				DeleteDocument(reader.GetInt32(0));
+		//			}
+		//		}
+		//	}
+		//}
 	}
 }
