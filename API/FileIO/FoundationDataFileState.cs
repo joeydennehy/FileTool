@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace API.FileIO
 {
@@ -22,7 +20,7 @@ namespace API.FileIO
 		public string SequesterPath { get; set; }
 		public long TotalSize { get; set; }
 		public string FileType { get; set; }
-		
+
 		public Dictionary<string, string> FilesNotFound { get; set; }
 		public List<string> FoundationApplicantProcessCodes { get; set; }
 
@@ -37,6 +35,7 @@ namespace API.FileIO
 			public int OrganizationId;
 			public string FileName;
 			public string FilePath;
+			public DateTime CreateDate;
 			public string Question;
 		}
 
@@ -46,7 +45,7 @@ namespace API.FileIO
 		public List<FileInfo> AttachmentFiles { get; set; }
 		public List<FileInfo> SharedFiles { get; set; }
 		public List<FileInfo> MergeTemplateFiles { get; set; }
-		
+
 		//public string MovedToDirectory { get; set; }
 		//public string MovedFromDirectory { get; set; }
 
@@ -77,17 +76,24 @@ namespace API.FileIO
 		{
 			var stateOutput = new StringBuilder();
 
-			stateOutput.AppendFormat("Foundation URL Key: {0}\r\n", string.IsNullOrWhiteSpace(FoundationUrlKey) ? "Not Found!" : FoundationUrlKey);
-			stateOutput.AppendFormat("Foundation ID: {0}\r\n", FoundationId >= 0 ? "Not Found!" : FoundationId.ToString(CultureInfo.CurrentCulture));
-			stateOutput.AppendFormat("Foundation Process ID: {0}\r\n", ProcessId >= 0 ? "Not Selected!" : ProcessId.ToString(CultureInfo.CurrentCulture));
-			stateOutput.AppendFormat("Base Directory: {0}\r\n", string.IsNullOrWhiteSpace(BaseDirectory) ? "Not Found!" : BaseDirectory);
+			stateOutput.AppendFormat("Foundation URL Key: {0}\r\n",
+				string.IsNullOrWhiteSpace(FoundationUrlKey) ? "Not Found!" : FoundationUrlKey);
+			stateOutput.AppendFormat("Foundation ID: {0}\r\n",
+				FoundationId >= 0 ? "Not Found!" : FoundationId.ToString(CultureInfo.CurrentCulture));
+			stateOutput.AppendFormat("Foundation Process ID: {0}\r\n",
+				ProcessId >= 0 ? "Not Selected!" : ProcessId.ToString(CultureInfo.CurrentCulture));
+			stateOutput.AppendFormat("Base Directory: {0}\r\n",
+				string.IsNullOrWhiteSpace(BaseDirectory) ? "Not Found!" : BaseDirectory);
 			stateOutput.AppendFormat("File Mask {0}\r\n", FileMask);
 			stateOutput.AppendFormat("Total File Count: {0}\r\n", Files != null ? Files.Count : 0);
 			stateOutput.AppendFormat("Total Byte Count: {0}\r\n", TotalSize);
-			stateOutput.AppendFormat("Sequester Path: {0}\r\n", string.IsNullOrWhiteSpace(SequesterPath) ? "Not Set" : SequesterPath);
-			stateOutput.AppendFormat("Sequester Exclusion Patterns {0}\r\n", SequesterExclusionPatterns == null ? "None" : string.Join(";", SequesterExclusionPatterns));
+			stateOutput.AppendFormat("Sequester Path: {0}\r\n",
+				string.IsNullOrWhiteSpace(SequesterPath) ? "Not Set" : SequesterPath);
+			stateOutput.AppendFormat("Sequester Exclusion Patterns {0}\r\n",
+				SequesterExclusionPatterns == null ? "None" : string.Join(";", SequesterExclusionPatterns));
 			stateOutput.AppendFormat("Sequester File Count: {0}\r\n", SequesterFiles != null ? SequesterFiles.Count : 0);
-			stateOutput.AppendFormat("Output Directory: {0}\r\n", string.IsNullOrWhiteSpace(OutputDirectory) ? "Not Set" : OutputDirectory);
+			stateOutput.AppendFormat("Output Directory: {0}\r\n",
+				string.IsNullOrWhiteSpace(OutputDirectory) ? "Not Set" : OutputDirectory);
 
 
 			return stateOutput.ToString();

@@ -180,6 +180,7 @@ WHERE
 				,a.`Value`
 				,st.Name
 				,e.Label
+				,a.CreateDate
 			FROM 
 				answer a
 				LEFT JOIN element e on (a.ElementGuid = e.ElementGuid)
@@ -206,6 +207,7 @@ WHERE
 				,a.`Value`
 				,st.Name
 				,e.Label
+				,a.CreateDate
 			FROM 
 				answer a
 				LEFT JOIN element e on (a.ElementGuid = e.ElementGuid)
@@ -228,7 +230,8 @@ WHERE
 			SELECT 
 				d.RequestId
 				,d.DocumentId
-				,document.Name
+				,d.Name
+				,d.CreateDate
 			FROM 
 				document d
 				LEFT JOIN request r on (d.RequestId = r.RequestId)
@@ -243,6 +246,7 @@ WHERE
 				d.RequestId
 				,d.DocumentId
 				,d.Name
+				,d.CreateDate
 			FROM 
 				document d
 			WHERE 
@@ -256,6 +260,7 @@ WHERE
 				d.OrganizationId
 				,d.DocumentId
 				,d.Name
+				,d.CreateDate
 			FROM 
 				document d
 			WHERE 

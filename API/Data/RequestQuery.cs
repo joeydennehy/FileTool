@@ -278,7 +278,8 @@ namespace API.Data
 								? ""
 								: reader.GetString(3)
 									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0],
-							Question = reader.IsDBNull(5) ? "" : reader.GetString(5)
+							Question = reader.IsDBNull(5) ? "" : reader.GetString(5),
+							CreateDate = reader.IsDBNull(6) ? DateTime.MinValue : reader.GetDateTime(6)
 						};
 						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
 						                   + fileIds.FileName;
@@ -318,7 +319,8 @@ namespace API.Data
 							FileName = reader.IsDBNull(3)
 								? ""
 								: reader.GetString(3)
-									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0]
+									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0],
+							CreateDate = reader.IsDBNull(6) ? DateTime.MinValue : reader.GetDateTime(6)
 						};
 						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
 						                   + fileIds.FileName;
@@ -354,7 +356,8 @@ namespace API.Data
 						{
 							RequestId = reader.GetInt32(0),
 							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
-							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2)
+							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2),
+							CreateDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
 						};
 						fileIds.FilePath = "\\Requests\\Supporting\\" + fileIds.RequestId + "_RS_" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
@@ -389,7 +392,8 @@ namespace API.Data
 						{
 							RequestId = reader.GetInt32(0),
 							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
-							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2)
+							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2),
+							CreateDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
 						};
 						fileIds.FilePath = "\\Requests\\Supporting\\" + fileIds.RequestId + "_RS_" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
@@ -424,7 +428,8 @@ namespace API.Data
 						{
 							OrganizationId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
 							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
-							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2)
+							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2),
+							CreateDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
 						};
 						fileIds.FilePath = "\\Organizations\\" + fileIds.OrganizationId + "_OS_" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);

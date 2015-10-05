@@ -19,10 +19,10 @@ namespace API.FileIO
 		{
 			CopyFilesToDestination(state, state.OutputDirectory);
 
-			if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
+			/*if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
 			{
 				CopyFilesToDestination(state, state.SequesterPath);
-			}
+			}*/
 		}
 
 		private static void ClearFiles(FoundationDataFileState state)
@@ -73,7 +73,7 @@ namespace API.FileIO
 		private static void SetRequestFiles(FoundationDataFileState state)
 		{
 			string directoryPath = "";
-			List<string> pathChecked = new List<string>();
+			var pathChecked = new List<string>();
 
 			foreach (FoundationDataFileState.FileInfo requestFile in state.RequestFiles)
 			{
@@ -101,7 +101,7 @@ namespace API.FileIO
 		private static void SetOrganizationSupportingFiles(FoundationDataFileState state)
 		{
 			string directoryPath = "";
-			List<string> pathChecked = new List<string>();
+			var pathChecked = new List<string>();
 
 			foreach (FoundationDataFileState.FileInfo orgSupportingFile in state.OrganizationSupportingFiles)
 			{
@@ -182,12 +182,16 @@ namespace API.FileIO
 
 		public static IEnumerable<FileInfo> BuildMergeTemplateFileInfo(DataTable mergeTemplateData, string rootDirectory)
 		{
-			return (from DataRow row in mergeTemplateData.Rows select new FileInfo(string.Format("{0}\\{1}\\mergetemplates\\mergetemplate.{2}", rootDirectory, row[1], row[2]))).ToList();
+			return (from DataRow row in mergeTemplateData.Rows
+				select new FileInfo(string.Format("{0}\\{1}\\mergetemplates\\mergetemplate.{2}", rootDirectory, row[1], row[2])))
+				.ToList();
 		}
 
 		public static IEnumerable<FileInfo> BuildCustomPrintPacketInfo(DataTable customPrintPacketData, string rootDirectory)
 		{
-			return (from DataRow row in customPrintPacketData.Rows select new FileInfo(string.Format("{0}\\{1}\\settingvalues\\settingvalue.{2}", rootDirectory, row[1], row[2]))).ToList();
+			return (from DataRow row in customPrintPacketData.Rows
+				select new FileInfo(string.Format("{0}\\{1}\\settingvalues\\settingvalue.{2}", rootDirectory, row[1], row[2])))
+				.ToList();
 		}
 
 		/*public static void CleanUpFolders(FoundationDataFileState state)
@@ -250,50 +254,80 @@ namespace API.FileIO
 			{
 				Directory.CreateDirectory(destinationFolder);
 			}
-
-			foreach (FoundationDataFileState.FileInfo file in state.RequestFiles)
+			switch (state.FileType)
 			{
-				string sourcePath = string.Format("{0}requests\\request.{1}\\submission.{2}\\answer.{3}", state.ClientRootDirectory,
-					file.RequestId, file.SubmissionId, file.AnswerId);
-				CopyFile(sourcePath, destinationFolder, file);
-			}
+				case "requests":
+					var sb = new StringBuilder();
 
-			foreach (FoundationDataFileState.FileInfo file in state.RequestSupportingFiles)
-			{
-				string sourcePath = string.Format("{0}requests\\request.{1}\\documents\\document.{2}", state.ClientRootDirectory,
-					file.RequestId, file.DocumentId);
-				CopyFile(sourcePath, destinationFolder, file);
-			}
+					foreach (FoundationDataFileState.FileInfo file in state.RequestFiles)
+					{
+						string sourcePath = string.Format("{0}requests\\request.{1}\\submission.{2}\\answer.{3}",
+							state.ClientRootDirectory, file.RequestId, file.SubmissionId, file.AnswerId);
+						CopyFile(sourcePath, destinationFolder, file);
+						if (!string.IsNullOrWhiteSpace(file.FileName))
+						{
+							sb.AppendLine(file.RequestId + ",\"" + file.FileName + "\"," + file.CreateDate);
+						}
+					}
 
-			foreach (FoundationDataFileState.FileInfo file in state.OrganizationSupportingFiles)
-			{
-				string sourcePath = string.Format("{0}organizations\\organization.{1}\\documents\\document.{2}", state.ClientRootDirectory,
-					file.OrganizationId, file.DocumentId);
-				CopyFile(sourcePath, destinationFolder, file);
-			}
+					foreach (FoundationDataFileState.FileInfo file in state.RequestSupportingFiles)
+					{
+						string sourcePath = string.Format("{0}requests\\request.{1}\\documents\\document.{2}", state.ClientRootDirectory,
+							file.RequestId, file.DocumentId);
+						CopyFile(sourcePath, destinationFolder, file);
+						if (!string.IsNullOrWhiteSpace(file.FileName))
+						{
+							if (!string.IsNullOrWhiteSpace(file.FileName))
+							{
+								sb.AppendLine(file.RequestId + ",\"" + file.FileName + "\"," + file.CreateDate);
+							}
+						}
+					}
+					File.WriteAllText(destinationFolder + "\\Output.csv", sb.ToString());
 
-			foreach (FoundationDataFileState.FileInfo file in state.AttachmentFiles)
-			{
-				string sourcePath = string.Format("{0}attachments\\attachment.{1}", state.ClientRootDirectory, file.AttachmentId);
-				CopyFile(sourcePath, destinationFolder, file);
-			}
+					break;
+				case "organizations":
+					sb = new StringBuilder();
 
-			foreach (FoundationDataFileState.FileInfo file in state.MergeTemplateFiles)
-			{
-				string sourcePath = string.Format("{0}mergetemplates\\mergetemplate.{1}", state.ClientRootDirectory, file.MergeTemplateId);
-				CopyFile(sourcePath, destinationFolder, file);
-			}
+					foreach (FoundationDataFileState.FileInfo file in state.OrganizationSupportingFiles)
+					{
+						string sourcePath = string.Format("{0}organizations\\organization.{1}\\documents\\document.{2}",
+							state.ClientRootDirectory, file.OrganizationId, file.DocumentId);
+						CopyFile(sourcePath, destinationFolder, file);
 
-			foreach (FoundationDataFileState.FileInfo file in state.SharedFiles)
-			{
-				string sourcePath = string.Format("{0}shareddocuments\\document.{1}", state.ClientRootDirectory, file.DocumentId);
-				CopyFile(sourcePath, destinationFolder, file);
+						sb.AppendLine(file.OrganizationId + ",\"" + file.FileName + "\"," + file.CreateDate);
+					}
+
+					File.WriteAllText(destinationFolder + "\\Output.csv", sb.ToString());
+					break;
+				case "mergetemplates":
+					foreach (FoundationDataFileState.FileInfo file in state.MergeTemplateFiles)
+					{
+						string sourcePath = string.Format("{0}mergetemplates\\mergetemplate.{1}", state.ClientRootDirectory,
+							file.MergeTemplateId);
+						CopyFile(sourcePath, destinationFolder, file);
+					}
+					break;
+				case "attachments":
+					foreach (FoundationDataFileState.FileInfo file in state.AttachmentFiles)
+					{
+						string sourcePath = string.Format("{0}attachments\\attachment.{1}", state.ClientRootDirectory, file.AttachmentId);
+						CopyFile(sourcePath, destinationFolder, file);
+					}
+					break;
+				case "shareddocuments":
+					foreach (FoundationDataFileState.FileInfo file in state.SharedFiles)
+					{
+						string sourcePath = string.Format("{0}shareddocuments\\document.{1}", state.ClientRootDirectory, file.DocumentId);
+						CopyFile(sourcePath, destinationFolder, file);
+					}
+					break;
 			}
 		}
 
 		private static void CopyFile(string sourcePath, string destinationFolder, FoundationDataFileState.FileInfo file)
 		{
-			string fullFileName = string.Format("{0}{1}", destinationFolder, BuildFilePath(file));
+			string fullFileName = string.Format("{0}{1}", destinationFolder, file.FileName);
 			string directory = Path.GetDirectoryName(fullFileName);
 			if (directory == null || !Directory.Exists(directory))
 			{
@@ -316,7 +350,7 @@ namespace API.FileIO
 					}
 
 					destinationFile =
-						new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.DirectoryName, baseFileName, fileCounter,
+						new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFolder, baseFileName, fileCounter,
 							destinationFile.Extension));
 					fullFileName = destinationFile.FullName;
 					fileCounter++;
@@ -344,7 +378,7 @@ namespace API.FileIO
 			}
 
 			//destinationFileInfo.Create();
-			using (var outfile = destinationFileInfo.OpenWrite())
+			using (FileStream outfile = destinationFileInfo.OpenWrite())
 			{
 				Byte[] outputData = new UTF8Encoding(true).GetBytes(fileOutput.ToString());
 				outfile.Write(outputData, 0, outputData.Length);
@@ -523,8 +557,9 @@ namespace API.FileIO
 		{
 			var template = new Document(mergeTemplateFilePath);
 			string[] mergeFields = template.MailMerge.GetFieldNames();
-			var reportFieldIds = mergeFields.Where(mergefield => mergefield.StartsWith("RF_")).ToList();
-			
+			List<string> reportFieldIds = mergeFields.Where(mergefield => mergefield.StartsWith("RF_"))
+				.ToList();
+
 			return reportFieldIds;
 		}
 
