@@ -17,12 +17,9 @@ namespace UI
 
 		#region Client Controls
 
-		public SourcePathBlockControl sourcePathBlockControl;
+		private FileExtractionBlockControl fileExtractionBlockControl;
+		private GhostInspectorBlockControl ghostInspectorBlockControl;
 		private TitleBlockControl titleBlockControl;
-
-		private ClientFileExtractionControl clientFileExtractionControl;
-		//private RemoveOrphanDocumentsControl removeOrphanDocumentsControl;
-		private ProcessMergeFieldDocumentsControl processMergeFieldDocumentsControl;
 		
 		#endregion
 
@@ -41,7 +38,9 @@ namespace UI
 		private void Initialize()
 		{
 			//Set up Top Panel Block controls
-			sourcePathBlockControl = new SourcePathBlockControl(this);
+			fileExtractionBlockControl = new FileExtractionBlockControl(this);
+			ghostInspectorBlockControl = new GhostInspectorBlockControl(this);
+
 			titleBlockControl = new TitleBlockControl();
 
 			titleBlockPanel.SuspendLayout();
@@ -49,27 +48,21 @@ namespace UI
 			titleBlockPanel.ResumeLayout();
 
 			sourceBlockPanel.SuspendLayout();
-			sourceBlockPanel.Controls.Add(sourcePathBlockControl);
+			sourceBlockPanel.Controls.Add(fileExtractionBlockControl);
 			sourceBlockPanel.ResumeLayout();
 
 			//Set up the functional block controls
 			panelControls = new Dictionary<string, FunctionBlockBaseControl>();
-			clientFileExtractionControl = new ClientFileExtractionControl(this);
-			//removeOrphanDocumentsControl = new RemoveOrphanDocumentsControl(this);
-			processMergeFieldDocumentsControl = new ProcessMergeFieldDocumentsControl(this);
-
-			panelControls.Add(clientFileExtractionControl.Name, clientFileExtractionControl);
-			//panelControls.Add(removeOrphanDocumentsControl.Name, removeOrphanDocumentsControl);
-			panelControls.Add(processMergeFieldDocumentsControl.Name, processMergeFieldDocumentsControl);
+			panelControls.Add(fileExtractionBlockControl.Name, fileExtractionBlockControl);
+			panelControls.Add(ghostInspectorBlockControl.Name, ghostInspectorBlockControl);
 
 			//Add client ID to the associated task button on the UI (used by NavigationButtonClick Event to switch controls)
-			btnNavFileExtraction.Tag = clientFileExtractionControl.Name;
-			//btnNavRemoveDocs.Tag = removeOrphanDocumentsControl.Name;
-			btnNavProcessMergeTemplates.Tag = processMergeFieldDocumentsControl.Name;
+			btnNavFileExtraction.Tag = fileExtractionBlockControl.Name;
+			btnNavGhostInspector.Tag = ghostInspectorBlockControl.Name;
 
 			//Set the initial Display task
-			SetDisplayTask(clientFileExtractionControl.Name);
 			SetCurrentNavButton(btnNavFileExtraction);
+			SetDisplayTask(fileExtractionBlockControl.Name);
 		}
 
 		private void SetCurrentNavButton(Button navButton)
@@ -88,7 +81,7 @@ namespace UI
 
 		private void SetDisplayTask(string controlId)
 		{
-			functionBlockPanel.SuspendLayout();
+			sourceBlockPanel.SuspendLayout();
 
 			if (string.IsNullOrEmpty(controlId) || panelControls[controlId] == null)
 				return;
@@ -97,16 +90,16 @@ namespace UI
 			{
 				if (!string.IsNullOrEmpty(currentControlId) && panelControls.ContainsKey(currentControlId))
 				{
-					functionBlockPanel.Controls.RemoveByKey(currentControlId);
+					sourceBlockPanel.Controls.RemoveByKey(currentControlId);
 				}
 
 				titleBlockControl.TitleText = panelControls[controlId].TitleBlockText;
-				functionBlockPanel.Controls.Add(panelControls[controlId]);
+				sourceBlockPanel.Controls.Add(panelControls[controlId]);
 				panelControls[controlId].Initialize();
 				currentControlId = controlId;
 			}
 
-			functionBlockPanel.ResumeLayout();
+			sourceBlockPanel.ResumeLayout();
 		}
 
 		private void NavigationButtonClick(object sender, EventArgs e)
@@ -121,12 +114,9 @@ namespace UI
 			SetCurrentNavButton(btnSender);
 		}
 
-		//This is preventing sourceDirectory from being set properly at startup
-		//protected override void OnShown(EventArgs e)
-		//{
-		//	sourcePathBlockControl.Setup();
-		//	base.OnShown(e);
+		private void sourceBlockPanel_Paint(object sender, PaintEventArgs e)
+		{
 
-		//}
+		}
 	}
 }

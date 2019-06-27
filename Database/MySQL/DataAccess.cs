@@ -81,7 +81,7 @@ namespace DataProvider.MySQL
 		{
 			object selectedValue = ExecuteScalarQuery(command);
 
-			return selectedValue == null ? 0 : (int)selectedValue;
+			return selectedValue == null ? 0 : int.Parse(selectedValue.ToString());
 		}
 	}
 	

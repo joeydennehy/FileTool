@@ -36,12 +36,6 @@ namespace API.Data
 		/// </summary>
 		public static DataTable ReportFieldData { get; private set; }
 
-		/// <summary>
-		/// Name/Index structure for this DataTable:
-		/// RequestProcessId:[0]; RequestProcessCode:[1]; RequestDisplayText:[2]
-		/// </summary>
-		public static DataTable RequestData { get; private set; }
-
 		public static void RefreshCustomPrintPacketData()
 		{
 			CustomPrintPacketData = new DataTable();
@@ -74,17 +68,14 @@ namespace API.Data
 			}
 		}
 
-		public static void RefreshFoundationProcessData(int foundationId)
+		public static void RefreshFoundationProcessData(int id)
 		{
 			FoundationProcessData = new DataTable();
-
-			if (foundationId <= 0)
-			{
-				return;
-			}
+			FoundationProcessData.Columns.Add("ProcessId", typeof(int));
+			FoundationProcessData.Columns.Add("ProcessDisplayText");
 
 			var parameters = new ParameterSet();
-			parameters.Add(DbType.Int32, "FOUNDATION_ID", foundationId);
+			parameters.Add(DbType.Int32, "FOUNDATION_ID", id);
 			var command = new Command
 			{
 				SqlStatementId = "SELECT_FOUNDATION_PROCESS_INFO",
@@ -219,7 +210,7 @@ namespace API.Data
 							string filePath = reader.GetString(0);
 							string fileName =
 								(!reader.IsDBNull(1) ? reader.GetString(1) : "").Split(new[] {"[:|:]"}, StringSplitOptions.None)[0];
-
+							filePath += fileName.Split('.').Last();
 
 							if (!string.IsNullOrEmpty(fileName) && !fileList.Keys.Contains(filePath))
 							{
@@ -249,6 +240,96 @@ namespace API.Data
 			return access.GetStringValue(command);
 		}
 
+		public static int GetFoundationId(string urlKey)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.String, "FOUNDATION_URLKEY", urlKey);
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_FOUNDATION_ID",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			return access.GetIntValue(command);
+		}
+
+		public static List<int> GetAllFoundationIds(int startIndex)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.String, "START_INDEX", startIndex);
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_ALL_FOUNDATION_ID",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			List<int> foundationIds = new List<int>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						foundationIds.Add(reader.GetInt32(0));
+					}
+				}
+			}
+
+			return foundationIds;
+		}
+
+		public struct UnsyncedAnswer
+		{
+			public string UrlKey;
+			public int RequestId;
+			public string FieldCode;
+			public int UnsyncedCount;
+		}
+
+		public static List<UnsyncedAnswer> GetUnsyncAnswers(int foundationId)
+		{
+			var parameters = new ParameterSet();
+			parameters.Add(DbType.String, "FOUNDATION_ID", foundationId);
+
+			var command = new Command
+			{
+				SqlStatementId = "SELECT_UNSYNCED_ANSWERS",
+				ParameterCollection = parameters
+			};
+
+			var access = new DataAccess();
+
+			List<UnsyncedAnswer> unsyncedAnswers = new List<UnsyncedAnswer>();
+
+			using (MySqlDataReader reader = access.GetReader(command))
+			{
+				while (reader.Read())
+				{
+					if (!reader.IsDBNull(0))
+					{
+						var unsyncedAnswer = new UnsyncedAnswer
+						{
+							UrlKey = reader.GetString(0),
+							RequestId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							FieldCode =  reader.GetString(2),
+							UnsyncedCount = reader.IsDBNull(3) ? -1 : reader.GetInt32(3),
+						};
+
+						unsyncedAnswers.Add(unsyncedAnswer);
+					}
+				}
+			}
+
+			return unsyncedAnswers;
+		}
+
 		public static List<FoundationDataFileState.FileInfo> RetrieveRequestInfo(int foundationProcess)
 		{
 			var parameters = new ParameterSet();
@@ -271,15 +352,15 @@ namespace API.Data
 					{
 						var fileIds = new FoundationDataFileState.FileInfo
 						{
-							AnswerId = reader.GetInt32(0),
+							AnswerId = reader.GetGuid(0),
 							SubmissionId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
 							RequestId = reader.IsDBNull(2) ? -1 : reader.GetInt32(2),
 							FileName = reader.IsDBNull(3)
 								? ""
 								: reader.GetString(3)
-									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0],
+									.Split(new [] {"[:|:]"}, StringSplitOptions.None)[0],
 							Question = reader.IsDBNull(5) ? "" : reader.GetString(5),
-							CreateDate = reader.IsDBNull(6) ? DateTime.MinValue : reader.GetDateTime(6)
+							RequestGuid = reader.IsDBNull(7) ? Guid.Empty : reader.GetGuid(7)
 						};
 						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
 						                   + fileIds.FileName;
@@ -313,14 +394,16 @@ namespace API.Data
 					{
 						var fileIds = new FoundationDataFileState.FileInfo
 						{
-							AnswerId = reader.GetInt32(0),
+							AnswerId = reader.GetGuid(0),
 							SubmissionId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
 							RequestId = reader.IsDBNull(2) ? -1 : reader.GetInt32(2),
 							FileName = reader.IsDBNull(3)
 								? ""
 								: reader.GetString(3)
-									.Split(new string[] {"[:|:]"}, StringSplitOptions.None)[0],
-							CreateDate = reader.IsDBNull(6) ? DateTime.MinValue : reader.GetDateTime(6)
+									.Split(new [] {"[:|:]"}, StringSplitOptions.None)[0],
+							Question = reader.IsDBNull(5) ? "" : reader.GetString(5),
+							ProcessId = reader.IsDBNull(7) ? -1 : reader.GetInt32(7),
+							RequestGuid = reader.IsDBNull(8) ? Guid.Empty : reader.GetGuid(8)
 						};
 						fileIds.FilePath = "Requests\\Submissions\\" + fileIds.RequestId + "_" + fileIds.SubmissionId + "_"
 						                   + fileIds.FileName;
@@ -355,9 +438,9 @@ namespace API.Data
 						var fileIds = new FoundationDataFileState.FileInfo
 						{
 							RequestId = reader.GetInt32(0),
-							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							DocumentId = reader.IsDBNull(1) ? Guid.Empty : reader.GetGuid(1),
 							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2),
-							CreateDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
+							RequestGuid = reader.IsDBNull(4) ? Guid.Empty : reader.GetGuid(4),
 						};
 						fileIds.FilePath = "\\Requests\\Supporting\\" + fileIds.RequestId + "_RS_" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
@@ -391,9 +474,9 @@ namespace API.Data
 						var fileIds = new FoundationDataFileState.FileInfo
 						{
 							RequestId = reader.GetInt32(0),
-							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							DocumentId = reader.IsDBNull(1) ? Guid.Empty : reader.GetGuid(1),
 							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2),
-							CreateDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
+							RequestGuid = reader.IsDBNull(4) ? Guid.Empty : reader.GetGuid(4)
 						};
 						fileIds.FilePath = "\\Requests\\Supporting\\" + fileIds.RequestId + "_RS_" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
@@ -426,10 +509,11 @@ namespace API.Data
 					{
 						var fileIds = new FoundationDataFileState.FileInfo
 						{
-							OrganizationId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
-							DocumentId = reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+							OrganizationId = reader.IsDBNull(0) ? Guid.Empty : reader.GetGuid(0),
+							DocumentId = reader.IsDBNull(1) ? Guid.Empty : reader.GetGuid(1),
 							FileName = reader.IsDBNull(2) ? "" : reader.GetString(2),
-							CreateDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3)
+							OrganizationName = reader.IsDBNull(4) ? "" : reader.GetString(4),
+							OrganizationTaxId = reader.IsDBNull(5) ? "" : reader.GetString(5),
 						};
 						fileIds.FilePath = "\\Organizations\\" + fileIds.OrganizationId + "_OS_" + fileIds.FileName;
 						requestSupporitngFiles.Add(fileIds);
@@ -530,7 +614,7 @@ namespace API.Data
 					{
 						var fileIds = new FoundationDataFileState.FileInfo
 						{
-							DocumentId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
+							DocumentId = reader.IsDBNull(0) ? Guid.Empty : reader.GetGuid(0),
 							FileName = reader.IsDBNull(1) ? "" : reader.GetString(1)
 						};
 						fileIds.FilePath = "\\Shared_Documents\\" + fileIds.FileName;

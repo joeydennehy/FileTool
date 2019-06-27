@@ -1,42 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
+using API.Data;
 
 namespace API.FileIO
 {
 	public class FoundationDataFileState
 	{
 		public string BaseDirectory { get; set; }
-		public string FileMask { get; set; }
+		private string FileMask { get; set; }
 		public List<global::System.IO.FileInfo> Files { get; set; }
 		public int FoundationId { get; set; }
 		public int ProcessId { get; set; }
 		public string FoundationUrlKey { get; set; }
 		public string OutputDirectory { get; set; }
+		public string InputFile { get; set; }
+		public string APIKey { get; set; }
 		public List<string> SequesterExclusionPatterns { get; set; }
 		public List<global::System.IO.FileInfo> SequesterFiles { get; set; }
 		public string SequesterPath { get; set; }
 		public long TotalSize { get; set; }
 		public string FileType { get; set; }
+		public List<RequestQuery.UnsyncedAnswer> UnsyncedAnswers { get; set; }
 
 		public Dictionary<string, string> FilesNotFound { get; set; }
-		public List<string> FoundationApplicantProcessCodes { get; set; }
 
 		public struct FileInfo
 		{
-			public int DocumentId;
-			public int AnswerId;
+			public Guid DocumentId;
+			public Guid AnswerId;
 			public int SubmissionId;
 			public int RequestId;
+			public Guid RequestGuid;
 			public int AttachmentId;
 			public int MergeTemplateId;
-			public int OrganizationId;
+			public int ProcessId;
+			public Guid OrganizationId;
 			public string FileName;
 			public string FilePath;
-			public DateTime CreateDate;
 			public string Question;
+			public string OrganizationName;
+			public string OrganizationTaxId;
+			
+			
 		}
 
 		public List<FileInfo> RequestFiles { get; set; }
@@ -46,30 +53,15 @@ namespace API.FileIO
 		public List<FileInfo> SharedFiles { get; set; }
 		public List<FileInfo> MergeTemplateFiles { get; set; }
 
-		//public string MovedToDirectory { get; set; }
-		//public string MovedFromDirectory { get; set; }
-
-		//Keeping for the possibility of future use
-		//public NetworkCredential BaseDirectoryCredentials { get; set; }
-		//public NetworkCredential OutputDirectoryCredentials { get; set; }
-
-		public string ClientRootDirectory
-		{
-			get
-			{
-				return string.Format("{0}\\{1}\\",
-					!string.IsNullOrWhiteSpace(BaseDirectory) ? BaseDirectory.TrimEnd(new[] {Path.DirectorySeparatorChar}) : "",
-					FoundationUrlKey);
-			}
-		}
+		public string ClientRootDirectory { get; set; }
 
 		public FoundationDataFileState()
 		{
 			FileMask = "*.*";
 
 			Files = new List<global::System.IO.FileInfo>();
-			FoundationApplicantProcessCodes = new List<string>();
 			SequesterFiles = new List<global::System.IO.FileInfo>();
+			UnsyncedAnswers = new List<RequestQuery.UnsyncedAnswer>();
 		}
 
 		public override string ToString()

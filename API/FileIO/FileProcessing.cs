@@ -5,25 +5,59 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
+using API.Data;
 using API.Logging;
 using Aspose.Words;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace API.FileIO
 {
 	public static class FileProcessing
 	{
-		private const string RECORDS_DELETE_CAPTION = "Records Delete";
-		private const string RECORDS_DELETE_ERROR_FORMAT = "Records Delete procedure gave the following error {0}.";
-
 		public static void CopyApplicationProcessFiles(FoundationDataFileState state)
 		{
 			CopyFilesToDestination(state, state.OutputDirectory);
-
-			/*if (!string.IsNullOrEmpty(state.SequesterPath) && state.SequesterFiles.Count > 0)
-			{
-				CopyFilesToDestination(state, state.SequesterPath);
-			}*/
 		}
+
+		public static async Task RunGhostInspector(FoundationDataFileState state)
+		{
+			StreamReader file =
+				new StreamReader(state.InputFile);
+			using (var client = new HttpClient())
+			{
+				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+				string line;
+				while ((line = file.ReadLine()) != null)
+				{
+					client.BaseAddress = new Uri($"https://api.ghostinspector.com/v1/suites/{line}/execute/?apiKey={state.APIKey}");
+				
+					//GET Method 
+					try {
+						HttpResponseMessage response = await client.GetAsync("");
+						if (response.IsSuccessStatusCode)
+						{
+							HttpContent test = response.Content;
+
+						}
+						else
+						{
+							Console.WriteLine("Internal server Error");
+						}
+					}
+					catch (Exception e)
+					{
+						
+						throw;
+					}
+					
+				}
+			}
+		}
+
 
 		private static void ClearFiles(FoundationDataFileState state)
 		{
@@ -48,10 +82,10 @@ namespace API.FileIO
 			{
 				switch (state.FileType)
 				{
-					case "requests":
+					case "answers":
 						SetRequestFiles(state);
 						break;
-					case "organizations":
+					case "documents":
 						SetOrganizationSupportingFiles(state);
 						break;
 					case "attachments":
@@ -72,13 +106,12 @@ namespace API.FileIO
 
 		private static void SetRequestFiles(FoundationDataFileState state)
 		{
-			string directoryPath = "";
+			string directoryPath;
 			var pathChecked = new List<string>();
 
 			foreach (FoundationDataFileState.FileInfo requestFile in state.RequestFiles)
 			{
-				directoryPath = string.Format("{0}requests\\request.{1}\\submission.{2}", state.ClientRootDirectory,
-					requestFile.RequestId, requestFile.SubmissionId);
+				directoryPath = string.Format("{0}\\", state.ClientRootDirectory);
 				if (!pathChecked.Contains(directoryPath))
 				{
 					SetFilesFromPath(state, directoryPath);
@@ -88,8 +121,9 @@ namespace API.FileIO
 
 			foreach (FoundationDataFileState.FileInfo requestSupportingFile in state.RequestSupportingFiles)
 			{
-				directoryPath = string.Format("{0}requests\\request.{1}\\documents", state.ClientRootDirectory,
-					requestSupportingFile.RequestId);
+				//directoryPath = string.Format("{0}\\documents\\{1}.{2}", state.ClientRootDirectory,
+					//requestSupportingFile.DocumentId, requestSupportingFile.FileName.Split('.').Last());
+				directoryPath = string.Format("{0}\\documents\\", state.ClientRootDirectory);
 				if (!pathChecked.Contains(directoryPath))
 				{
 					SetFilesFromPath(state, directoryPath);
@@ -100,13 +134,12 @@ namespace API.FileIO
 
 		private static void SetOrganizationSupportingFiles(FoundationDataFileState state)
 		{
-			string directoryPath = "";
 			var pathChecked = new List<string>();
 
 			foreach (FoundationDataFileState.FileInfo orgSupportingFile in state.OrganizationSupportingFiles)
 			{
-				directoryPath = string.Format("{0}organizations\\organization.{1}\\documents", state.ClientRootDirectory,
-					orgSupportingFile.OrganizationId);
+				var directoryPath = string.Format("{0}\\documents\\{1}.{2}", state.ClientRootDirectory,
+				                                  orgSupportingFile.DocumentId, orgSupportingFile.FileName.Split('.').Last());
 				if (!pathChecked.Contains(directoryPath))
 				{
 					SetFilesFromPath(state, directoryPath);
@@ -117,33 +150,33 @@ namespace API.FileIO
 
 		private static void SetAttachmentFiles(FoundationDataFileState state)
 		{
-			string directoryPath = string.Format("{0}attachments", state.ClientRootDirectory);
+			string directoryPath = string.Format("{0}\\attachments", state.ClientRootDirectory);
 			SetFilesFromPath(state, directoryPath);
 		}
 
 		private static void SetCustomPrintPacketFiles(FoundationDataFileState state)
 		{
-			string directoryPath = string.Format("{0}settingvalues", state.ClientRootDirectory);
+			string directoryPath = string.Format("{0}\\settingvalues", state.ClientRootDirectory);
 			SetFilesFromPath(state, directoryPath);
 		}
 
 		private static void SetMergeTemplateFiles(FoundationDataFileState state)
 		{
-			string directoryPath = string.Format("{0}mergetemplates", state.ClientRootDirectory);
+			string directoryPath = string.Format("{0}\\mergetemplates", state.ClientRootDirectory);
 			SetFilesFromPath(state, directoryPath);
 		}
 
 		private static void SetSharedDocumentFiles(FoundationDataFileState state)
 		{
-			string directoryPath = string.Format("{0}shareddocuments", state.ClientRootDirectory);
+			string directoryPath = string.Format("{0}\\shareddocuments", state.ClientRootDirectory);
 			SetFilesFromPath(state, directoryPath);
 		}
 
-		private static void SetFilesFromPath(FoundationDataFileState state, string FilePath)
+		private static void SetFilesFromPath(FoundationDataFileState state, string filePath)
 		{
-			if (Directory.Exists(FilePath))
+			if (Directory.Exists(filePath))
 			{
-				string[] files = Directory.GetFiles(FilePath, "*.*", SearchOption.AllDirectories)
+				string[] files = Directory.GetFiles(filePath, "*.*", SearchOption.AllDirectories)
 					.ToArray();
 
 				foreach (string fileString in files)
@@ -194,149 +227,133 @@ namespace API.FileIO
 				.ToList();
 		}
 
-		/*public static void CleanUpFolders(FoundationDataFileState state)
+		private static void CopyFilesToDestination(FoundationDataFileState state, string destinationFolder)
 		{
-			string[] validDirectories =
+			string sourcePath = "";
+			try
 			{
-				"loi", "application", "qualification", "evaluation 1", "evaluation 2", "followup",
-				"supportingdocuments"
-			};
-
-			string[] directories = Directory.GetDirectories(state.ClientRootDirectory);
-
-			foreach (string directory in directories)
-			{
-				if (!directory.Contains("shared"))
+				if (state.Files == null || state.Files.Count == 0)
 				{
-					string[] subDirectories = Directory.GetDirectories(directory);
+					Logger.Log("CopyFilesToDestination: no files selected to copy", LogLevel.Warn);
+					return;
+				}
 
-					foreach (string subDirectory in subDirectories)
+				if (string.IsNullOrEmpty(destinationFolder))
+				{
+					Logger.Log("CopyFilesToDestination: No destination selected for copy", LogLevel.Error);
+					throw new ArgumentNullException("destinationFolder");
+				}
+
+				if (!Directory.Exists(destinationFolder))
+				{ 
+					Directory.CreateDirectory(destinationFolder);
+				}
+
+				string[] fileTypes = state.FileType != "All" ? new[] { state.FileType } : new[] { "answers", "documents" };
+
+				foreach (var fileyType in fileTypes)
+				{
+					var sb = new StringBuilder();
+					switch (fileyType)
 					{
-						if (!validDirectories.Any(dir => subDirectory.Contains(dir)))
-						{
-							Directory.Delete(subDirectory, true);
-						}
+						case "answers":
+							List<string> faildList = new List<string>();
+								sb.AppendLine("Request Id, Request Guid,Submission Id,Answer Id, Question, File Path, File Name");
+
+								foreach (FoundationDataFileState.FileInfo file in state.RequestFiles)
+								{
+									sourcePath = string.Format("{0}\\answers\\{1}.{2}",
+									                           state.ClientRootDirectory, file.AnswerId, file.FileName.Split('.').Last());
+									try
+									{
+										CopyFile(sourcePath, destinationFolder, file);
+										if (!string.IsNullOrWhiteSpace(file.FileName))
+										{
+											sb.AppendLine(string.Format("{0},{1},{2},{3},\"{4}\",\"{5}\",\"{6}\",\"{7}\"", file.RequestId,
+											                            file.RequestGuid, file.SubmissionId, file.AnswerId, file.Question, file.FilePath,
+											                            file.FileName, file.ProcessId));
+										}
+									}
+									catch (Exception e)
+									{
+										faildList.Add(sourcePath);
+									}
+								}
+								File.WriteAllText(destinationFolder + "\\Request.csv", sb.ToString());
+							break;
+						case "documents":
+							sb = new StringBuilder();
+							foreach (FoundationDataFileState.FileInfo file in state.RequestSupportingFiles)
+							{
+								sourcePath = string.Format("{0}\\documents\\{1}.{2}",
+									state.ClientRootDirectory, file.DocumentId, file.FileName.Split('.').Last());
+								CopyFile(sourcePath, destinationFolder, file);
+								if (!string.IsNullOrWhiteSpace(file.FileName))
+								{
+									if (!string.IsNullOrWhiteSpace(file.FileName))
+									{
+										sb.AppendLine(string.Format("{0},{1},\"{2}\",\"{3}\"", file.RequestId, file.RequestGuid, file.FilePath, file.FileName));
+									}
+								}
+							}
+							File.WriteAllText(destinationFolder + "\\RequestSupporting.csv", sb.ToString());
+							sb = new StringBuilder();
+							sb.AppendLine("Organization Id,Organization Name Id,Organization Tax Id, Question, File Path, File Name");
+
+							foreach (FoundationDataFileState.FileInfo file in state.OrganizationSupportingFiles)
+							{
+								sourcePath = string.Format("{0}\\documents\\{1}.{2}",
+								                           state.ClientRootDirectory, file.DocumentId, file.FileName.Split('.').Last());
+								CopyFile(sourcePath, destinationFolder, file);
+								sb.AppendLine(string.Format("{0},\"{1}\",{2},\"{3}\",\"{4}\"", file.OrganizationId, file.OrganizationName,
+									file.OrganizationTaxId, file.FilePath, file.FileName));
+							}
+
+							File.WriteAllText(destinationFolder + "\\Organization.csv", sb.ToString());
+							foreach (FoundationDataFileState.FileInfo file in state.SharedFiles)
+							{
+								sourcePath = string.Format("{0}\\shareddocuments\\document.{1}", state.ClientRootDirectory, file.DocumentId);
+								CopyFile(sourcePath, destinationFolder, file);
+							}
+							break;
+						case "mergetemplates":
+							foreach (FoundationDataFileState.FileInfo file in state.MergeTemplateFiles)
+							{
+								sourcePath = string.Format("{0}\\mergetemplates\\mergetemplate.{1}", state.ClientRootDirectory,
+									file.MergeTemplateId);
+								CopyFile(sourcePath, destinationFolder, file);
+							}
+							break;
+						case "attachments":
+							foreach (FoundationDataFileState.FileInfo file in state.AttachmentFiles)
+							{
+								sourcePath = string.Format("{0}\\attachments\\attachment.{1}", state.ClientRootDirectory, file.AttachmentId);
+								CopyFile(sourcePath, destinationFolder, file);
+							}
+							break;
 					}
 				}
 			}
-		}
-
-		public static bool CheckFoundationPath(FoundationDataFileState state)
-		{
-			return Directory.Exists(state.ClientRootDirectory);
-		}
-
-		public static bool CheckDirectoryExist(string directory)
-		{
-			if (Directory.Exists(directory))
+			catch (Exception e)
 			{
-				return true;
+				MessageBox.Show(String.Format("Unable to copy file: {0}\n{1}", sourcePath, e.Message), "Unable to copy file", MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
-
-			return false;
-		}*/
-
-		private static void CopyFilesToDestination(FoundationDataFileState state, string destinationFolder)
-		{
-			if (state.Files == null || state.Files.Count == 0)
-			{
-				Logger.Log("CopyFilesToDestination: no files selected to copy", LogLevel.Warn);
-				return;
-			}
-
-			if (string.IsNullOrEmpty(destinationFolder))
-			{
-				Logger.Log("CopyFilesToDestination: No destination selected for copy", LogLevel.Error);
-				throw new ArgumentNullException("destinationFolder");
-			}
-
-			if (!Directory.Exists(destinationFolder))
-			{
-				Directory.CreateDirectory(destinationFolder);
-			}
-			switch (state.FileType)
-			{
-				case "requests":
-					var sb = new StringBuilder();
-
-					foreach (FoundationDataFileState.FileInfo file in state.RequestFiles)
-					{
-						string sourcePath = string.Format("{0}requests\\request.{1}\\submission.{2}\\answer.{3}",
-							state.ClientRootDirectory, file.RequestId, file.SubmissionId, file.AnswerId);
-						CopyFile(sourcePath, destinationFolder, file);
-						if (!string.IsNullOrWhiteSpace(file.FileName))
-						{
-							sb.AppendLine(file.RequestId + ",\"" + file.FileName + "\"," + file.CreateDate);
-						}
-					}
-
-					foreach (FoundationDataFileState.FileInfo file in state.RequestSupportingFiles)
-					{
-						string sourcePath = string.Format("{0}requests\\request.{1}\\documents\\document.{2}", state.ClientRootDirectory,
-							file.RequestId, file.DocumentId);
-						CopyFile(sourcePath, destinationFolder, file);
-						if (!string.IsNullOrWhiteSpace(file.FileName))
-						{
-							if (!string.IsNullOrWhiteSpace(file.FileName))
-							{
-								sb.AppendLine(file.RequestId + ",\"" + file.FileName + "\"," + file.CreateDate);
-							}
-						}
-					}
-					File.WriteAllText(destinationFolder + "\\Output.csv", sb.ToString());
-
-					break;
-				case "organizations":
-					sb = new StringBuilder();
-
-					foreach (FoundationDataFileState.FileInfo file in state.OrganizationSupportingFiles)
-					{
-						string sourcePath = string.Format("{0}organizations\\organization.{1}\\documents\\document.{2}",
-							state.ClientRootDirectory, file.OrganizationId, file.DocumentId);
-						CopyFile(sourcePath, destinationFolder, file);
-
-						sb.AppendLine(file.OrganizationId + ",\"" + file.FileName + "\"," + file.CreateDate);
-					}
-
-					File.WriteAllText(destinationFolder + "\\Output.csv", sb.ToString());
-					break;
-				case "mergetemplates":
-					foreach (FoundationDataFileState.FileInfo file in state.MergeTemplateFiles)
-					{
-						string sourcePath = string.Format("{0}mergetemplates\\mergetemplate.{1}", state.ClientRootDirectory,
-							file.MergeTemplateId);
-						CopyFile(sourcePath, destinationFolder, file);
-					}
-					break;
-				case "attachments":
-					foreach (FoundationDataFileState.FileInfo file in state.AttachmentFiles)
-					{
-						string sourcePath = string.Format("{0}attachments\\attachment.{1}", state.ClientRootDirectory, file.AttachmentId);
-						CopyFile(sourcePath, destinationFolder, file);
-					}
-					break;
-				case "shareddocuments":
-					foreach (FoundationDataFileState.FileInfo file in state.SharedFiles)
-					{
-						string sourcePath = string.Format("{0}shareddocuments\\document.{1}", state.ClientRootDirectory, file.DocumentId);
-						CopyFile(sourcePath, destinationFolder, file);
-					}
-					break;
-			}
+			
 		}
 
 		private static void CopyFile(string sourcePath, string destinationFolder, FoundationDataFileState.FileInfo file)
 		{
-			string fullFileName = string.Format("{0}{1}", destinationFolder, file.FileName);
-			string directory = Path.GetDirectoryName(fullFileName);
-			if (directory == null || !Directory.Exists(directory))
-			{
-				Directory.CreateDirectory(directory);
-			}
-
 			try
 			{
-				var destinationFile = new FileInfo(fullFileName);
+				var fullFileName = string.Format("{0}\\{1}", destinationFolder, file.FilePath);
+				string directory = Path.GetDirectoryName(fullFileName);
+				if (directory == null || !Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+
+				FileInfo destinationFile = new FileInfo(fullFileName);
 				int fileCounter = 1;
 				while (destinationFile.Exists)
 				{
@@ -350,7 +367,7 @@ namespace API.FileIO
 					}
 
 					destinationFile =
-						new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFolder, baseFileName, fileCounter,
+						new FileInfo(string.Format("{0}\\{1} ({2}){3}", destinationFile.Directory, baseFileName, fileCounter,
 							destinationFile.Extension));
 					fullFileName = destinationFile.FullName;
 					fileCounter++;
@@ -377,166 +394,11 @@ namespace API.FileIO
 				destinationFileInfo.Delete();
 			}
 
-			//destinationFileInfo.Create();
 			using (FileStream outfile = destinationFileInfo.OpenWrite())
 			{
 				Byte[] outputData = new UTF8Encoding(true).GetBytes(fileOutput.ToString());
 				outfile.Write(outputData, 0, outputData.Length);
 			}
-		}
-
-		//public static void LogStateData(FoundationDataFileState state)
-		//{
-		//	Logger.Log(string.Format("Foundation: {0}({1})", state.FoundationUrlKey, state.FoundationId) + state.BaseDirectory, LogLevel.Info);
-		//	Logger.Log("Base Directory: " + state.BaseDirectory, LogLevel.Info);
-		//	Logger.Log("Client Root Directory: " + state.ClientRootDirectory, LogLevel.Info);
-		//	Logger.Log(string.Format("Files Count: {0}", state.Files != null ? state.Files.Count : 0), LogLevel.Info);
-		//	Logger.Log(string.Format("SequesterFiles Count: {0}", state.SequesterFiles != null ? state.SequesterFiles.Count : 0), LogLevel.Info);
-		//	Logger.Log(string.Format("Moved Sequestered Path: {0}", state.SequesterPath), LogLevel.Info);
-		//	Logger.Log(string.Format("Files Not Found Count: {0}", state.FilesNotFound != null ? state.FilesNotFound.Count : 0), LogLevel.Info);
-		//	Logger.Log(string.Format("Moved From Directory: {0}", state.MovedFromDirectory), LogLevel.Info);
-		//	Logger.Log(string.Format("Moved To Directory: {0}", state.MovedToDirectory), LogLevel.Info);
-		//	Logger.Log(string.Format("Copied File Directory: {0}", state.OutputDirectory), LogLevel.Info);
-		//	Logger.Log(string.Format("Total File Size: {0}", state.TotalSize), LogLevel.Info);
-		//}
-
-		/*public static void MoveFilesToDestination(FoundationDataFileState state, ref StringBuilder outputData,
-			bool cleanSequesterFolder = false)
-		{
-			if (outputData == null)
-			{
-				outputData = new StringBuilder();
-			}
-			var movedFilesOutput = new StringBuilder();
-			var errorFilesOutput = new StringBuilder();
-
-			int movedFileCount = 0, errorCount = 0;
-
-			Logger.Log("Move unreferenced data files start", LogLevel.Info);
-			Logger.Log(string.Format("Current Task State:\r\n{0}", state), LogLevel.Info);
-
-			if (state.SequesterFiles == null || state.SequesterFiles.Count == 0)
-			{
-				const string OUTPUT_WARNING = "MoveFilesToDestination: no files selected to copy";
-				Logger.Log(OUTPUT_WARNING, LogLevel.Warn);
-				outputData.AppendLine(OUTPUT_WARNING);
-				return;
-			}
-
-			if (string.IsNullOrEmpty(state.OutputDirectory))
-			{
-				const string OUTPUT_ERROR = "MoveFilesToDestination: No destination selected for copy";
-				Logger.Log(OUTPUT_ERROR, LogLevel.Error);
-				outputData.AppendLine(OUTPUT_ERROR);
-				return;
-			}
-			string outputFolder = state.OutputDirectory;
-			if (outputFolder.LastIndexOf(state.FoundationUrlKey, StringComparison.CurrentCulture) < 0)
-			{
-				outputFolder = string.Format("{0}\\{1}", outputFolder, state.FoundationUrlKey);
-			}
-
-			if (!Directory.Exists(outputFolder))
-			{
-				Directory.CreateDirectory(outputFolder);
-			}
-			else
-			{
-				if (cleanSequesterFolder)
-				{
-					foreach (string directory in Directory.GetDirectories(outputFolder))
-					{
-						var subFolder = new DirectoryInfo(directory);
-						subFolder.Delete(true);
-					}
-					foreach (string file in Directory.GetFiles(outputFolder))
-					{
-						var fileInfo = new FileInfo(file);
-						fileInfo.Delete();
-					}
-				}
-				else
-				{
-					throw new IOException("Directory Not Empty");
-				}
-			}
-
-			foreach (FileInfo file in state.SequesterFiles)
-			{
-				string directory = string.Format("{0}\\{1}", outputFolder,
-					file.Directory.FullName.Substring(state.ClientRootDirectory.Length - 1));
-				if (!Directory.Exists(directory))
-				{
-					Directory.CreateDirectory(directory);
-				}
-				string fullDestinationPath = string.Format("{0}\\{1}", directory, file.Name);
-				try
-				{
-					File.Move(file.FullName, fullDestinationPath);
-					string movedFileOutput = string.Format("Moved file " + file.FullName + " to " + fullDestinationPath);
-					movedFileCount += 1;
-					movedFilesOutput.AppendLine(movedFileOutput);
-					Logger.Log(movedFileOutput, LogLevel.Info);
-				}
-				catch (Exception eError)
-				{
-					string errorText = string.Format("Unable to move file {0}.  Error: {1} ", file.FullName, eError.Message);
-					errorCount += 1;
-					errorFilesOutput.AppendLine(errorText);
-					Logger.Log(string.Format(errorText), LogLevel.Error);
-				}
-			}
-
-			outputData.AppendLine("File Move Details:");
-			outputData.AppendLine(string.Format("Total number of files moved: {0}", movedFileCount));
-			outputData.AppendLine(string.Format("Total number of errors encountered: {0}", errorCount));
-
-			outputData.AppendLine("Files Moved:");
-			outputData.Append(movedFilesOutput);
-			outputData.AppendLine();
-
-			if (errorCount > 0)
-			{
-				outputData.AppendLine("Errors Encountered:");
-				outputData.Append(errorFilesOutput);
-				outputData.AppendLine();
-			}
-
-			Logger.Log("Move unreferenced data files end", LogLevel.Info);
-		}*/
-
-		//public static void MoveFilesBack(FoundationDataFileState state)
-		//{
-		//	ClearFiles(state);
-		//	SetFilesFromPath(state, state.MovedToDirectory);
-
-		//	foreach (FileInfo file in state.Files)
-		//	{
-		//		try
-		//		{
-		//			string fullDestination = string.Format("{0}{1}", state.MovedFromDirectory,
-		//				file.FullName.Substring(state.MovedToDirectory.Length));
-		//			File.Move(file.FullName, fullDestination);
-		//		}
-		//		catch (Exception eError)
-		//		{
-		//			Logger.Log(string.Format("Unable to undo file {0}.  Error: {1} ", file.FullName, eError.Message), LogLevel.Error);
-		//			throw;
-		//		}
-		//	}
-		//}
-
-		private static string BuildFilePath(FoundationDataFileState.FileInfo file)
-		{
-			if (string.IsNullOrEmpty(file.FileName))
-			{
-				return string.Empty;
-			}
-
-			var fileName = new StringBuilder();
-			fileName.Append(string.Format("{0}", file.FilePath));
-
-			return fileName.ToString();
 		}
 	}
 

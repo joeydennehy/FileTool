@@ -1,42 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
+﻿using log4net;
 
 namespace API.Logging
 {
 	public class Logger
 	{
-		protected static readonly ILog log;
+		private static readonly ILog LOG;
 
-	    static Logger()
-	    {
-		    if (log == null)
-		    {
-			   log = LogManager.GetLogger(typeof(Logger));
-		    }
-	    }
-		 
+		static Logger()
+		{
+			if (LOG == null)
+			{
+				LOG = LogManager.GetLogger(typeof (Logger));
+			}
+		}
+
 
 		public static void Log(string message, LogLevel type)
 		{
 			switch (type)
 			{
 				case LogLevel.Warn:
-					log.Warn(message);
+					LOG.Warn(message);
 					break;
 				case LogLevel.Debug:
-					log.Debug(message);
+					LOG.Debug(message);
 					break;
 				case LogLevel.Error:
-					log.Error(message);
+					LOG.Error(message);
 					break;
 				case LogLevel.Info:
-					log.Info(message);
+					LOG.Info(message);
 					break;
-
 			}
 		}
 	}

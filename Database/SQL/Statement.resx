@@ -155,32 +155,62 @@ WHERE
 	</data>
 
 
-	<data name="SELECT_ALL_URL_KEYS_AND_NAMES" xml:space="preserve">
+	<data name="SELECT_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
 				f.FoundationId
-				,f.UrlKey
-				,f.Name 
-				,CONCAT(f.UrlKey, ' - ', f.Name) AS FoundationDisplayText
+			FROM 
+				foundation f
+			WHERE
+				f.UrlKey = @FOUNDATION_URLKEY
+		</value>
+	</data>
+
+	<data name="SELECT_ALL_FOUNDATION_ID" xml:space="preserve">
+		<value>
+			SELECT
+				f.FoundationId
 			FROM 
 				foundation f
 			WHERE
 				f.UrlKey IS NOT NULL
-			ORDER BY 
-				f.Name
+				AND
+				f.FoundationId > @START_INDEX
+			ORDER BY f.FoundationId
+		</value>
+	</data>
+
+	<data name="SELECT_UNSYNCED_ANSWERS" xml:space="preserve">
+		<value>
+			SELECT
+			 foundation.UrlKey,
+			 submission.RequestId,
+       element.FieldCode,
+			 COUNT(DISTINCT answer.`Value`) as unsyncedCount
+FROM   answer
+       join element 
+         on answer.ElementGuid = element.ElementGuid
+       join submission
+         on answer.SubmissionId = submission.SubmissionId
+			 join foundation on answer.FoundationId = foundation.FoundationId
+WHERE  answer.FoundationId = @FOUNDATION_ID
+       and element.IsSharedQuestion = 1
+GROUP BY submission.RequestId, element.FieldCode
+HAVING unsyncedCount > 1;
 		</value>
 	</data>
 
 	<data name="SELECT_REQUEST_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				a.AnswerId
+				a.AnswerGuid
 				,s.SubmissionId
 				,r.RequestId
 				,a.`Value`
 				,st.Name
 				,e.Label
 				,a.CreateDate
+				,r.RequestGuid
 			FROM 
 				answer a
 				LEFT JOIN element e on (a.ElementGuid = e.ElementGuid)
@@ -193,21 +223,21 @@ WHERE
 				NULLIF(a.`Value`, '') IS NOT NULL
 				AND
 				a.`Value` != '[:|:]'
-				AND 
-				r.ProcessId = @FOUNDATION_PROCESS
 		</value>
 	</data>
 
 	<data name="SELECT_ALL_REQUEST_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				a.AnswerId
+				a.AnswerGuid
 				,s.SubmissionId
 				,r.RequestId
 				,a.`Value`
 				,st.Name
 				,e.Label
 				,a.CreateDate
+				,r.ProcessId
+				,r.RequestGuid
 			FROM 
 				answer a
 				LEFT JOIN element e on (a.ElementGuid = e.ElementGuid)
@@ -229,14 +259,15 @@ WHERE
 		<value>
 			SELECT 
 				d.RequestId
-				,d.DocumentId
+				,d.DocumentGuid
 				,d.Name
 				,d.CreateDate
+				,r.RequestGuid
 			FROM 
 				document d
 				LEFT JOIN request r on (d.RequestId = r.RequestId)
 			WHERE 
-				r.ProcessId = @FOUNDATION_PROCESS
+				d.FoundationId = @FOUNDATION_ID
 		</value>
 	</data>
 
@@ -244,11 +275,13 @@ WHERE
 		<value>
 			SELECT 
 				d.RequestId
-				,d.DocumentId
+				,d.DocumentGuid
 				,d.Name
 				,d.CreateDate
+				,r.RequestGuid
 			FROM 
 				document d
+				LEFT JOIN request r on (d.RequestId = r.RequestId)
 			WHERE 
 				d.FoundationId = @FOUNDATION_ID
 		</value>
@@ -257,12 +290,15 @@ WHERE
 	<data name="SELECT_ALL_ORGANIZATION_SUPPORTING_INFO" xml:space="preserve">
 		<value>
 			SELECT 
-				d.OrganizationId
-				,d.DocumentId
+				d.OrganizationGuid
+				,d.DocumentGuid
 				,d.Name
 				,d.CreateDate
+				,o.Name
+				,o.TaxId
 			FROM 
 				document d
+				LEFT JOIN organization o on (d.OrganizationGuid = o.OrganizationGuid)
 			WHERE 
 				d.FoundationId = @FOUNDATION_ID
 		</value>
@@ -348,15 +384,13 @@ WHERE
 	<data name="SELECT_ALL_SHARED_INFO" xml:space="preserve">
 		<value>
 			SELECT
-				d.DocumentId, d.FilePath
+				d.DocumentGuid, d.Name
 			FROM
 				document d
 			WHERE
 				d.FoundationId = @FOUNDATION_ID
 				AND
-				NULLIF(d.RequestId, '') IS NULL
-				AND
-				NULLIF(d.OrganizationId, '') IS NULL
+				d.Type = 9
 		</value>
 	</data>
 	
@@ -395,7 +429,7 @@ WHERE
 			FROM 
 				process p
 			WHERE
-				p.FoundationId = @FOUNDATION_ID 
+				p.FoundationId = @FOUNDATION_ID
 			ORDER BY 
 				p.Name
 		</value>
@@ -404,7 +438,7 @@ WHERE
 	<data name="SELECT_REQUEST_SUPPORTING_DOCUMENTS_BY_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
-				CONCAT('\\requests\\request.', d.RequestId, '\\documents\\document.', d.DocumentId) AS FileName,
+				CONCAT('\\documents\\', d.DocumentGuid, '.') AS FileName,
 					d.FilePath
 			FROM
 				document d
@@ -422,14 +456,14 @@ WHERE
 		<value>
 			SELECT
 				DISTINCT
-					CONCAT('\\organizations\\organization.', d.OrganizationId, '\\documents\\document.', d.DocumentId) AS FileName,
+					CONCAT('\\documents\\', d.DocumentGuid, '.') AS FileName,
 					d.FilePath
 			FROM
 				document d
 			WHERE
 				d.FoundationId = @FOUNDATION_ID
 				AND
-				NULLIF(d.OrganizationId, '') IS NOT NULL
+				NULLIF(d.OrganizationGuid, '') IS NOT NULL
 			ORDER BY
 				FileName
 		</value>
@@ -439,7 +473,7 @@ WHERE
 		<value>
 			SELECT
 				DISTINCT
-					CONCAT('\\requests\\request.', su.RequestId, '\\submission.', su.SubmissionId, '\\answer.', an.AnswerId) AS FileName,
+					CONCAT('\\answer\\',an.AnswerGuid, '.') AS FileName,
 					an.Value
 			FROM
 				submission su
@@ -459,7 +493,7 @@ WHERE
 	<data name="SELECT_SHARED_FILES_BY_FOUNDATION_ID" xml:space="preserve">
 		<value>
 			SELECT
-				CONCAT('\\shareddocuments\\document.' , d.DocumentId) AS FileName,
+				CONCAT('\\documents\\', d.DocumentGuid, '.') AS FileName,
 				d.FilePath
 			FROM
 				document d
@@ -475,7 +509,7 @@ WHERE
 	<data name="SELECT_REQUEST_DOCUMENT_ID" xml:space="preserve">
 		<value>
 			SELECT 
-				DocumentId 
+				DocumentGuid 
 			FROM 
 				document d 
 			WHERE 
@@ -488,11 +522,11 @@ WHERE
 	<data name="SELECT_ORGANIZATION_DOCUMENT_ID" xml:space="preserve">
 		<value>
 			SELECT 
-				DocumentId 
+				DocumentGuid 
 			FROM 
 				document d 
 			WHERE 
-				d.OrganizationId = @ORGANIZATION_ID
+				d.OrganizationGuid = @ORGANIZATION_ID
 				AND
 				d.Name like '%@FILE_NAME%'
 		</value>
@@ -501,13 +535,13 @@ WHERE
 	<data name="SELECT_SHARED_DOCUMENT_ID" xml:space="preserve">
 		<value>
 			SELECT 
-				DocumentId 
+				DocumentGuid 
 			FROM 
 				document d 
 			WHERE 
 				NULLIF(d.RequestId, '') IS NULL
 				AND
-				NULLIF(d.OrganizationId, '') IS NULL
+				NULLIF(d.OrganizationGuid, '') IS NULL
 				AND
 				d.Name like '%@FILE_NAME%'
 		</value>

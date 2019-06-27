@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,11 +65,11 @@
     <Compile Include="Controls\CustomButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\FunctionBlockControls\ClientFileExtractionControl.cs">
+    <Compile Include="Controls\FunctionBlockControls\GhostInspectorBlockControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\FunctionBlockControls\ClientFileExtractionControl.Designer.cs">
-      <DependentUpon>ClientFileExtractionControl.cs</DependentUpon>
+    <Compile Include="Controls\FunctionBlockControls\GhostInspectorBlockControl.Designer.cs">
+      <DependentUpon>GhostInspectorBlockControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FunctionBlockControls\FunctionBlockBaseControl.cs">
       <SubType>UserControl</SubType>
@@ -76,23 +77,11 @@
     <Compile Include="Controls\FunctionBlockControls\FunctionBlockBaseControl.Designer.cs">
       <DependentUpon>FunctionBlockBaseControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FunctionBlockControls\ProcessMergeFieldDocumentsControl.cs">
+    <Compile Include="Controls\FunctionBlockControls\FileExtractionBlockControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\FunctionBlockControls\ProcessMergeFieldDocumentsControl.Designer.cs">
-      <DependentUpon>ProcessMergeFieldDocumentsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.Designer.cs">
-      <DependentUpon>RemoveOrphanDocumentsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SourcePathBlockControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SourcePathBlockControl.Designer.cs">
-      <DependentUpon>SourcePathBlockControl.cs</DependentUpon>
+    <Compile Include="Controls\FunctionBlockControls\FileExtractionBlockControl.Designer.cs">
+      <DependentUpon>FileExtractionBlockControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TitleBlockControl.cs">
       <SubType>UserControl</SubType>
@@ -127,20 +116,14 @@
     <Compile Include="Interfaces\IFunctionControlInterface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\FunctionBlockControls\ClientFileExtractionControl.resx">
-      <DependentUpon>ClientFileExtractionControl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\GhostInspectorBlockControl.resx">
+      <DependentUpon>GhostInspectorBlockControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FunctionBlockControls\FunctionBlockBaseControl.resx">
       <DependentUpon>FunctionBlockBaseControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FunctionBlockControls\ProcessMergeFieldDocumentsControl.resx">
-      <DependentUpon>ProcessMergeFieldDocumentsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FunctionBlockControls\RemoveOrphanDocumentsControl.resx">
-      <DependentUpon>RemoveOrphanDocumentsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SourcePathBlockControl.resx">
-      <DependentUpon>SourcePathBlockControl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\FunctionBlockControls\FileExtractionBlockControl.resx">
+      <DependentUpon>FileExtractionBlockControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TitleBlockControl.resx">
       <DependentUpon>TitleBlockControl.cs</DependentUpon>

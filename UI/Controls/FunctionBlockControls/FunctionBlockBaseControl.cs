@@ -30,5 +30,10 @@ namespace UI.Controls.FunctionBlockControls
 			EnableSourceBlock = true;
 			TitleBlockText = string.Empty;
 		}
+
+		private void FunctionBlockBaseControl_Load(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
