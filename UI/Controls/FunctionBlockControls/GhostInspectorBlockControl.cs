@@ -4,6 +4,10 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using API.Config;
 using API.Data;
@@ -75,15 +79,6 @@ namespace UI.Controls
 			state = new FoundationDataFileState();
 
 			SetLocationSelection(ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY));
-			SetDisplayText(SourceLocation);
-		}
-
-		private void SetDisplayText(string directoryPath)
-		{
-			sourceLocationText.Text = directoryPath;
-
-			sourceLocationText.SelectionStart = sourceLocationText.Text.Length;
-			sourceLocationText.SelectionLength = 0;
 		}
 
 		private void SetLocationSelection(string directoryPath)
@@ -97,14 +92,12 @@ namespace UI.Controls
 				else
 				{
 					SourceLocation = ApplicationConfiguration.GetSetting(ApplicationConfiguration.BASE_UPLOAD_PATH_KEY);
-					SetDisplayText(SourceLocation);
 				}
 				parentControl.SourceLocation = SourceLocation;
 			}
 			catch (Exception eError)
 			{
 				MessageBox.Show(this, eError.Message, VALIDATION_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				sourceLocationText.Focus();
 			}
 
 		}
@@ -128,11 +121,6 @@ namespace UI.Controls
 
 		}
 
-		private void OnLeave_SourcePathBlockControl(object sender, EventArgs e)
-		{
-			SetLocationSelection(sourceLocationText.Text);
-		}
-
 		private void TextChanged_SourceFolder(object sender, EventArgs e)
 		{
 
@@ -145,16 +133,21 @@ namespace UI.Controls
 		#endregion
 
 
-		private async void GhostInspectorButton_Click(object sender, EventArgs e)
+		private void GhostInspectorButton_Click(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			try
 			{
-				var outputDirectory = new DirectoryInfo(sourceLocationText.Text);
-				state.InputFile = outputDirectory.ToString();
-				state.APIKey = apiKeyText.Text;
 
-				await FileProcessing.RunGhostInspector(state);
+				resultsTextBox.Text = "";
+				DataRow selectedRow = ((DataRowView)(FolderList.SelectedItem)).Row;
+				StringBuilder sb = new StringBuilder();
+				List<Task> tasks = new List<Task>();
+				foreach (var currentLine in FileProcessing.GetGhostInspectorSuites(state, selectedRow[0].ToString()))
+				{
+					tasks.Add(Task.Factory.StartNew(() => RunGhostInspector(currentLine)));
+				}
+				Task.WaitAll(tasks.ToArray());
 
 				MessageBox.Show(this, FILE_COPY_COMPLETE, FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
@@ -169,22 +162,23 @@ namespace UI.Controls
 			}
 		}
 
-		private void SourcePathBlockControl_Load(object sender, EventArgs e) { state.OutputDirectory = sourceLocationText.Text; }
-
-		private void browseButton_Click(object sender, EventArgs e)
+		private void RunGhostInspector(string line)
 		{
-			var folderBrowser = new FolderBrowserDialog
-			{
-				ShowNewFolderButton = false
-			};
-
-			DialogResult result = folderBrowser.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				SetDisplayText(folderBrowser.SelectedPath);
-				SetLocationSelection(folderBrowser.SelectedPath);
-			}
+			FileProcessing.RunGhostInspector(state, line);
 		}
+
+		private void apiKeyText_TextChanged(object sender, EventArgs e)
+		{
+			state.APIKey = apiKeyText.Text;
+			FolderList.DataSource = FileProcessing.GetGhostInspectorFolders(state);
+			FolderList.DisplayMember = "folderName";
+		}
+
+		private void FolderList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
 
 		#region Public Methods
 		#endregion
@@ -295,7 +289,7 @@ namespace UI.Controls
 		//		SetLocation(folderBrowser.SelectedPath);
 		//	}
 		//}
-		
+
 		//Tasks for this control:
 		//Call API to get the default location
 		//Enable Folder Browse and validate the location is navigable by the app\

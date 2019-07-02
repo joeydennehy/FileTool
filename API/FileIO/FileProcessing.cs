@@ -12,7 +12,8 @@ using Aspose.Words;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
+using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace API.FileIO
 {
@@ -23,38 +24,128 @@ namespace API.FileIO
 			CopyFilesToDestination(state, state.OutputDirectory);
 		}
 
-		public static async Task RunGhostInspector(FoundationDataFileState state)
+		public static void RunGhostInspector(FoundationDataFileState state, string line)
 		{
-			StreamReader file =
-				new StreamReader(state.InputFile);
-			using (var client = new HttpClient())
-			{
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-				string line;
-				while ((line = file.ReadLine()) != null)
-				{
-					client.BaseAddress = new Uri($"https://api.ghostinspector.com/v1/suites/{line}/execute/?apiKey={state.APIKey}");
-				
-					//GET Method 
-					try {
-						HttpResponseMessage response = await client.GetAsync("");
-						if (response.IsSuccessStatusCode)
-						{
-							HttpContent test = response.Content;
 
-						}
-						else
-						{
-							Console.WriteLine("Internal server Error");
-						}
-					}
-					catch (Exception e)
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+			//GET Method 
+			try
+			{
+				WebRequest requestObjGet =
+					WebRequest.Create($"https://api.ghostinspector.com/v1/suites/{line}/execute/?apiKey={state.APIKey}");
+				requestObjGet.Method = "GET";
+				HttpWebResponse responseObjGet = null;
+				requestObjGet.Timeout = 600000;
+				requestObjGet.BeginGetResponse(new AsyncCallback(GetResponseCallback), requestObjGet);
+			}
+			catch (Exception e)
+			{
+
+				
+			}
+		}
+
+
+		private static void GetResponseCallback(IAsyncResult asynchronousResult)
+		{
+			HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+
+			// End the operation
+			HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+			Stream streamResponse = response.GetResponseStream();
+			StreamReader sr = new StreamReader(streamResponse);
+			var resultBabe = sr.ReadToEnd();
+			sr.Close();
+
+			var json = JObject.Parse(resultBabe)["data"];
+			StringBuilder sb = new StringBuilder();
+			foreach (var result in json.Children())
+			{
+				sb.AppendLine(result["name"] + " - " + (bool.Parse(result["passing"].ToString()) ? "Passed" : "Failed"));
+			}
+			Console.WriteLine(sb);
+			// Close the stream object
+			streamResponse.Close();
+			sr.Close();
+
+			// Release the HttpWebResponse
+			response.Close();
+		}
+
+		public static DataTable GetGhostInspectorFolders(FoundationDataFileState state)
+		{
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+			//GET Method 
+			try
+			{
+				WebRequest requestObjGet = WebRequest.Create($"https://api.ghostinspector.com/v1/folders/?apiKey={state.APIKey}");
+				requestObjGet.Method = "GET";
+				HttpWebResponse responseObjGet = null;
+				requestObjGet.Timeout = 600000;
+				responseObjGet = (HttpWebResponse)requestObjGet.GetResponse();
+
+				using (Stream stream = responseObjGet.GetResponseStream())
+				{
+					StreamReader sr = new StreamReader(stream);
+					var resultBabe = sr.ReadToEnd();
+					sr.Close();
+
+					var json = JObject.Parse(resultBabe)["data"];
+					DataTable table = new DataTable();
+					table.Columns.Add("folderId");
+					table.Columns.Add("folderName");
+					foreach (var result in json.Children())
 					{
-						
-						throw;
+							DataRow row = table.NewRow();
+							row["folderName"] = result["name"].ToString();
+							row["folderId"] = result["_id"].ToString();
+
+						table.Rows.Add(row);
 					}
-					
-				}
+					return table;
+				};
+			}
+			catch (Exception e)
+			{
+
+				return null;
+			}
+		}
+
+		public static List<string> GetGhostInspectorSuites(FoundationDataFileState state, string folderId)
+		{
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+			//GET Method 
+			try
+			{
+				WebRequest requestObjGet = WebRequest.Create($"https://api.ghostinspector.com/v1/folders/{folderId}/suites/?apiKey={state.APIKey}");
+				requestObjGet.Method = "GET";
+				HttpWebResponse responseObjGet = null;
+				requestObjGet.Timeout = 600000;
+				responseObjGet = (HttpWebResponse)requestObjGet.GetResponse();
+
+				using (Stream stream = responseObjGet.GetResponseStream())
+				{
+					StreamReader sr = new StreamReader(stream);
+					var resultBabe = sr.ReadToEnd();
+					sr.Close();
+
+					var json = JObject.Parse(resultBabe)["data"];
+					List<string> suites = new List<string>();
+					foreach (var result in json.Children())
+					{
+						suites.Add(result["_id"].ToString());
+					}
+					return suites;
+				};
+			}
+			catch (Exception e)
+			{
+
+				return null;
 			}
 		}
 

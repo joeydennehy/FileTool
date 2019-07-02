@@ -17,6 +17,7 @@ namespace API.FileIO
 		public string OutputDirectory { get; set; }
 		public string InputFile { get; set; }
 		public string APIKey { get; set; }
+		public string fileLine { get; set; }
 		public List<string> SequesterExclusionPatterns { get; set; }
 		public List<global::System.IO.FileInfo> SequesterFiles { get; set; }
 		public string SequesterPath { get; set; }
