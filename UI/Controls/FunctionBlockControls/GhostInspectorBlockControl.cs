@@ -141,13 +141,11 @@ namespace UI.Controls
 
 				resultsTextBox.Text = "";
 				DataRow selectedRow = ((DataRowView)(FolderList.SelectedItem)).Row;
-				StringBuilder sb = new StringBuilder();
-				List<Task> tasks = new List<Task>();
 				foreach (var currentLine in FileProcessing.GetGhostInspectorSuites(state, selectedRow[0].ToString()))
 				{
-					tasks.Add(Task.Factory.StartNew(() => RunGhostInspector(currentLine)));
+					FileProcessing.RunGhostInspector(state, currentLine);
 				}
-				Task.WaitAll(tasks.ToArray());
+				
 
 				MessageBox.Show(this, FILE_COPY_COMPLETE, FILE_COPY_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
@@ -160,11 +158,6 @@ namespace UI.Controls
 			{
 				Cursor = Cursors.Default;
 			}
-		}
-
-		private void RunGhostInspector(string line)
-		{
-			FileProcessing.RunGhostInspector(state, line);
 		}
 
 		private void apiKeyText_TextChanged(object sender, EventArgs e)

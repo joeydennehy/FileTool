@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace API.FileIO
@@ -26,7 +27,6 @@ namespace API.FileIO
 
 		public static void RunGhostInspector(FoundationDataFileState state, string line)
 		{
-
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
 			//GET Method 
@@ -34,10 +34,10 @@ namespace API.FileIO
 			{
 				WebRequest requestObjGet =
 					WebRequest.Create($"https://api.ghostinspector.com/v1/suites/{line}/execute/?apiKey={state.APIKey}");
-				requestObjGet.Method = "GET";
-				HttpWebResponse responseObjGet = null;
-				requestObjGet.Timeout = 600000;
-				requestObjGet.BeginGetResponse(new AsyncCallback(GetResponseCallback), requestObjGet);
+				requestObjGet.Method = "POST";
+				requestObjGet.GetResponseAsync();
+				Thread.Sleep(3000);
+				requestObjGet.Abort();
 			}
 			catch (Exception e)
 			{
@@ -46,14 +46,16 @@ namespace API.FileIO
 			}
 		}
 
+	
+
 
 		private static void GetResponseCallback(IAsyncResult asynchronousResult)
 		{
 			HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
 
 			// End the operation
-			HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
-			Stream streamResponse = response.GetResponseStream();
+			request.EndGetRequestStream(asynchronousResult);
+			/*Stream streamResponse = response.GetResponseStream();
 			StreamReader sr = new StreamReader(streamResponse);
 			var resultBabe = sr.ReadToEnd();
 			sr.Close();
@@ -70,7 +72,7 @@ namespace API.FileIO
 			sr.Close();
 
 			// Release the HttpWebResponse
-			response.Close();
+			response.Close();*/
 		}
 
 		public static DataTable GetGhostInspectorFolders(FoundationDataFileState state)
