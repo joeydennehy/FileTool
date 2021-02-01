@@ -351,7 +351,7 @@ namespace API.FileIO
 					{
 						case "answers":
 							List<string> faildList = new List<string>();
-								sb.AppendLine("Request Id, Request Guid,Submission Id,Answer Id, Question, File Path, File Name");
+								sb.AppendLine("Request Id, Request Guid,Submission Id,Answer Id, User Id, Question, File Path, File Name");
 
 								foreach (FoundationDataFileState.FileInfo file in state.RequestFiles)
 								{
@@ -362,8 +362,8 @@ namespace API.FileIO
 										CopyFile(sourcePath, destinationFolder, file);
 										if (!string.IsNullOrWhiteSpace(file.FileName))
 										{
-											sb.AppendLine(string.Format("{0},{1},{2},{3},\"{4}\",\"{5}\",\"{6}\",\"{7}\"", file.RequestId,
-											                            file.RequestGuid, file.SubmissionId, file.AnswerId, file.Question, file.FilePath,
+											sb.AppendLine(string.Format("{0},{1},{2},{3},{4},\"{5}\",\"{6}\",\"{7}\",\"{8}\"", file.RequestId,
+											                            file.RequestGuid, file.SubmissionId, file.AnswerId, file.ActorGuid, file.Question, file.FilePath,
 											                            file.FileName, file.ProcessId));
 										}
 									}
@@ -376,6 +376,7 @@ namespace API.FileIO
 							break;
 						case "documents":
 							sb = new StringBuilder();
+							sb.AppendLine("Request Id, Request Guid, User Id, Description,File Path, File Name");
 							foreach (FoundationDataFileState.FileInfo file in state.RequestSupportingFiles)
 							{
 								sourcePath = string.Format("{0}\\documents\\{1}.{2}",
@@ -385,21 +386,21 @@ namespace API.FileIO
 								{
 									if (!string.IsNullOrWhiteSpace(file.FileName))
 									{
-										sb.AppendLine(string.Format("{0},{1},\"{2}\",\"{3}\"", file.RequestId, file.RequestGuid, file.FilePath, file.FileName));
+										sb.AppendLine(string.Format("{0},{1},{2},\"{3}\",\"{4}\",\"{5}\"", file.RequestId, file.RequestGuid, file.ActorGuid, file.Description, file.FilePath, file.FileName));
 									}
 								}
 							}
 							File.WriteAllText(destinationFolder + "\\RequestSupporting.csv", sb.ToString());
 							sb = new StringBuilder();
-							sb.AppendLine("Organization Id,Organization Name Id,Organization Tax Id, Question, File Path, File Name");
+							sb.AppendLine("Organization Id,Organization Name Id,Organization Tax Id, Description, File Path, File Name");
 
 							foreach (FoundationDataFileState.FileInfo file in state.OrganizationSupportingFiles)
 							{
 								sourcePath = string.Format("{0}\\documents\\{1}.{2}",
 								                           state.ClientRootDirectory, file.DocumentId, file.FileName.Split('.').Last());
 								CopyFile(sourcePath, destinationFolder, file);
-								sb.AppendLine(string.Format("{0},\"{1}\",{2},\"{3}\",\"{4}\"", file.OrganizationId, file.OrganizationName,
-									file.OrganizationTaxId, file.FilePath, file.FileName));
+								sb.AppendLine(string.Format("{0},\"{1}\",{2},\"{3}\",\"{4}\",\"{5}\"", file.OrganizationId, file.OrganizationName,
+									file.OrganizationTaxId, file.Description, file.FilePath, file.FileName));
 							}
 
 							File.WriteAllText(destinationFolder + "\\Organization.csv", sb.ToString());
