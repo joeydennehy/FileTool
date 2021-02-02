@@ -1,14 +1,17 @@
-name: example-basic
+name: integration-tests
 on: [push]
 jobs:
-  basic-on-windows:
-    runs-on: windows-latest
+  cypress-run:
+    runs-on: ubuntu-16.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Cypress tests
-        uses: actions/checkout@v2
+      # https://github.com/cypress-io/github-action
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
         with:
+          record: true
           working-directory: https://github.com/Foundant/cypress-tests/tree/trunk/UITest
-          build: npx cypress info
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: fdd45e99-5916-41ae-90fb-85658b57961f
