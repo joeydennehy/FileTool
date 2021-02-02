@@ -1,0 +1,418 @@
+{
+  "Environment": "sandbox.grantinterface.com",
+  "Processes": [
+    {
+      "Guid": "1950beca-7e98-4938-91dc-c67daf57f8fb",
+      "Name": "Universe for Import/Export test",
+      "ActiveStatus": 0,
+      "Description": "",
+      "CreatedBy": 660204,
+      "StartDate": "9999-12-31T00:00:00",
+      "EndDate": "9999-12-31T00:00:00",
+      "Sequence": 0,
+      "Visibility": 0,
+      "ApplicantVisibility": 0,
+      "ExternalType": 2,
+      "AccessCode": null,
+      "Budget": null,
+      "BlindRoles": null,
+      "Eligibilities": [],
+      "Stages": [
+        {
+          "Guid": "6d35af62-98c8-45cb-84d9-48ef35366fe6",
+          "Name": "Application",
+          "Sequence": 1,
+          "FormType": 4,
+          "Type": 1,
+          "RenderType": 1,
+          "Anonymous": false,
+          "IsRequired": false,
+          "IsToggledOn": true,
+          "ShareEvaluations": false,
+          "SideBySide": false,
+          "DashboardGroup": "Application",
+          "Form": {
+            "Name": "Application",
+            "Description": null,
+            "Type": 4,
+            "Elements": [],
+            "Groups": [],
+            "ProcessEligibilities": []
+          },
+          "Role": null,
+          "ChildStages": [
+            {
+              "Guid": "7d07f500-ced8-41f5-870a-50aa6acb3d2c",
+              "Name": "Evaluation 2",
+              "Sequence": 3,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": {
+                "Name": "Evaluation",
+                "Description": null,
+                "Type": 5,
+                "Elements": [],
+                "Groups": [],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "6d35af62-98c8-45cb-84d9-48ef35366fe6",
+              "ProcessGuid": "1950beca-7e98-4938-91dc-c67daf57f8fb"
+            },
+            {
+              "Guid": "3ad0f572-5b4c-42e0-bb5d-58737c855fb5",
+              "Name": "Evaluation 1",
+              "Sequence": 2,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": {
+                "Name": "Evaluation",
+                "Description": null,
+                "Type": 5,
+                "Elements": [],
+                "Groups": [],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "6d35af62-98c8-45cb-84d9-48ef35366fe6",
+              "ProcessGuid": "1950beca-7e98-4938-91dc-c67daf57f8fb"
+            }
+          ],
+          "AutoAssigns": [],
+          "Notifications": [],
+          "StageCommittees": [],
+          "ParentGuid": null,
+          "ProcessGuid": "1950beca-7e98-4938-91dc-c67daf57f8fb"
+        },
+        {
+          "Guid": "6b22f0a4-fcb8-43ff-8fd7-dc8ec401f498",
+          "Name": "Decisions",
+          "Sequence": 4,
+          "FormType": null,
+          "Type": 2,
+          "RenderType": 0,
+          "Anonymous": false,
+          "IsRequired": false,
+          "IsToggledOn": true,
+          "ShareEvaluations": false,
+          "SideBySide": false,
+          "DashboardGroup": null,
+          "Form": null,
+          "Role": null,
+          "ChildStages": [
+            {
+              "Guid": "21724bb7-4674-454c-bfc6-76ad650e0542",
+              "Name": "Denial",
+              "Sequence": 6,
+              "FormType": 8,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Denial",
+              "Form": {
+                "Name": "Denial",
+                "Description": null,
+                "Type": 8,
+                "Elements": [
+                  {
+                    "Type": 6,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Decision Date",
+                    "Instructions": null,
+                    "MaxTextLength": 10,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Grant_Decision_Date",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 12,
+                    "DisplayType": 5,
+                    "RequiredType": 2,
+                    "IsSharedQuestion": true,
+                    "Label": "Denial Type",
+                    "Instructions": null,
+                    "MaxTextLength": 250,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Denial_Type",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "Denied",
+                        "Value": null,
+                        "Sequence": 0
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ],
+                "Groups": [
+                  {
+                    "Name": "Denial Information",
+                    "Sequence": 0,
+                    "Rules": null,
+                    "Deleted": null,
+                    "Elements": [
+                      {
+                        "Type": 6,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Decision Date",
+                        "Instructions": null,
+                        "MaxTextLength": 10,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Grant_Decision_Date",
+                        "JsonAttributes": null,
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 12,
+                        "DisplayType": 5,
+                        "RequiredType": 2,
+                        "IsSharedQuestion": true,
+                        "Label": "Denial Type",
+                        "Instructions": null,
+                        "MaxTextLength": 250,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Denial_Type",
+                        "JsonAttributes": null,
+                        "Choices": [
+                          {
+                            "Text": "Denied",
+                            "Value": null,
+                            "Sequence": 0
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      }
+                    ]
+                  }
+                ],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "6b22f0a4-fcb8-43ff-8fd7-dc8ec401f498",
+              "ProcessGuid": "1950beca-7e98-4938-91dc-c67daf57f8fb"
+            },
+            {
+              "Guid": "e8795fc8-3b23-464f-8d69-fc2b6a4d5f6e",
+              "Name": "Approval",
+              "Sequence": 5,
+              "FormType": 6,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Approval",
+              "Form": {
+                "Name": "Approval",
+                "Description": null,
+                "Type": 6,
+                "Elements": [
+                  {
+                    "Type": 5,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Amount Awarded",
+                    "Instructions": null,
+                    "MaxTextLength": 20,
+                    "MaxFileSize": 0,
+                    "Sequence": 3,
+                    "FieldCode": "Grant_Amount",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 12,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Award Type",
+                    "Instructions": null,
+                    "MaxTextLength": 250,
+                    "MaxFileSize": 0,
+                    "Sequence": 2,
+                    "FieldCode": "Grant_Type",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "Installment",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "Matching",
+                        "Value": null,
+                        "Sequence": 2
+                      },
+                      {
+                        "Text": "One Time",
+                        "Value": null,
+                        "Sequence": 0
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 6,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Decision Date",
+                    "Instructions": null,
+                    "MaxTextLength": 10,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Grant_Decision_Date",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ],
+                "Groups": [
+                  {
+                    "Name": "Approval Information",
+                    "Sequence": 0,
+                    "Rules": null,
+                    "Deleted": null,
+                    "Elements": [
+                      {
+                        "Type": 5,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Amount Awarded",
+                        "Instructions": null,
+                        "MaxTextLength": 20,
+                        "MaxFileSize": 0,
+                        "Sequence": 3,
+                        "FieldCode": "Grant_Amount",
+                        "JsonAttributes": null,
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 12,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Award Type",
+                        "Instructions": null,
+                        "MaxTextLength": 250,
+                        "MaxFileSize": 0,
+                        "Sequence": 2,
+                        "FieldCode": "Grant_Type",
+                        "JsonAttributes": null,
+                        "Choices": [
+                          {
+                            "Text": "Installment",
+                            "Value": null,
+                            "Sequence": 1
+                          },
+                          {
+                            "Text": "Matching",
+                            "Value": null,
+                            "Sequence": 2
+                          },
+                          {
+                            "Text": "One Time",
+                            "Value": null,
+                            "Sequence": 0
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 6,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Decision Date",
+                        "Instructions": null,
+                        "MaxTextLength": 10,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Grant_Decision_Date",
+                        "JsonAttributes": null,
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      }
+                    ]
+                  }
+                ],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "6b22f0a4-fcb8-43ff-8fd7-dc8ec401f498",
+              "ProcessGuid": "1950beca-7e98-4938-91dc-c67daf57f8fb"
+            }
+          ],
+          "AutoAssigns": [],
+          "Notifications": [],
+          "StageCommittees": [],
+          "ParentGuid": null,
+          "ProcessGuid": "1950beca-7e98-4938-91dc-c67daf57f8fb"
+        }
+      ],
+      "OpportunityProcesses": []
+    }
+  ]
+}

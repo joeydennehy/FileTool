@@ -1,0 +1,1801 @@
+{
+  "Environment": "beta.grantinterface.com",
+  "Processes": [
+    {
+      "Guid": "813978da-b177-4392-8346-86fa0fff2636",
+      "Name": "UA Cypress Test",
+      "ActiveStatus": 9000,
+      "Description": "",
+      "CreatedBy": 2532810,
+      "StartDate": "2021-01-01T00:00:00",
+      "EndDate": "2031-01-01T00:00:00",
+      "Sequence": 0,
+      "Visibility": 0,
+      "ApplicantVisibility": 0,
+      "ExternalType": 2,
+      "AccessCode": null,
+      "Budget": null,
+      "BlindRoles": null,
+      "Eligibilities": [],
+      "Stages": [
+        {
+          "Guid": "af967ef0-8ad6-4d4e-a3db-9878a7ab6c7c",
+          "Name": "Application",
+          "Sequence": 1,
+          "FormType": 4,
+          "Type": 1,
+          "RenderType": 1,
+          "Anonymous": false,
+          "IsRequired": false,
+          "IsToggledOn": true,
+          "ShareEvaluations": false,
+          "SideBySide": false,
+          "DashboardGroup": "Application",
+          "Form": {
+            "Name": "Application",
+            "Description": null,
+            "Type": 4,
+            "Elements": [
+              {
+                "Type": 24,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Decimal Question",
+                "Instructions": "this is a decimal question",
+                "MaxTextLength": 20,
+                "MaxFileSize": 0,
+                "Sequence": 2,
+                "FieldCode": "Q_56bd844742",
+                "JsonAttributes": "{\"Opportunities\":[],\"decimalLeftDigits\":1,\"decimalRightDigits\":2,\"requireDecimalRightDigits\":true}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 5,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Currency Question",
+                "Instructions": "this is a currency question",
+                "MaxTextLength": 20,
+                "MaxFileSize": 0,
+                "Sequence": 3,
+                "FieldCode": "Q_0382e52479",
+                "JsonAttributes": "{\"Opportunities\":[]}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 8,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Email Question",
+                "Instructions": "this is a email question",
+                "MaxTextLength": 254,
+                "MaxFileSize": 0,
+                "Sequence": 5,
+                "FieldCode": "Q_3eca14806a",
+                "JsonAttributes": "{\"Opportunities\":[]}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 4,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Integer Question",
+                "Instructions": "this is a integer question",
+                "MaxTextLength": 200,
+                "MaxFileSize": 0,
+                "Sequence": 1,
+                "FieldCode": "Q_c41ee06b06",
+                "JsonAttributes": "{\"Opportunities\":[]}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 6,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Date Question",
+                "Instructions": "this is a date question",
+                "MaxTextLength": 10,
+                "MaxFileSize": 0,
+                "Sequence": 4,
+                "FieldCode": "Q_28b883ea97",
+                "JsonAttributes": "{\"Opportunities\":[]}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 11,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Text Area Question",
+                "Instructions": "this is a text area question",
+                "MaxTextLength": 1000,
+                "MaxFileSize": 0,
+                "Sequence": 0,
+                "FieldCode": "Q_82c2b78439",
+                "JsonAttributes": "{\"Opportunities\":[]}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              }
+            ],
+            "Groups": [
+              {
+                "Name": "Question Group",
+                "Sequence": 0,
+                "Rules": null,
+                "Deleted": null,
+                "Elements": [
+                  {
+                    "Type": 24,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Decimal Question",
+                    "Instructions": "this is a decimal question",
+                    "MaxTextLength": 20,
+                    "MaxFileSize": 0,
+                    "Sequence": 2,
+                    "FieldCode": "Q_56bd844742",
+                    "JsonAttributes": "{\"Opportunities\":[],\"decimalLeftDigits\":1,\"decimalRightDigits\":2,\"requireDecimalRightDigits\":true}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 5,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Currency Question",
+                    "Instructions": "this is a currency question",
+                    "MaxTextLength": 20,
+                    "MaxFileSize": 0,
+                    "Sequence": 3,
+                    "FieldCode": "Q_0382e52479",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 8,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Email Question",
+                    "Instructions": "this is a email question",
+                    "MaxTextLength": 254,
+                    "MaxFileSize": 0,
+                    "Sequence": 5,
+                    "FieldCode": "Q_3eca14806a",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 4,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Integer Question",
+                    "Instructions": "this is a integer question",
+                    "MaxTextLength": 200,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Q_c41ee06b06",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 6,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Date Question",
+                    "Instructions": "this is a date question",
+                    "MaxTextLength": 10,
+                    "MaxFileSize": 0,
+                    "Sequence": 4,
+                    "FieldCode": "Q_28b883ea97",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 11,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Text Area Question",
+                    "Instructions": "this is a text area question",
+                    "MaxTextLength": 1000,
+                    "MaxFileSize": 0,
+                    "Sequence": 0,
+                    "FieldCode": "Q_82c2b78439",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ]
+              }
+            ],
+            "ProcessEligibilities": []
+          },
+          "Role": null,
+          "ChildStages": [
+            {
+              "Guid": "23856646-c4b8-45a7-8722-117ddd5234bb",
+              "Name": "Evaluation 2",
+              "Sequence": 3,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": {
+                "Name": "Evaluation",
+                "Description": null,
+                "Type": 5,
+                "Elements": [],
+                "Groups": [],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "af967ef0-8ad6-4d4e-a3db-9878a7ab6c7c",
+              "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+            },
+            {
+              "Guid": "c22f9fa9-b541-4ec6-b3f4-1995ca20be9b",
+              "Name": "Evaluation 1",
+              "Sequence": 2,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": {
+                "Name": "Evaluation",
+                "Description": null,
+                "Type": 5,
+                "Elements": [
+                  {
+                    "Type": 18,
+                    "DisplayType": 5,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Text and Upload Question",
+                    "Instructions": "this is a text and upload question",
+                    "MaxTextLength": 1000,
+                    "MaxFileSize": 5,
+                    "Sequence": 3,
+                    "FieldCode": "Q_7d49b1272f",
+                    "JsonAttributes": "{\"Opportunities\":[],\"FileTypes\":\"doc,docx\"}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 15,
+                    "DisplayType": 5,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Checkbox List Question",
+                    "Instructions": "this is a checkbox list question",
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 0,
+                    "FieldCode": "Q_543eca9f90",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [
+                      {
+                        "Text": "Box 1",
+                        "Value": null,
+                        "Sequence": 0
+                      },
+                      {
+                        "Text": "Box 2",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "Box 3",
+                        "Value": null,
+                        "Sequence": 2
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 12,
+                    "DisplayType": 5,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Drop Down List Question",
+                    "Instructions": "this is a drop down list question",
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Q_174896ed66",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [
+                      {
+                        "Text": "Select 1",
+                        "Value": null,
+                        "Sequence": 0
+                      },
+                      {
+                        "Text": "Select 2",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "Select 3",
+                        "Value": null,
+                        "Sequence": 2
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 14,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": false,
+                    "Label": "Scoring Question",
+                    "Instructions": "this is a scoring question",
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 2,
+                    "FieldCode": "Q_af29228805",
+                    "JsonAttributes": "{\"Opportunities\":[]}",
+                    "Choices": [
+                      {
+                        "Text": "0",
+                        "Value": null,
+                        "Sequence": 0
+                      },
+                      {
+                        "Text": "10",
+                        "Value": null,
+                        "Sequence": 1
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ],
+                "Groups": [
+                  {
+                    "Name": "Question Group",
+                    "Sequence": 0,
+                    "Rules": null,
+                    "Deleted": null,
+                    "Elements": [
+                      {
+                        "Type": 18,
+                        "DisplayType": 5,
+                        "RequiredType": 0,
+                        "IsSharedQuestion": false,
+                        "Label": "Text and Upload Question",
+                        "Instructions": "this is a text and upload question",
+                        "MaxTextLength": 1000,
+                        "MaxFileSize": 5,
+                        "Sequence": 3,
+                        "FieldCode": "Q_7d49b1272f",
+                        "JsonAttributes": "{\"Opportunities\":[],\"FileTypes\":\"doc,docx\"}",
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 15,
+                        "DisplayType": 5,
+                        "RequiredType": 0,
+                        "IsSharedQuestion": false,
+                        "Label": "Checkbox List Question",
+                        "Instructions": "this is a checkbox list question",
+                        "MaxTextLength": 0,
+                        "MaxFileSize": 0,
+                        "Sequence": 0,
+                        "FieldCode": "Q_543eca9f90",
+                        "JsonAttributes": "{\"Opportunities\":[]}",
+                        "Choices": [
+                          {
+                            "Text": "Box 1",
+                            "Value": null,
+                            "Sequence": 0
+                          },
+                          {
+                            "Text": "Box 2",
+                            "Value": null,
+                            "Sequence": 1
+                          },
+                          {
+                            "Text": "Box 3",
+                            "Value": null,
+                            "Sequence": 2
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 12,
+                        "DisplayType": 5,
+                        "RequiredType": 0,
+                        "IsSharedQuestion": false,
+                        "Label": "Drop Down List Question",
+                        "Instructions": "this is a drop down list question",
+                        "MaxTextLength": 0,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Q_174896ed66",
+                        "JsonAttributes": "{\"Opportunities\":[]}",
+                        "Choices": [
+                          {
+                            "Text": "Select 1",
+                            "Value": null,
+                            "Sequence": 0
+                          },
+                          {
+                            "Text": "Select 2",
+                            "Value": null,
+                            "Sequence": 1
+                          },
+                          {
+                            "Text": "Select 3",
+                            "Value": null,
+                            "Sequence": 2
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 14,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": false,
+                        "Label": "Scoring Question",
+                        "Instructions": "this is a scoring question",
+                        "MaxTextLength": 0,
+                        "MaxFileSize": 0,
+                        "Sequence": 2,
+                        "FieldCode": "Q_af29228805",
+                        "JsonAttributes": "{\"Opportunities\":[]}",
+                        "Choices": [
+                          {
+                            "Text": "0",
+                            "Value": null,
+                            "Sequence": 0
+                          },
+                          {
+                            "Text": "10",
+                            "Value": null,
+                            "Sequence": 1
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      }
+                    ]
+                  }
+                ],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "af967ef0-8ad6-4d4e-a3db-9878a7ab6c7c",
+              "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+            }
+          ],
+          "AutoAssigns": [],
+          "Notifications": [],
+          "StageCommittees": [],
+          "ParentGuid": null,
+          "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+        },
+        {
+          "Guid": "0367279e-16af-475d-875e-57f3373fab6c",
+          "Name": "Decisions",
+          "Sequence": 4,
+          "FormType": null,
+          "Type": 2,
+          "RenderType": 0,
+          "Anonymous": false,
+          "IsRequired": false,
+          "IsToggledOn": true,
+          "ShareEvaluations": false,
+          "SideBySide": false,
+          "DashboardGroup": null,
+          "Form": null,
+          "Role": null,
+          "ChildStages": [
+            {
+              "Guid": "c8390086-df47-41f4-9ad6-f00908ebcb53",
+              "Name": "Denial",
+              "Sequence": 6,
+              "FormType": 8,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Denial",
+              "Form": {
+                "Name": "Denial",
+                "Description": null,
+                "Type": 8,
+                "Elements": [
+                  {
+                    "Type": 6,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Decision Date",
+                    "Instructions": null,
+                    "MaxTextLength": 10,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Grant_Decision_Date",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 12,
+                    "DisplayType": 5,
+                    "RequiredType": 2,
+                    "IsSharedQuestion": true,
+                    "Label": "Denial Type",
+                    "Instructions": null,
+                    "MaxTextLength": 250,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Denial_Type",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "Denied",
+                        "Value": null,
+                        "Sequence": 0
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ],
+                "Groups": [
+                  {
+                    "Name": "Denial Information",
+                    "Sequence": 0,
+                    "Rules": null,
+                    "Deleted": null,
+                    "Elements": [
+                      {
+                        "Type": 6,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Decision Date",
+                        "Instructions": null,
+                        "MaxTextLength": 10,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Grant_Decision_Date",
+                        "JsonAttributes": null,
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 12,
+                        "DisplayType": 5,
+                        "RequiredType": 2,
+                        "IsSharedQuestion": true,
+                        "Label": "Denial Type",
+                        "Instructions": null,
+                        "MaxTextLength": 250,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Denial_Type",
+                        "JsonAttributes": null,
+                        "Choices": [
+                          {
+                            "Text": "Denied",
+                            "Value": null,
+                            "Sequence": 0
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      }
+                    ]
+                  }
+                ],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "0367279e-16af-475d-875e-57f3373fab6c",
+              "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+            },
+            {
+              "Guid": "d90c9477-0a85-41fe-8f0c-6408e2d5ef84",
+              "Name": "Approval",
+              "Sequence": 5,
+              "FormType": 6,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Approval",
+              "Form": {
+                "Name": "Approval",
+                "Description": null,
+                "Type": 6,
+                "Elements": [
+                  {
+                    "Type": 5,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Amount Awarded",
+                    "Instructions": null,
+                    "MaxTextLength": 20,
+                    "MaxFileSize": 0,
+                    "Sequence": 3,
+                    "FieldCode": "Grant_Amount",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 6,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Decision Date",
+                    "Instructions": null,
+                    "MaxTextLength": 10,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Grant_Decision_Date",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 12,
+                    "DisplayType": 5,
+                    "RequiredType": 1,
+                    "IsSharedQuestion": true,
+                    "Label": "Award Type",
+                    "Instructions": null,
+                    "MaxTextLength": 250,
+                    "MaxFileSize": 0,
+                    "Sequence": 2,
+                    "FieldCode": "Grant_Type",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "Installment",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "Matching",
+                        "Value": null,
+                        "Sequence": 2
+                      },
+                      {
+                        "Text": "One Time",
+                        "Value": null,
+                        "Sequence": 0
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ],
+                "Groups": [
+                  {
+                    "Name": "Approval Information",
+                    "Sequence": 0,
+                    "Rules": null,
+                    "Deleted": null,
+                    "Elements": [
+                      {
+                        "Type": 5,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Amount Awarded",
+                        "Instructions": null,
+                        "MaxTextLength": 20,
+                        "MaxFileSize": 0,
+                        "Sequence": 3,
+                        "FieldCode": "Grant_Amount",
+                        "JsonAttributes": null,
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 6,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Decision Date",
+                        "Instructions": null,
+                        "MaxTextLength": 10,
+                        "MaxFileSize": 0,
+                        "Sequence": 1,
+                        "FieldCode": "Grant_Decision_Date",
+                        "JsonAttributes": null,
+                        "Choices": [],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      },
+                      {
+                        "Type": 12,
+                        "DisplayType": 5,
+                        "RequiredType": 1,
+                        "IsSharedQuestion": true,
+                        "Label": "Award Type",
+                        "Instructions": null,
+                        "MaxTextLength": 250,
+                        "MaxFileSize": 0,
+                        "Sequence": 2,
+                        "FieldCode": "Grant_Type",
+                        "JsonAttributes": null,
+                        "Choices": [
+                          {
+                            "Text": "Installment",
+                            "Value": null,
+                            "Sequence": 1
+                          },
+                          {
+                            "Text": "Matching",
+                            "Value": null,
+                            "Sequence": 2
+                          },
+                          {
+                            "Text": "One Time",
+                            "Value": null,
+                            "Sequence": 0
+                          }
+                        ],
+                        "Nesteds": [],
+                        "ChildNestedElements": []
+                      }
+                    ]
+                  }
+                ],
+                "ProcessEligibilities": []
+              },
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "0367279e-16af-475d-875e-57f3373fab6c",
+              "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+            }
+          ],
+          "AutoAssigns": [],
+          "Notifications": [],
+          "StageCommittees": [],
+          "ParentGuid": null,
+          "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+        },
+        {
+          "Guid": "d915a2a0-ebe0-4686-a684-48baab781114",
+          "Name": "Universe Follow-Ups",
+          "Sequence": 7,
+          "FormType": 9,
+          "Type": 1,
+          "RenderType": null,
+          "Anonymous": false,
+          "IsRequired": false,
+          "IsToggledOn": true,
+          "ShareEvaluations": false,
+          "SideBySide": false,
+          "DashboardGroup": "Follow Ups",
+          "Form": {
+            "Name": "New Follow-Up",
+            "Description": null,
+            "Type": 9,
+            "Elements": [
+              {
+                "Type": 19,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "State",
+                "Instructions": null,
+                "MaxTextLength": 0,
+                "MaxFileSize": 0,
+                "Sequence": 0,
+                "FieldCode": "RF_25a6e1b4f8",
+                "JsonAttributes": null,
+                "Choices": [
+                  {
+                    "Text": "CO",
+                    "Value": null,
+                    "Sequence": 1
+                  },
+                  {
+                    "Text": "MT",
+                    "Value": null,
+                    "Sequence": 0
+                  }
+                ],
+                "Nesteds": [
+                  {
+                    "ParentChoice": "USA"
+                  }
+                ],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 13,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Radio Button List Question",
+                "Instructions": "this is a radio button list question",
+                "MaxTextLength": 0,
+                "MaxFileSize": 0,
+                "Sequence": 1,
+                "FieldCode": "Q_d71f334143",
+                "JsonAttributes": null,
+                "Choices": [
+                  {
+                    "Text": "Radio 1",
+                    "Value": null,
+                    "Sequence": 0
+                  },
+                  {
+                    "Text": "Radio 2",
+                    "Value": null,
+                    "Sequence": 1
+                  },
+                  {
+                    "Text": "Radio 3",
+                    "Value": null,
+                    "Sequence": 2
+                  }
+                ],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 16,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Nested Question",
+                "Instructions": "this is a nested question",
+                "MaxTextLength": 0,
+                "MaxFileSize": 0,
+                "Sequence": 4,
+                "FieldCode": "Q_1f211f50e8",
+                "JsonAttributes": null,
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": [
+                  {
+                    "ParentChoice": null,
+                    "ChildElement": {
+                      "Type": 19,
+                      "DisplayType": 6,
+                      "RequiredType": 0,
+                      "IsSharedQuestion": false,
+                      "Label": "Country",
+                      "Instructions": null,
+                      "MaxTextLength": 0,
+                      "MaxFileSize": 0,
+                      "Sequence": 0,
+                      "FieldCode": "RF_6a85e10faf",
+                      "JsonAttributes": null,
+                      "Choices": [
+                        {
+                          "Text": "Canada",
+                          "Value": null,
+                          "Sequence": 1
+                        },
+                        {
+                          "Text": "USA",
+                          "Value": null,
+                          "Sequence": 0
+                        }
+                      ],
+                      "ChildNestedElements": [
+                        {
+                          "ParentChoice": "USA",
+                          "ChildElement": {
+                            "Type": 19,
+                            "DisplayType": 6,
+                            "RequiredType": 0,
+                            "IsSharedQuestion": false,
+                            "Label": "State",
+                            "Instructions": null,
+                            "MaxTextLength": 0,
+                            "MaxFileSize": 0,
+                            "Sequence": 0,
+                            "FieldCode": "RF_25a6e1b4f8",
+                            "JsonAttributes": null,
+                            "Choices": [
+                              {
+                                "Text": "CO",
+                                "Value": null,
+                                "Sequence": 1
+                              },
+                              {
+                                "Text": "MT",
+                                "Value": null,
+                                "Sequence": 0
+                              }
+                            ],
+                            "ChildNestedElements": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "Type": 7,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Url Question",
+                "Instructions": "this is a url question",
+                "MaxTextLength": 2000,
+                "MaxFileSize": 0,
+                "Sequence": 3,
+                "FieldCode": "Q_36ead5c9a7",
+                "JsonAttributes": null,
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 19,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Country",
+                "Instructions": null,
+                "MaxTextLength": 0,
+                "MaxFileSize": 0,
+                "Sequence": 0,
+                "FieldCode": "RF_6a85e10faf",
+                "JsonAttributes": null,
+                "Choices": [
+                  {
+                    "Text": "Canada",
+                    "Value": null,
+                    "Sequence": 1
+                  },
+                  {
+                    "Text": "USA",
+                    "Value": null,
+                    "Sequence": 0
+                  }
+                ],
+                "Nesteds": [
+                  {
+                    "ParentChoice": null
+                  }
+                ],
+                "ChildNestedElements": [
+                  {
+                    "ParentChoice": "USA",
+                    "ChildElement": {
+                      "Type": 19,
+                      "DisplayType": 6,
+                      "RequiredType": 0,
+                      "IsSharedQuestion": false,
+                      "Label": "State",
+                      "Instructions": null,
+                      "MaxTextLength": 0,
+                      "MaxFileSize": 0,
+                      "Sequence": 0,
+                      "FieldCode": "RF_25a6e1b4f8",
+                      "JsonAttributes": null,
+                      "Choices": [
+                        {
+                          "Text": "CO",
+                          "Value": null,
+                          "Sequence": 1
+                        },
+                        {
+                          "Text": "MT",
+                          "Value": null,
+                          "Sequence": 0
+                        }
+                      ],
+                      "ChildNestedElements": []
+                    }
+                  }
+                ]
+              },
+              {
+                "Type": 3,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "Text Box Question",
+                "Instructions": "this is a text box question",
+                "MaxTextLength": 200,
+                "MaxFileSize": 0,
+                "Sequence": 0,
+                "FieldCode": "Q_6741567908",
+                "JsonAttributes": null,
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              },
+              {
+                "Type": 17,
+                "DisplayType": 6,
+                "RequiredType": 0,
+                "IsSharedQuestion": false,
+                "Label": "File Upload Question",
+                "Instructions": "this is a file upload question",
+                "MaxTextLength": 0,
+                "MaxFileSize": 5,
+                "Sequence": 2,
+                "FieldCode": "Q_fd4edad2aa",
+                "JsonAttributes": "{\"FileTypes\":\"doc,docx\"}",
+                "Choices": [],
+                "Nesteds": [],
+                "ChildNestedElements": []
+              }
+            ],
+            "Groups": [
+              {
+                "Name": "Question Group",
+                "Sequence": 0,
+                "Rules": null,
+                "Deleted": null,
+                "Elements": [
+                  {
+                    "Type": 19,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "State",
+                    "Instructions": null,
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 0,
+                    "FieldCode": "RF_25a6e1b4f8",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "CO",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "MT",
+                        "Value": null,
+                        "Sequence": 0
+                      }
+                    ],
+                    "Nesteds": [
+                      {
+                        "ParentChoice": "USA"
+                      }
+                    ],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 13,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Radio Button List Question",
+                    "Instructions": "this is a radio button list question",
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 1,
+                    "FieldCode": "Q_d71f334143",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "Radio 1",
+                        "Value": null,
+                        "Sequence": 0
+                      },
+                      {
+                        "Text": "Radio 2",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "Radio 3",
+                        "Value": null,
+                        "Sequence": 2
+                      }
+                    ],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 16,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Nested Question",
+                    "Instructions": "this is a nested question",
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 4,
+                    "FieldCode": "Q_1f211f50e8",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": [
+                      {
+                        "ParentChoice": null,
+                        "ChildElement": {
+                          "Type": 19,
+                          "DisplayType": 6,
+                          "RequiredType": 0,
+                          "IsSharedQuestion": false,
+                          "Label": "Country",
+                          "Instructions": null,
+                          "MaxTextLength": 0,
+                          "MaxFileSize": 0,
+                          "Sequence": 0,
+                          "FieldCode": "RF_6a85e10faf",
+                          "JsonAttributes": null,
+                          "Choices": [
+                            {
+                              "Text": "Canada",
+                              "Value": null,
+                              "Sequence": 1
+                            },
+                            {
+                              "Text": "USA",
+                              "Value": null,
+                              "Sequence": 0
+                            }
+                          ],
+                          "ChildNestedElements": [
+                            {
+                              "ParentChoice": "USA",
+                              "ChildElement": {
+                                "Type": 19,
+                                "DisplayType": 6,
+                                "RequiredType": 0,
+                                "IsSharedQuestion": false,
+                                "Label": "State",
+                                "Instructions": null,
+                                "MaxTextLength": 0,
+                                "MaxFileSize": 0,
+                                "Sequence": 0,
+                                "FieldCode": "RF_25a6e1b4f8",
+                                "JsonAttributes": null,
+                                "Choices": [
+                                  {
+                                    "Text": "CO",
+                                    "Value": null,
+                                    "Sequence": 1
+                                  },
+                                  {
+                                    "Text": "MT",
+                                    "Value": null,
+                                    "Sequence": 0
+                                  }
+                                ],
+                                "ChildNestedElements": []
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Type": 7,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Url Question",
+                    "Instructions": "this is a url question",
+                    "MaxTextLength": 2000,
+                    "MaxFileSize": 0,
+                    "Sequence": 3,
+                    "FieldCode": "Q_36ead5c9a7",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 19,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Country",
+                    "Instructions": null,
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 0,
+                    "Sequence": 0,
+                    "FieldCode": "RF_6a85e10faf",
+                    "JsonAttributes": null,
+                    "Choices": [
+                      {
+                        "Text": "Canada",
+                        "Value": null,
+                        "Sequence": 1
+                      },
+                      {
+                        "Text": "USA",
+                        "Value": null,
+                        "Sequence": 0
+                      }
+                    ],
+                    "Nesteds": [
+                      {
+                        "ParentChoice": null
+                      }
+                    ],
+                    "ChildNestedElements": [
+                      {
+                        "ParentChoice": "USA",
+                        "ChildElement": {
+                          "Type": 19,
+                          "DisplayType": 6,
+                          "RequiredType": 0,
+                          "IsSharedQuestion": false,
+                          "Label": "State",
+                          "Instructions": null,
+                          "MaxTextLength": 0,
+                          "MaxFileSize": 0,
+                          "Sequence": 0,
+                          "FieldCode": "RF_25a6e1b4f8",
+                          "JsonAttributes": null,
+                          "Choices": [
+                            {
+                              "Text": "CO",
+                              "Value": null,
+                              "Sequence": 1
+                            },
+                            {
+                              "Text": "MT",
+                              "Value": null,
+                              "Sequence": 0
+                            }
+                          ],
+                          "ChildNestedElements": []
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Type": 3,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "Text Box Question",
+                    "Instructions": "this is a text box question",
+                    "MaxTextLength": 200,
+                    "MaxFileSize": 0,
+                    "Sequence": 0,
+                    "FieldCode": "Q_6741567908",
+                    "JsonAttributes": null,
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  },
+                  {
+                    "Type": 17,
+                    "DisplayType": 6,
+                    "RequiredType": 0,
+                    "IsSharedQuestion": false,
+                    "Label": "File Upload Question",
+                    "Instructions": "this is a file upload question",
+                    "MaxTextLength": 0,
+                    "MaxFileSize": 5,
+                    "Sequence": 2,
+                    "FieldCode": "Q_fd4edad2aa",
+                    "JsonAttributes": "{\"FileTypes\":\"doc,docx\"}",
+                    "Choices": [],
+                    "Nesteds": [],
+                    "ChildNestedElements": []
+                  }
+                ]
+              }
+            ],
+            "ProcessEligibilities": []
+          },
+          "Role": {
+            "Name": "Applicant",
+            "Sequence": 7,
+            "ProcessAssignments": []
+          },
+          "ChildStages": [
+            {
+              "Guid": "d584104c-e12f-4207-b8c8-e51148a347b6",
+              "Name": "Universe Follow-Up",
+              "Sequence": 8,
+              "FormType": 9,
+              "Type": 1,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Follow Ups",
+              "Form": null,
+              "Role": {
+                "Name": "Applicant",
+                "Sequence": 7,
+                "ProcessAssignments": []
+              },
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "d915a2a0-ebe0-4686-a684-48baab781114",
+              "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+            }
+          ],
+          "AutoAssigns": [],
+          "Notifications": [],
+          "StageCommittees": [],
+          "ParentGuid": null,
+          "ProcessGuid": "813978da-b177-4392-8346-86fa0fff2636"
+        }
+      ],
+      "OpportunityProcesses": [
+        {
+          "Guid": "e9df445a-1280-49a4-8cb6-016fe1be780c",
+          "Name": "Opp1",
+          "ActiveStatus": 9000,
+          "Description": null,
+          "CreatedBy": 2532810,
+          "StartDate": null,
+          "EndDate": null,
+          "Sequence": 2,
+          "Visibility": 0,
+          "ApplicantVisibility": 0,
+          "ExternalType": 3,
+          "AccessCode": null,
+          "Budget": null,
+          "BlindRoles": null,
+          "Eligibilities": [],
+          "Stages": [
+            {
+              "Guid": "ab1524e6-c54c-4f0d-912f-2d9bdc4353e8",
+              "Name": "Application",
+              "Sequence": 1,
+              "FormType": 4,
+              "Type": 1,
+              "RenderType": 0,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "af967ef0-8ad6-4d4e-a3db-9878a7ab6c7c",
+              "ProcessGuid": "e9df445a-1280-49a4-8cb6-016fe1be780c"
+            },
+            {
+              "Guid": "9bab749a-272b-4641-aa87-df5364fdfc60",
+              "Name": "Evaluation 1",
+              "Sequence": 2,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "c22f9fa9-b541-4ec6-b3f4-1995ca20be9b",
+              "ProcessGuid": "e9df445a-1280-49a4-8cb6-016fe1be780c"
+            },
+            {
+              "Guid": "3a5e3949-29a1-49af-b723-fe42aeecad6b",
+              "Name": "Evaluation 2",
+              "Sequence": 3,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "23856646-c4b8-45a7-8722-117ddd5234bb",
+              "ProcessGuid": "e9df445a-1280-49a4-8cb6-016fe1be780c"
+            },
+            {
+              "Guid": "f627b83d-4e46-4141-bda0-8d86b9b6e85f",
+              "Name": "Approval",
+              "Sequence": 5,
+              "FormType": 6,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Approval",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "d90c9477-0a85-41fe-8f0c-6408e2d5ef84",
+              "ProcessGuid": "e9df445a-1280-49a4-8cb6-016fe1be780c"
+            },
+            {
+              "Guid": "e16611c4-598a-4da7-988d-1adcee920203",
+              "Name": "Denial",
+              "Sequence": 6,
+              "FormType": 8,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Denial",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "c8390086-df47-41f4-9ad6-f00908ebcb53",
+              "ProcessGuid": "e9df445a-1280-49a4-8cb6-016fe1be780c"
+            }
+          ],
+          "OpportunityProcesses": []
+        },
+        {
+          "Guid": "64ab24a6-5809-457b-92ab-3a7cb0bc35a4",
+          "Name": "Opp2",
+          "ActiveStatus": 9000,
+          "Description": null,
+          "CreatedBy": 2532810,
+          "StartDate": null,
+          "EndDate": null,
+          "Sequence": 3,
+          "Visibility": 0,
+          "ApplicantVisibility": 0,
+          "ExternalType": 3,
+          "AccessCode": null,
+          "Budget": null,
+          "BlindRoles": null,
+          "Eligibilities": [],
+          "Stages": [
+            {
+              "Guid": "40d4e62b-0848-40be-8ad7-3aab14415a7f",
+              "Name": "Application",
+              "Sequence": 1,
+              "FormType": 4,
+              "Type": 1,
+              "RenderType": 0,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "af967ef0-8ad6-4d4e-a3db-9878a7ab6c7c",
+              "ProcessGuid": "64ab24a6-5809-457b-92ab-3a7cb0bc35a4"
+            },
+            {
+              "Guid": "a5ee9b1a-3ac6-418f-bc1e-357b79e9f85d",
+              "Name": "Evaluation 1",
+              "Sequence": 2,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "c22f9fa9-b541-4ec6-b3f4-1995ca20be9b",
+              "ProcessGuid": "64ab24a6-5809-457b-92ab-3a7cb0bc35a4"
+            },
+            {
+              "Guid": "03c98a74-f32a-4e6b-8450-8b9991c1a2b9",
+              "Name": "Evaluation 2",
+              "Sequence": 3,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "23856646-c4b8-45a7-8722-117ddd5234bb",
+              "ProcessGuid": "64ab24a6-5809-457b-92ab-3a7cb0bc35a4"
+            },
+            {
+              "Guid": "bd10a90f-a3e6-4e03-8034-f9ce2ae31c96",
+              "Name": "Approval",
+              "Sequence": 5,
+              "FormType": 6,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Approval",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "d90c9477-0a85-41fe-8f0c-6408e2d5ef84",
+              "ProcessGuid": "64ab24a6-5809-457b-92ab-3a7cb0bc35a4"
+            },
+            {
+              "Guid": "e9812459-33c1-4f88-b817-c12cb8f46873",
+              "Name": "Denial",
+              "Sequence": 6,
+              "FormType": 8,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Denial",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "c8390086-df47-41f4-9ad6-f00908ebcb53",
+              "ProcessGuid": "64ab24a6-5809-457b-92ab-3a7cb0bc35a4"
+            }
+          ],
+          "OpportunityProcesses": []
+        },
+        {
+          "Guid": "9a7b7c6b-2bd1-4644-a9e7-2ffec3e14534",
+          "Name": "Opp3",
+          "ActiveStatus": 9000,
+          "Description": null,
+          "CreatedBy": 2532810,
+          "StartDate": null,
+          "EndDate": null,
+          "Sequence": 4,
+          "Visibility": 0,
+          "ApplicantVisibility": 0,
+          "ExternalType": 3,
+          "AccessCode": null,
+          "Budget": null,
+          "BlindRoles": null,
+          "Eligibilities": [],
+          "Stages": [
+            {
+              "Guid": "13659f39-d930-4ac8-9f20-ac29c3a68e2f",
+              "Name": "Application",
+              "Sequence": 1,
+              "FormType": 4,
+              "Type": 1,
+              "RenderType": 0,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "af967ef0-8ad6-4d4e-a3db-9878a7ab6c7c",
+              "ProcessGuid": "9a7b7c6b-2bd1-4644-a9e7-2ffec3e14534"
+            },
+            {
+              "Guid": "0d7972f3-dcd5-4fc9-8ae7-1721261f1b87",
+              "Name": "Evaluation 1",
+              "Sequence": 2,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "c22f9fa9-b541-4ec6-b3f4-1995ca20be9b",
+              "ProcessGuid": "9a7b7c6b-2bd1-4644-a9e7-2ffec3e14534"
+            },
+            {
+              "Guid": "4737b81b-a36b-49cb-9af4-afbd50e9d169",
+              "Name": "Evaluation 2",
+              "Sequence": 3,
+              "FormType": 5,
+              "Type": 0,
+              "RenderType": null,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Application Evaluation",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "23856646-c4b8-45a7-8722-117ddd5234bb",
+              "ProcessGuid": "9a7b7c6b-2bd1-4644-a9e7-2ffec3e14534"
+            },
+            {
+              "Guid": "7fd78fa0-3d02-4a85-b00e-28149aa3ac9a",
+              "Name": "Approval",
+              "Sequence": 5,
+              "FormType": 6,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Approval",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "d90c9477-0a85-41fe-8f0c-6408e2d5ef84",
+              "ProcessGuid": "9a7b7c6b-2bd1-4644-a9e7-2ffec3e14534"
+            },
+            {
+              "Guid": "b5eaa3df-ca1f-45bf-bf92-90ffc4603fe3",
+              "Name": "Denial",
+              "Sequence": 6,
+              "FormType": 8,
+              "Type": 3,
+              "RenderType": 1,
+              "Anonymous": false,
+              "IsRequired": false,
+              "IsToggledOn": true,
+              "ShareEvaluations": false,
+              "SideBySide": false,
+              "DashboardGroup": "Denial",
+              "Form": null,
+              "Role": null,
+              "ChildStages": [],
+              "AutoAssigns": [],
+              "Notifications": [],
+              "StageCommittees": [],
+              "ParentGuid": "c8390086-df47-41f4-9ad6-f00908ebcb53",
+              "ProcessGuid": "9a7b7c6b-2bd1-4644-a9e7-2ffec3e14534"
+            }
+          ],
+          "OpportunityProcesses": []
+        }
+      ]
+    }
+  ]
+}
