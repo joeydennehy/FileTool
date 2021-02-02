@@ -11,7 +11,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           record: true
-          working-directory: https://github.com/Foundant/cypress-tests/tree/trunk/UITest
+          working-directory: UITest
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: fdd45e99-5916-41ae-90fb-85658b57961f
