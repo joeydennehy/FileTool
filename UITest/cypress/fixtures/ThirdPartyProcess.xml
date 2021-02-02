@@ -1,0 +1,652 @@
+<Process xmlns:i="http://www.w3.org/2001/XMLSchema-instance" z:Id="1" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="Foundant.Common.BLL">
+  <AccessCode i:nil="true" />
+  <ActiveStatus>Inactive</ActiveStatus>
+  <ApplicantVisibility>Default</ApplicantVisibility>
+  <BlindRoles i:nil="true" />
+  <Budget i:nil="true" />
+  <CreatedBy>158667</CreatedBy>
+  <Description i:nil="true" />
+  <Eligibilities z:Id="2" z:Size="0" />
+  <EndDate i:nil="true" />
+  <ExternalType>None</ExternalType>
+  <Guid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</Guid>
+  <Name z:Id="3">Third Party Process</Name>
+  <OpportunityProcesses z:Id="4" z:Size="0" />
+  <Sequence>13</Sequence>
+  <Stages z:Id="5" z:Size="9">
+    <Stage z:Id="6">
+      <Anonymous>false</Anonymous>
+      <AutoAssigns z:Id="7" z:Size="0" />
+      <ChildStages z:Id="8" z:Size="0" />
+      <DashboardGroup z:Id="9">LOI</DashboardGroup>
+      <Form i:nil="true" />
+      <FormType>LOI</FormType>
+      <Guid>7cd880ed-03b9-4f97-b88a-9ee6206a6924</Guid>
+      <IsRequired>false</IsRequired>
+      <IsToggledOn>false</IsToggledOn>
+      <Name z:Id="10">LOI</Name>
+      <Notifications z:Id="11" z:Size="4">
+        <Notification z:Id="12">
+          <EmailTemplate z:Id="13">
+            <ActiveStatus>Active</ActiveStatus>
+            <BccAddress i:nil="true" />
+            <Body i:nil="true" />
+            <BodyHtml i:nil="true" />
+            <CcAddress i:nil="true" />
+            <FromAddress i:nil="true" />
+            <Guid>00000000-0000-0000-0000-000000000000</Guid>
+            <MailMessageType>None</MailMessageType>
+            <Name z:Id="14">Not Using</Name>
+            <Sequence>1</Sequence>
+            <Subject i:nil="true" />
+          </EmailTemplate>
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>SubmissionVerification</Type>
+        </Notification>
+        <Notification z:Id="15">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>FormSubmitted</Type>
+        </Notification>
+        <Notification z:Id="16">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>ThirdPartyAssigned</Type>
+        </Notification>
+        <Notification z:Id="17">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>ThirdPartyReminder</Type>
+        </Notification>
+      </Notifications>
+      <ParentGuid i:nil="true" />
+      <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+      <RenderType i:nil="true" />
+      <Role z:Id="18">
+        <Name z:Id="19">Applicant</Name>
+        <ProcessAssignments z:Id="20" z:Size="0" />
+        <Sequence>7</Sequence>
+      </Role>
+      <Sequence>1</Sequence>
+      <ShareEvaluations>false</ShareEvaluations>
+      <SideBySide>false</SideBySide>
+      <StageCommittees z:Id="21" z:Size="0" />
+      <Type>Form</Type>
+    </Stage>
+    <Stage z:Id="22">
+      <Anonymous>false</Anonymous>
+      <AutoAssigns z:Id="23" z:Size="1">
+        <AutoAssign z:Id="24">
+          <InstallmentMonthsBetween i:nil="true" />
+          <InstallmentNumberToAdd i:nil="true" />
+          <IsHardDate>false</IsHardDate>
+          <SlidingDirection i:nil="true" />
+          <SlidingType i:nil="true" />
+          <SpecificDate i:nil="true" />
+          <SpecificTimeZone i:nil="true" />
+          <Stage z:Ref="22" i:nil="true" />
+          <TimespanDirection i:nil="true" />
+          <TimespanNumber i:nil="true" />
+          <TimespanReferenceDate i:nil="true" />
+          <TimespanType i:nil="true" />
+          <Type>NotUsing</Type>
+        </AutoAssign>
+      </AutoAssigns>
+      <ChildStages z:Id="25" z:Size="2">
+        <Stage z:Id="26">
+          <Anonymous>false</Anonymous>
+          <AutoAssigns z:Id="27" z:Size="0" />
+          <ChildStages z:Id="28" z:Size="0" />
+          <DashboardGroup z:Id="29">Application Evaluation</DashboardGroup>
+          <Form i:nil="true" />
+          <FormType>Evaluation</FormType>
+          <Guid>2dafb4a0-207d-4f37-a3fa-0072eddae7be</Guid>
+          <IsRequired>false</IsRequired>
+          <IsToggledOn>false</IsToggledOn>
+          <Name z:Id="30">Evaluation 1</Name>
+          <Notifications z:Id="31" z:Size="1">
+            <Notification z:Id="32">
+              <EmailTemplate z:Ref="13" i:nil="true" />
+              <IncludeApplicantDetails>false</IncludeApplicantDetails>
+              <Type>EvaluationAssigned</Type>
+            </Notification>
+          </Notifications>
+          <ParentGuid>02e1c2c1-d0e1-4567-94f4-20acf892e89e</ParentGuid>
+          <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+          <RenderType i:nil="true" />
+          <Role i:nil="true" />
+          <Sequence>4</Sequence>
+          <ShareEvaluations>false</ShareEvaluations>
+          <SideBySide>false</SideBySide>
+          <StageCommittees z:Id="33" z:Size="0" />
+          <Type>Evaluation</Type>
+        </Stage>
+        <Stage z:Id="34">
+          <Anonymous>false</Anonymous>
+          <AutoAssigns z:Id="35" z:Size="0" />
+          <ChildStages z:Id="36" z:Size="0" />
+          <DashboardGroup z:Id="37">Application Evaluation</DashboardGroup>
+          <Form i:nil="true" />
+          <FormType>Evaluation</FormType>
+          <Guid>f66364f6-bdb0-4aad-98fb-ff821cfc170e</Guid>
+          <IsRequired>false</IsRequired>
+          <IsToggledOn>false</IsToggledOn>
+          <Name z:Id="38">Evaluation 2</Name>
+          <Notifications z:Id="39" z:Size="1">
+            <Notification z:Id="40">
+              <EmailTemplate z:Ref="13" i:nil="true" />
+              <IncludeApplicantDetails>false</IncludeApplicantDetails>
+              <Type>EvaluationAssigned</Type>
+            </Notification>
+          </Notifications>
+          <ParentGuid>02e1c2c1-d0e1-4567-94f4-20acf892e89e</ParentGuid>
+          <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+          <RenderType i:nil="true" />
+          <Role i:nil="true" />
+          <Sequence>5</Sequence>
+          <ShareEvaluations>false</ShareEvaluations>
+          <SideBySide>false</SideBySide>
+          <StageCommittees z:Id="41" z:Size="0" />
+          <Type>Evaluation</Type>
+        </Stage>
+      </ChildStages>
+      <DashboardGroup z:Id="42">Application</DashboardGroup>
+      <Form z:Id="43">
+        <Description i:nil="true" />
+        <Elements z:Id="44" z:Size="3">
+          <Element z:Id="45">
+            <ChildNestedElements z:Id="46" z:Size="0" />
+            <Choices z:Id="47" z:Size="0" />
+            <DisplayType>Everyone</DisplayType>
+            <FieldCode z:Id="48">RF_6b86b273ff</FieldCode>
+            <Instructions z:Id="49">Name of Project.</Instructions>
+            <IsSharedQuestion>true</IsSharedQuestion>
+            <JsonAttributes i:nil="true" />
+            <Label z:Id="50">Project Name</Label>
+            <MaxFileSize>0</MaxFileSize>
+            <MaxTextLength>100</MaxTextLength>
+            <Nesteds z:Id="51" z:Size="0" />
+            <RequiredType>Required</RequiredType>
+            <Sequence>0</Sequence>
+            <Type>TextBox</Type>
+          </Element>
+          <Element z:Id="52">
+            <ChildNestedElements z:Id="53" z:Size="0" />
+            <Choices z:Id="54" z:Size="0" />
+            <DisplayType>Everyone</DisplayType>
+            <FieldCode z:Id="55">Q_7725311910</FieldCode>
+            <Instructions i:nil="true" />
+            <IsSharedQuestion>false</IsSharedQuestion>
+            <JsonAttributes i:nil="true" />
+            <Label z:Id="56">Test Question</Label>
+            <MaxFileSize>0</MaxFileSize>
+            <MaxTextLength>10</MaxTextLength>
+            <Nesteds z:Id="57" z:Size="0" />
+            <RequiredType>Optional</RequiredType>
+            <Sequence>2</Sequence>
+            <Type>TextBox</Type>
+          </Element>
+          <Element z:Id="58">
+            <ChildNestedElements z:Id="59" z:Size="0" />
+            <Choices z:Id="60" z:Size="0" />
+            <DisplayType>Everyone</DisplayType>
+            <FieldCode z:Id="61">Q_389ae66165</FieldCode>
+            <Instructions i:nil="true" />
+            <IsSharedQuestion>false</IsSharedQuestion>
+            <JsonAttributes i:nil="true" />
+            <Label z:Id="62">Third Party Email</Label>
+            <MaxFileSize>0</MaxFileSize>
+            <MaxTextLength>254</MaxTextLength>
+            <Nesteds z:Id="63" z:Size="0" />
+            <RequiredType>Required</RequiredType>
+            <Sequence>1</Sequence>
+            <Type>ThirdPartyEmail</Type>
+          </Element>
+        </Elements>
+        <Groups z:Id="64" z:Size="2">
+          <Group z:Id="65">
+            <Deleted i:nil="true" />
+            <Elements z:Id="66" z:Size="1">
+              <Element z:Ref="45" i:nil="true" />
+            </Elements>
+            <Name z:Id="67">Question Group</Name>
+            <Rules i:nil="true" />
+            <Sequence>0</Sequence>
+          </Group>
+          <Group z:Id="68">
+            <Deleted i:nil="true" />
+            <Elements z:Id="69" z:Size="2">
+              <Element z:Ref="52" i:nil="true" />
+              <Element z:Ref="58" i:nil="true" />
+            </Elements>
+            <Name z:Id="70">3rd Party</Name>
+            <Rules i:nil="true" />
+            <Sequence>1</Sequence>
+          </Group>
+        </Groups>
+        <Name z:Id="71">Application - Ghost Process 8KLcUZJGZbaLETGu</Name>
+        <ProcessEligibilities z:Id="72" z:Size="0" />
+        <Type>Application</Type>
+      </Form>
+      <FormType>Application</FormType>
+      <Guid>02e1c2c1-d0e1-4567-94f4-20acf892e89e</Guid>
+      <IsRequired>true</IsRequired>
+      <IsToggledOn>true</IsToggledOn>
+      <Name z:Id="73">Application</Name>
+      <Notifications z:Id="74" z:Size="5">
+        <Notification z:Id="75">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>FormAssigned</Type>
+        </Notification>
+        <Notification z:Id="76">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>SubmissionVerification</Type>
+        </Notification>
+        <Notification z:Id="77">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>FormSubmitted</Type>
+        </Notification>
+        <Notification z:Id="78">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>ThirdPartyAssigned</Type>
+        </Notification>
+        <Notification z:Id="79">
+          <EmailTemplate z:Ref="13" i:nil="true" />
+          <IncludeApplicantDetails>false</IncludeApplicantDetails>
+          <Type>ThirdPartyReminder</Type>
+        </Notification>
+      </Notifications>
+      <ParentGuid i:nil="true" />
+      <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+      <RenderType i:nil="true" />
+      <Role z:Ref="18" i:nil="true" />
+      <Sequence>3</Sequence>
+      <ShareEvaluations>false</ShareEvaluations>
+      <SideBySide>false</SideBySide>
+      <StageCommittees z:Id="80" z:Size="0" />
+      <Type>Form</Type>
+    </Stage>
+    <Stage z:Ref="26" i:nil="true" />
+    <Stage z:Ref="34" i:nil="true" />
+    <Stage z:Id="81">
+      <Anonymous>false</Anonymous>
+      <AutoAssigns z:Id="82" z:Size="0" />
+      <ChildStages z:Id="83" z:Size="2">
+        <Stage z:Id="84">
+          <Anonymous>false</Anonymous>
+          <AutoAssigns z:Id="85" z:Size="0" />
+          <ChildStages z:Id="86" z:Size="1">
+            <Stage z:Id="87">
+              <Anonymous>false</Anonymous>
+              <AutoAssigns z:Id="88" z:Size="1">
+                <AutoAssign z:Id="89">
+                  <InstallmentMonthsBetween i:nil="true" />
+                  <InstallmentNumberToAdd i:nil="true" />
+                  <IsHardDate>false</IsHardDate>
+                  <SlidingDirection i:nil="true" />
+                  <SlidingType i:nil="true" />
+                  <SpecificDate i:nil="true" />
+                  <SpecificTimeZone i:nil="true" />
+                  <Stage z:Ref="87" i:nil="true" />
+                  <TimespanDirection i:nil="true" />
+                  <TimespanNumber i:nil="true" />
+                  <TimespanReferenceDate i:nil="true" />
+                  <TimespanType i:nil="true" />
+                  <Type>NotUsing</Type>
+                </AutoAssign>
+              </AutoAssigns>
+              <ChildStages z:Id="90" z:Size="0" />
+              <DashboardGroup i:nil="true" />
+              <Form z:Id="91">
+                <Description i:nil="true" />
+                <Elements z:Id="92" z:Size="3">
+                  <Element z:Id="93">
+                    <ChildNestedElements z:Id="94" z:Size="0" />
+                    <Choices z:Id="95" z:Size="0" />
+                    <DisplayType>Internal</DisplayType>
+                    <FieldCode z:Id="96">Installment_Conditions</FieldCode>
+                    <Instructions i:nil="true" />
+                    <IsSharedQuestion>false</IsSharedQuestion>
+                    <JsonAttributes i:nil="true" />
+                    <Label z:Id="97">Installment Conditions</Label>
+                    <MaxFileSize>0</MaxFileSize>
+                    <MaxTextLength>250</MaxTextLength>
+                    <Nesteds z:Id="98" z:Size="0" />
+                    <RequiredType>Optional</RequiredType>
+                    <Sequence>2</Sequence>
+                    <Type>TextArea</Type>
+                  </Element>
+                  <Element z:Id="99">
+                    <ChildNestedElements z:Id="100" z:Size="0" />
+                    <Choices z:Id="101" z:Size="0" />
+                    <DisplayType>Everyone</DisplayType>
+                    <FieldCode z:Id="102">Installment_Amount</FieldCode>
+                    <Instructions i:nil="true" />
+                    <IsSharedQuestion>false</IsSharedQuestion>
+                    <JsonAttributes i:nil="true" />
+                    <Label z:Id="103">Installment Amount</Label>
+                    <MaxFileSize>0</MaxFileSize>
+                    <MaxTextLength>20</MaxTextLength>
+                    <Nesteds z:Id="104" z:Size="0" />
+                    <RequiredType>Required</RequiredType>
+                    <Sequence>1</Sequence>
+                    <Type>Currency</Type>
+                  </Element>
+                  <Element z:Id="105">
+                    <ChildNestedElements z:Id="106" z:Size="0" />
+                    <Choices z:Id="107" z:Size="0" />
+                    <DisplayType>Everyone</DisplayType>
+                    <FieldCode z:Id="108">Installment_DueDate</FieldCode>
+                    <Instructions i:nil="true" />
+                    <IsSharedQuestion>false</IsSharedQuestion>
+                    <JsonAttributes i:nil="true" />
+                    <Label z:Id="109">Installment Due Date</Label>
+                    <MaxFileSize>0</MaxFileSize>
+                    <MaxTextLength>10</MaxTextLength>
+                    <Nesteds z:Id="110" z:Size="0" />
+                    <RequiredType>Required</RequiredType>
+                    <Sequence>0</Sequence>
+                    <Type>Date</Type>
+                  </Element>
+                </Elements>
+                <Groups z:Id="111" z:Size="1">
+                  <Group z:Id="112">
+                    <Deleted i:nil="true" />
+                    <Elements z:Id="113" z:Size="3">
+                      <Element z:Ref="93" i:nil="true" />
+                      <Element z:Ref="99" i:nil="true" />
+                      <Element z:Ref="105" i:nil="true" />
+                    </Elements>
+                    <Name z:Id="114">Installment Information</Name>
+                    <Rules i:nil="true" />
+                    <Sequence>0</Sequence>
+                  </Group>
+                </Groups>
+                <Name z:Id="115">Installment Form</Name>
+                <ProcessEligibilities z:Id="116" z:Size="0" />
+                <Type>Installment</Type>
+              </Form>
+              <FormType>Installment</FormType>
+              <Guid>bad9e983-5693-44ac-b095-b92ae079a1c5</Guid>
+              <IsRequired>true</IsRequired>
+              <IsToggledOn>true</IsToggledOn>
+              <Name z:Id="117">Installment</Name>
+              <Notifications z:Id="118" z:Size="0" />
+              <ParentGuid>c5d18183-2d71-4aa6-9121-135424a24418</ParentGuid>
+              <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+              <RenderType i:nil="true" />
+              <Role z:Id="119">
+                <Name z:Id="120">Administrator</Name>
+                <ProcessAssignments z:Id="121" z:Size="0" />
+                <Sequence>2</Sequence>
+              </Role>
+              <Sequence>10</Sequence>
+              <ShareEvaluations>false</ShareEvaluations>
+              <SideBySide>false</SideBySide>
+              <StageCommittees z:Id="122" z:Size="0" />
+              <Type>Form</Type>
+            </Stage>
+          </ChildStages>
+          <DashboardGroup z:Id="123">Approval</DashboardGroup>
+          <Form z:Id="124">
+            <Description i:nil="true" />
+            <Elements z:Id="125" z:Size="4">
+              <Element z:Id="126">
+                <ChildNestedElements z:Id="127" z:Size="0" />
+                <Choices z:Id="128" z:Size="3">
+                  <Choice z:Id="129">
+                    <Sequence>1</Sequence>
+                    <Text z:Id="130">Installment</Text>
+                  </Choice>
+                  <Choice z:Id="131">
+                    <Sequence>2</Sequence>
+                    <Text z:Id="132">Matching</Text>
+                  </Choice>
+                  <Choice z:Id="133">
+                    <Sequence>0</Sequence>
+                    <Text z:Id="134">One Time</Text>
+                  </Choice>
+                </Choices>
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="135">Grant_Type</FieldCode>
+                <Instructions i:nil="true" />
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="136">Award Type</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>250</MaxTextLength>
+                <Nesteds z:Id="137" z:Size="0" />
+                <RequiredType>Required</RequiredType>
+                <Sequence>2</Sequence>
+                <Type>DropDownList</Type>
+              </Element>
+              <Element z:Id="138">
+                <ChildNestedElements z:Id="139" z:Size="0" />
+                <Choices z:Id="140" z:Size="0" />
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="141">RF_6b86b273ff</FieldCode>
+                <Instructions z:Id="142">Name of Project.</Instructions>
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="143">Project Name</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>100</MaxTextLength>
+                <Nesteds z:Id="144" z:Size="0" />
+                <RequiredType>Required</RequiredType>
+                <Sequence>0</Sequence>
+                <Type>TextBox</Type>
+              </Element>
+              <Element z:Id="145">
+                <ChildNestedElements z:Id="146" z:Size="0" />
+                <Choices z:Id="147" z:Size="0" />
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="148">Grant_Decision_Date</FieldCode>
+                <Instructions i:nil="true" />
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="149">Decision Date</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>10</MaxTextLength>
+                <Nesteds z:Id="150" z:Size="0" />
+                <RequiredType>Required</RequiredType>
+                <Sequence>1</Sequence>
+                <Type>Date</Type>
+              </Element>
+              <Element z:Id="151">
+                <ChildNestedElements z:Id="152" z:Size="0" />
+                <Choices z:Id="153" z:Size="0" />
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="154">Grant_Amount</FieldCode>
+                <Instructions i:nil="true" />
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="155">Amount Awarded</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>20</MaxTextLength>
+                <Nesteds z:Id="156" z:Size="0" />
+                <RequiredType>Required</RequiredType>
+                <Sequence>3</Sequence>
+                <Type>Currency</Type>
+              </Element>
+            </Elements>
+            <Groups z:Id="157" z:Size="1">
+              <Group z:Id="158">
+                <Deleted i:nil="true" />
+                <Elements z:Id="159" z:Size="4">
+                  <Element z:Ref="126" i:nil="true" />
+                  <Element z:Ref="138" i:nil="true" />
+                  <Element z:Ref="145" i:nil="true" />
+                  <Element z:Ref="151" i:nil="true" />
+                </Elements>
+                <Name z:Id="160">Approval Information</Name>
+                <Rules i:nil="true" />
+                <Sequence>0</Sequence>
+              </Group>
+            </Groups>
+            <Name z:Id="161">Approval Form</Name>
+            <ProcessEligibilities z:Id="162" z:Size="0" />
+            <Type>Approval</Type>
+          </Form>
+          <FormType>Approval</FormType>
+          <Guid>c5d18183-2d71-4aa6-9121-135424a24418</Guid>
+          <IsRequired>true</IsRequired>
+          <IsToggledOn>true</IsToggledOn>
+          <Name z:Id="163">Approval</Name>
+          <Notifications z:Id="164" z:Size="0" />
+          <ParentGuid>d28f279c-8943-4a09-b54f-d1a6b8b12584</ParentGuid>
+          <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+          <RenderType i:nil="true" />
+          <Role z:Ref="119" i:nil="true" />
+          <Sequence>7</Sequence>
+          <ShareEvaluations>false</ShareEvaluations>
+          <SideBySide>false</SideBySide>
+          <StageCommittees z:Id="165" z:Size="0" />
+          <Type>Decision</Type>
+        </Stage>
+        <Stage z:Id="166">
+          <Anonymous>false</Anonymous>
+          <AutoAssigns z:Id="167" z:Size="0" />
+          <ChildStages z:Id="168" z:Size="0" />
+          <DashboardGroup z:Id="169">Denial</DashboardGroup>
+          <Form z:Id="170">
+            <Description i:nil="true" />
+            <Elements z:Id="171" z:Size="3">
+              <Element z:Id="172">
+                <ChildNestedElements z:Id="173" z:Size="0" />
+                <Choices z:Id="174" z:Size="0" />
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="175">Grant_Decision_Date</FieldCode>
+                <Instructions i:nil="true" />
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="176">Decision Date</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>10</MaxTextLength>
+                <Nesteds z:Id="177" z:Size="0" />
+                <RequiredType>Required</RequiredType>
+                <Sequence>1</Sequence>
+                <Type>Date</Type>
+              </Element>
+              <Element z:Id="178">
+                <ChildNestedElements z:Id="179" z:Size="0" />
+                <Choices z:Id="180" z:Size="0" />
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="181">RF_6b86b273ff</FieldCode>
+                <Instructions z:Id="182">Name of Project.</Instructions>
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="183">Project Name</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>100</MaxTextLength>
+                <Nesteds z:Id="184" z:Size="0" />
+                <RequiredType>Required</RequiredType>
+                <Sequence>0</Sequence>
+                <Type>TextBox</Type>
+              </Element>
+              <Element z:Id="185">
+                <ChildNestedElements z:Id="186" z:Size="0" />
+                <Choices z:Id="187" z:Size="1">
+                  <Choice z:Id="188">
+                    <Sequence>0</Sequence>
+                    <Text z:Id="189">Denied</Text>
+                  </Choice>
+                </Choices>
+                <DisplayType>Internal</DisplayType>
+                <FieldCode z:Id="190">Denial_Type</FieldCode>
+                <Instructions i:nil="true" />
+                <IsSharedQuestion>true</IsSharedQuestion>
+                <JsonAttributes i:nil="true" />
+                <Label z:Id="191">Denial Type</Label>
+                <MaxFileSize>0</MaxFileSize>
+                <MaxTextLength>250</MaxTextLength>
+                <Nesteds z:Id="192" z:Size="0" />
+                <RequiredType>ReadOnly</RequiredType>
+                <Sequence>1</Sequence>
+                <Type>DropDownList</Type>
+              </Element>
+            </Elements>
+            <Groups z:Id="193" z:Size="1">
+              <Group z:Id="194">
+                <Deleted i:nil="true" />
+                <Elements z:Id="195" z:Size="3">
+                  <Element z:Ref="172" i:nil="true" />
+                  <Element z:Ref="178" i:nil="true" />
+                  <Element z:Ref="185" i:nil="true" />
+                </Elements>
+                <Name z:Id="196">Denial Information</Name>
+                <Rules i:nil="true" />
+                <Sequence>0</Sequence>
+              </Group>
+            </Groups>
+            <Name z:Id="197">Denial Form</Name>
+            <ProcessEligibilities z:Id="198" z:Size="0" />
+            <Type>Denial</Type>
+          </Form>
+          <FormType>Denial</FormType>
+          <Guid>a0bbe8bb-9013-4ce6-819f-9ae3952dbcb5</Guid>
+          <IsRequired>true</IsRequired>
+          <IsToggledOn>true</IsToggledOn>
+          <Name z:Id="199">Denial</Name>
+          <Notifications z:Id="200" z:Size="0" />
+          <ParentGuid>d28f279c-8943-4a09-b54f-d1a6b8b12584</ParentGuid>
+          <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+          <RenderType i:nil="true" />
+          <Role z:Ref="119" i:nil="true" />
+          <Sequence>8</Sequence>
+          <ShareEvaluations>false</ShareEvaluations>
+          <SideBySide>false</SideBySide>
+          <StageCommittees z:Id="201" z:Size="0" />
+          <Type>Decision</Type>
+        </Stage>
+      </ChildStages>
+      <DashboardGroup i:nil="true" />
+      <Form i:nil="true" />
+      <FormType i:nil="true" />
+      <Guid>d28f279c-8943-4a09-b54f-d1a6b8b12584</Guid>
+      <IsRequired>false</IsRequired>
+      <IsToggledOn>true</IsToggledOn>
+      <Name z:Id="202">Decisions</Name>
+      <Notifications z:Id="203" z:Size="0" />
+      <ParentGuid i:nil="true" />
+      <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+      <RenderType>Accordion</RenderType>
+      <Role i:nil="true" />
+      <Sequence>6</Sequence>
+      <ShareEvaluations>false</ShareEvaluations>
+      <SideBySide>false</SideBySide>
+      <StageCommittees z:Id="204" z:Size="0" />
+      <Type>Container</Type>
+    </Stage>
+    <Stage z:Ref="84" i:nil="true" />
+    <Stage z:Ref="87" i:nil="true" />
+    <Stage z:Ref="166" i:nil="true" />
+    <Stage z:Id="205">
+      <Anonymous>false</Anonymous>
+      <AutoAssigns z:Id="206" z:Size="0" />
+      <ChildStages z:Id="207" z:Size="0" />
+      <DashboardGroup z:Id="208">Follow Ups</DashboardGroup>
+      <Form i:nil="true" />
+      <FormType>FollowUp</FormType>
+      <Guid>2f83d2bc-f825-425c-a4aa-d18b73b182a5</Guid>
+      <IsRequired>false</IsRequired>
+      <IsToggledOn>true</IsToggledOn>
+      <Name z:Id="209">Follow Ups</Name>
+      <Notifications z:Id="210" z:Size="0" />
+      <ParentGuid i:nil="true" />
+      <ProcessGuid>92aaab74-9d05-4303-9183-7a8f4a80ff2d</ProcessGuid>
+      <RenderType>Accordion</RenderType>
+      <Role i:nil="true" />
+      <Sequence>9</Sequence>
+      <ShareEvaluations>false</ShareEvaluations>
+      <SideBySide>false</SideBySide>
+      <StageCommittees z:Id="211" z:Size="0" />
+      <Type>Container</Type>
+    </Stage>
+  </Stages>
+  <StartDate i:nil="true" />
+  <Visibility>Public</Visibility>
+</Process>

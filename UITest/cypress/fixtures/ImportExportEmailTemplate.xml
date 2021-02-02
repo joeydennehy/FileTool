@@ -1,0 +1,15 @@
+<ArrayOfEmailTemplate xmlns:i="http://www.w3.org/2001/XMLSchema-instance" z:Id="1" z:Size="1" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="Foundant.Common.BLL">
+  <EmailTemplate z:Id="2">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="3">Body</Body>
+    <BodyHtml z:Id="4">Body</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress i:nil="true" />
+    <Guid>9b5cccff-fe13-4568-8aa8-e09291e55cf4</Guid>
+    <MailMessageType>None</MailMessageType>
+    <Name z:Id="5">Email Template for Import/Export test</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="6">Subject</Subject>
+  </EmailTemplate>
+</ArrayOfEmailTemplate>

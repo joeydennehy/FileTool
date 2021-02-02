@@ -1,0 +1,457 @@
+<ArrayOfEmailTemplate xmlns:i="http://www.w3.org/2001/XMLSchema-instance" z:Id="1" z:Size="18" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="Foundant.Common.BLL">
+  <EmailTemplate z:Id="2">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="3">Dear {{Recipient.FirstName}},
+
+You have been assigned to a grant request from {{Process.Name}} to review and evaluate. Please log into the online grant system to complete and submit your evaluation.
+
+{{Url.Logon}}
+
+Thank you,
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="4">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;You have been assigned to a grant request from {{Process.Name}} to review and evaluate. Please log into the online grant system to complete and submit your evaluation.&lt;br&gt;&lt;br&gt;{{Url.Logon}}&lt;br&gt;&lt;br&gt;Thank you,&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="5">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>49ea1c6d-e722-8127-5894-ffb8228bfb52</Guid>
+    <MailMessageType>EvaluationAssigned</MailMessageType>
+    <Name z:Id="6">Evaluation Assigned - EXAMPLE</Name>
+    <Sequence>1</Sequence>
+    <Subject z:Id="7">Evaluation  Assignment Notification</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="8">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="9">Dear {{Applicant.FirstName}},
+
+Thank you for submitting your LOI to the Foundation. You will be contacted if any additional information is needed.
+
+LOIs are reviewed at the beginning of each month. After your LOI is reviewed you will be contacted with the next steps in the application process.
+
+Thank You,
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="10">Dear {{Applicant.FirstName}},&lt;br&gt;&lt;br&gt;Thank you for submitting your LOI to the Foundation. You will be contacted if any additional information is needed.&lt;br&gt;&lt;br&gt;LOIs are reviewed at the beginning of each month. After your LOI is reviewed you will be contacted with the next steps in the application process.&lt;br&gt;&lt;br&gt;Thank You,&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="11">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>7c66d33d-6e71-c182-4e6a-2d206b28b065</Guid>
+    <MailMessageType>SubmissionVerification</MailMessageType>
+    <Name z:Id="12">LOI Received - EXAMPLE</Name>
+    <Sequence>5</Sequence>
+    <Subject z:Id="13">LOI Submission Verification</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="14">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="15">Dear {{Applicant.FirstName}},
+
+The Foundation is pleased to invite your organization to submit a full grant proposal for your {{Request.ProjectName}} request as outlined in your LOI.
+
+There is sufficient interest in your program(s) that we would like more information to evaluate whether your program(s) meet the Foundation’s highest funding priorities. Please be advised, however, that this invitation to submit a full proposal does not imply a guarantee of funding.
+
+Please log on to the Foundation's online grant system&lt;{{Url.Logon}}&gt;, to access the full application. The full application will be accessible on your dashboard; click the blue Edit Application link on the right.
+
+We look forward to reviewing your grant proposal.
+
+Sincerely,
+{{Funder.Name}}
+{{Url.Logon}}</Body>
+    <BodyHtml z:Id="16">Dear {{Applicant.FirstName}},&lt;br&gt;&lt;br&gt;The Foundation is pleased to invite your organization to submit a full grant proposal for your {{Request.ProjectName}} request as outlined in your LOI.&lt;br&gt;&lt;br&gt;There is sufficient interest in your program(s) that we would like more information to evaluate whether your program(s) meet the Foundation’s highest funding priorities. Please be advised, however, that this invitation to submit a full proposal does not imply a guarantee of funding.&lt;br&gt;&lt;br&gt;Please log on to the Foundation's &lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;online grant system&lt;/a&gt;, to access the full application. The full application will be accessible on your dashboard; click the blue Edit Application link on the right.&lt;br&gt;&lt;br&gt;We look forward to reviewing your grant proposal.&lt;br&gt;&lt;br&gt;Sincerely,&lt;br&gt;{{Funder.Name}}&lt;br&gt;{{Url.Logon}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="17">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>a3966975-edf0-8fc5-7ef6-3301c4c782d7</Guid>
+    <MailMessageType>FormAssigned</MailMessageType>
+    <Name z:Id="18">LOI Approval &amp; Invitation to Submit Full Proposal - EXAMPLE</Name>
+    <Sequence>2</Sequence>
+    <Subject z:Id="19">LOI Approval &amp; Invitation to Submit Full Proposal</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="20">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="21">Dear {{Applicant.FirstName}},
+
+Thank you for submitting your {{Request.ProjectName}} request for our consideration. After thoroughly reviewing your request, we regret to inform you that we are not able to invite your organization to the next step in our grant process.
+
+Should you have any questions, please feel free to contact us.
+
+Sincerely,
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="22">Dear {{Applicant.FirstName}},&lt;br&gt;&lt;br&gt;Thank you for submitting your {{Request.ProjectName}} request for our consideration. After thoroughly reviewing your request, we regret to inform you that we are not able to invite your organization to the next step in our grant process.&lt;br&gt;&lt;br&gt;Should you have any questions, please feel free to contact us.&lt;br&gt;&lt;br&gt;Sincerely,&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="23">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>015e0b0b-f5a9-d452-e6d8-6a7ec9ba495c</Guid>
+    <MailMessageType>None</MailMessageType>
+    <Name z:Id="24">LOI Stage - Declination - EXAMPLE</Name>
+    <Sequence>3</Sequence>
+    <Subject z:Id="25">Grant Request Status</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="26">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="27">Dear {{Recipient.FirstName}},
+
+The Board of Directors has reviewed and considered proposals submitted for this funding cycle. Each proposal was carefully considered in light of our grant making guidelines, our current priority areas, and the amount of funding available.
+
+Unfortunately, we are not able to fund your request, {{Request.ProjectName}}. We wish we could fund every meaningful appeal, but as we receive far more requests than we have funds, we are unable to support every project.
+
+Our Board joins me in commending you and your organization for your generosity of spirit and dedication of time and effort to the community.
+
+If you have any questions, or if you would like to set up a meeting to discuss your grant application, feel free to contact us.
+
+Sincerely,
+{{Funder.Name}}
+
+</Body>
+    <BodyHtml z:Id="28">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;The Board of Directors has reviewed and considered proposals submitted for this funding cycle. Each proposal was carefully considered in light of our grant making guidelines, our current priority areas, and the amount of funding available.&lt;br&gt;&lt;br&gt;Unfortunately, we are not able to fund your request, {{Request.ProjectName}}. We wish we could fund every meaningful appeal, but as we receive far more requests than we have funds, we are unable to support every project.&lt;br&gt;&lt;br&gt;Our Board joins me in commending you and your organization for your generosity of spirit and dedication of time and effort to the community.&lt;br&gt;&lt;br&gt;If you have any questions, or if you would like to set up a meeting to discuss your grant application, feel free to contact us.&lt;br&gt;&lt;br&gt;Sincerely,&lt;br&gt;{{Funder.Name}}&lt;br&gt;&lt;br&gt;</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="29">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>cb866d84-01a2-770e-016d-d94e9f859f02</Guid>
+    <MailMessageType>None</MailMessageType>
+    <Name z:Id="30">Application Stage - Declination - EXAMPLE</Name>
+    <Sequence>4</Sequence>
+    <Subject z:Id="31">Application Status </Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="32">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="33">*This administrator notification template can be used for any form submission
+LOIs, applications, and follow up forms
+
+Form Name: {{Submission.FormName}}
+Organization Name: {{Organization.Name}}
+Project Name: {{Request.ProjectName}}
+Process: {{Process.Name}}
+
+Consider putting the next steps or action items for internal staff/administrators. These can be very detailed to save you time with new staff members.
+
+Several examples:
+
+Application submission next steps 
+1. Review and mark complete
+2. On August 15 we will be assigning evaluators
+
+Grant agreement (follow-up form) submission next steps
+1. Review and mark complete
+2. Send info to the accountant and they send the check
+
+Final report (follow-up form) submission next steps
+1. Call grantee to discuss the project
+2. Fill out an internal survey about grantee and project impact.
+2. Review and mark complete
+
+Links to documents about next steps are also an option</Body>
+    <BodyHtml z:Id="34">&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;&lt;u&gt;*This administrator notification template can be used for any form submission&lt;/u&gt;&lt;/strong&gt;&lt;br&gt;LOIs, applications, and follow up forms&lt;br&gt;&lt;br&gt;Form Name: {{Submission.FormName}}&lt;br&gt;Organization Name: {{Organization.Name}}&lt;br&gt;Project Name: {{Request.ProjectName}}&lt;br&gt;Process: {{Process.Name}}&lt;br&gt;&lt;br&gt;Consider putting the next steps or action items for internal staff/administrators. These can be very detailed to save you time with new staff members.&lt;br&gt;&lt;br&gt;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;&lt;u&gt;Several examples&lt;/u&gt;&lt;/strong&gt;:&lt;br&gt;&lt;br&gt;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;Application submission next steps&amp;nbsp;&lt;/strong&gt;&lt;br&gt;1. Review and mark complete&lt;br&gt;2. On August 15 we will be assigning evaluators&lt;br&gt;&lt;br&gt;&lt;strong fr-original-style="font-weight: 700;" style="font-weight: 700;"&gt;Grant agreement (follow-up form) submission next steps&lt;/strong&gt;&lt;br&gt;1. Review and mark complete&lt;br&gt;2. Send info to the accountant and they send the check&lt;br&gt;&lt;br&gt;&lt;strong fr-original-style="font-weight: 700;" style="font-weight: 700;"&gt;Final report (follow-up form) submission next steps&lt;/strong&gt;&lt;br&gt;1. Call grantee to discuss the project&lt;br&gt;2. Fill out an internal survey about grantee and project impact.&lt;br&gt;2. Review and mark complete&lt;br&gt;&lt;br&gt;Links to documents about next steps are also an option</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="35">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>7939f218-3048-2e13-1ea8-f61391832eef</Guid>
+    <MailMessageType>FormSubmitted</MailMessageType>
+    <Name z:Id="36">Administrator Notification and Staff Next Steps - Form Submitted - EXAMPLE</Name>
+    <Sequence>7</Sequence>
+    <Subject z:Id="37">{{Organization.Name}} Submitted {{Submission.FormName}} for {{Process.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="38">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="39">Dear {{Recipient.FirstName}},
+
+Thank you for submitting your {{Submission.FormName}}. It was successfully received. You should hear from us in approximately 4 weeks after the due date, {{Submission.DueDate}}.
+
+You will be contacted if any additional information is required.
+
+Sincerely,
+
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="40">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;Thank you for submitting your {{Submission.FormName}}. It was successfully received. You should hear from us in approximately 4 weeks after the due date, {{Submission.DueDate}}.&lt;br&gt;&lt;br&gt;You will be contacted if any additional information is required.&lt;br&gt;&lt;br&gt;Sincerely,&lt;br&gt;&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="41">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>fcd78277-944c-d30c-75a9-41f0461310db</Guid>
+    <MailMessageType>SubmissionVerification</MailMessageType>
+    <Name z:Id="42">Applicant Notification - Application Form Received - EXAMPLE</Name>
+    <Sequence>13</Sequence>
+    <Subject z:Id="43">{{Submission.FormName}} Form Received - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="44">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="45">Dear {{Recipient.FirstName}},
+
+This is a friendly reminder that your {{Submission.FormName}} is due in 14 days. Please log in to {{Funder.Name}}'s online system and review and complete your report as part of your grant requirements by the due date, {{Submission.DueDate}}. It is important to our organization's understanding of how the grant benefited the community.
+
+Follow these steps to complete the form:
+
+
+1.	Log in&lt;{{Url.Logon}}&gt; with your username ({{Recipient.Email}}) and password.
+2.	Once logged in you will be on the Applicant Dashboard.
+3.	Below your application, you will find the form {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form. You can save the form as often as you need but remember to submit by the due date, {{Submission.DueDate}}.
+
+Thank you,
+
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="46">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;This is a friendly reminder that your {{Submission.FormName}} is &lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;due in 14 days&lt;/strong&gt;. Please log in to {{Funder.Name}}'s online system and review and complete your report as part of your grant requirements by the due date, &lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;{{Submission.DueDate}}&lt;/strong&gt;. It is important to our organization's understanding of how the grant benefited the community.&lt;br&gt;&lt;br&gt;Follow these steps to complete the form:&lt;br&gt;&lt;br&gt;&lt;ol fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;Log in&lt;/a&gt; with your username ({{Recipient.Email}}) and password.&lt;/li&gt;&lt;li&gt;Once logged in you will be on the Applicant Dashboard.&lt;/li&gt;&lt;li&gt;Below your application, you will find the form {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form. You can save the form as often as you need but remember to submit by the due date, &lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;{{Submission.DueDate}}&lt;/strong&gt;.&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;Thank you,&lt;br&gt;&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress z:Id="47">{{Organization.PrimaryContactEmail}}</CcAddress>
+    <FromAddress z:Id="48">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>4578e9eb-ac51-540c-5347-c33fca32d2fd</Guid>
+    <MailMessageType>FollowUpReminder</MailMessageType>
+    <Name z:Id="49">14 Day Follow-Up Form Due Reminder Notification - EXAMPLE</Name>
+    <Sequence>8</Sequence>
+    <Subject z:Id="50">{{Submission.FormName}} 14 Day Due Date Reminder - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="51">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="52">{{Current.Date}}
+
+Dear {{Recipient.FullName}},
+
+You have been assigned to review applications for {{Process.Name}}.
+
+Please log on to our online grant system, to access the EValuator Dashboard and see your assignments.
+
+To access your Dashboard please:
+
+
+1.	Go to:  Logon&lt;{{Url.Logon}}&gt;
+2.	Enter your email address ({{Recipient.Email}}), and
+3.	Password: if this is your first time logging in please click on "Forgot your Password" and the system will send you a link and instructions on resetting your password.
+4.	Once logged in you will be on your dashboard, and see the proposals you have been assigned.
+5.	Click the review icon to the very right of the request.
+6.	Proceed through all of your reviews, saving as you go. Notice that when you complete the review a green checkmark will appear!
+
+
+Please review the tutorial 
+Staff Evaluator:
+*	Video Tutorial&lt;https://drive.google.com/open?id=1otL8U8rzcxW7DDDKvIYb-z6hZqakJtIT&gt; (approximately 7 minutes long)
+*	Written Tutorial&lt;https://drive.google.com/open?id=12psT7jgcAM38bJzgH35C-BqC6fFyGoOwVOtw5JDEuNU&gt;
+Board Member:
+*	Video Tutorial&lt;https://drive.google.com/open?id=10oBiTnbSuj9Jzr6hGBfRX6Y0SHL6vFPq&gt; (approximately 8 minutes long)
+*	Written Tutorial&lt;https://drive.google.com/open?id=12K0jhOSIDp2PLKy5KUm5Ru9749JaePYSk6lM2jHYYLw&gt;
+
+NOTE:  ALL REVIEWS MUST BE COMPLETED TWO WEEKS FROM TODAY
+If you are unable to complete your reviews by that date, please inform me as soon as possible.
+
+We appreciate your continued efforts supporting our Foundation.
+Thank you,
+{{Funder.Name}}
+&lt;data:image/jpeg;base64,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&gt;
+</Body>
+    <BodyHtml z:Id="53">{{Current.Date}}&lt;br&gt;&lt;br&gt;Dear {{Recipient.FullName}},&lt;br&gt;&lt;br&gt;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;You have been assigned to review applications for {{Process.Name}}&lt;/strong&gt;.&lt;br&gt;&lt;br&gt;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;Please log on to our online grant system&lt;/strong&gt;, to access the EValuator Dashboard and see your assignments.&lt;br&gt;&lt;br&gt;&lt;strong&gt;To access your Dashboard please:&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&lt;ol fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;Go to: &amp;nbsp;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; -moz-user-select: auto;" href="{{Url.Logon}}" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; -moz-user-select: auto;"&gt;Logon&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Enter your email address ({{Recipient.Email}}), and&lt;/li&gt;&lt;li&gt;Password: if this is your first time logging in please click on "Forgot your Password" and the system will send you a link and instructions on resetting your password.&lt;/li&gt;&lt;li&gt;Once logged in you will be on your dashboard, and see the proposals you have been assigned.&lt;/li&gt;&lt;li&gt;Click the review icon to the very right of the request.&lt;/li&gt;&lt;li&gt;Proceed through all of your reviews, saving as you go. Notice that when you complete the review a green checkmark will appear!&lt;/li&gt;&lt;/ol&gt;&lt;em&gt;&lt;br&gt;&lt;/em&gt;&lt;br&gt;&lt;em&gt;Please review the tutorial&amp;nbsp;&lt;/em&gt;&lt;br&gt;&lt;strong&gt;Staff Evaluator:&lt;/strong&gt;&lt;ul fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="https://drive.google.com/open?id=1otL8U8rzcxW7DDDKvIYb-z6hZqakJtIT" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank" title=""&gt;Video Tutorial&lt;/a&gt; (approximately 7 minutes long)&lt;/li&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="https://drive.google.com/open?id=12psT7jgcAM38bJzgH35C-BqC6fFyGoOwVOtw5JDEuNU" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank" title=""&gt;Written Tutorial&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;strong&gt;Board Member:&lt;/strong&gt;&lt;ul fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="https://drive.google.com/open?id=10oBiTnbSuj9Jzr6hGBfRX6Y0SHL6vFPq" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank" title=""&gt;Video Tutorial&lt;/a&gt; (approximately 8 minutes long)&lt;/li&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="https://drive.google.com/open?id=12K0jhOSIDp2PLKy5KUm5Ru9749JaePYSk6lM2jHYYLw" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank" title=""&gt;Written Tutorial&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;&lt;strong&gt;NOTE: &amp;nbsp;ALL REVIEWS MUST BE COMPLETED TWO WEEKS FROM TODAY&lt;/strong&gt;&lt;br&gt;&lt;em&gt;If you are unable to complete your reviews by that date, please inform me as soon as possible.&lt;br&gt;&lt;/em&gt;&lt;br&gt;We appreciate your continued efforts supporting our Foundation.&lt;br&gt;Thank you,&lt;br&gt;{{Funder.Name}}&lt;br&gt;&lt;img src="data:image/jpeg;base64,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" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; box-sizing: border-box; border: 0px; position: relative; max-width: 100%; cursor: pointer;" fr-original-style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left;" fr-original-class="fr-draggable"&gt;&lt;br&gt;</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="54">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>9e6ed722-ac67-24ab-11cf-df132c97f5ba</Guid>
+    <MailMessageType>None</MailMessageType>
+    <Name z:Id="55">Batch Evaluation Assigned Email - EXAMPLE</Name>
+    <Sequence>10</Sequence>
+    <Subject z:Id="56">Evaluations Assignment Email - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="57">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="58">Dear {{Recipient.FirstName}},
+
+Congratulations! You have been awarded {{Request.AmountAwarded}} for your {{Request.ProjectName}} project! Please &lt;{{Url.Logon}}&gt;log in to {{Funder.Name}}'s online system and review and complete the agreement as part of your grant requirements.
+
+Follow these steps to complete the contract:
+
+
+1.	Log in&lt;{{Url.Logon}}&gt; with your username ({{Recipient.Email}}) and password.
+2.	Once logged in you will be on the Applicant Dashboard.
+3.	Below your application, you will see that it reads {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form. You can save the form as often as you need but remember to submit by the due date ({{Submission.DueDate}}).
+
+Note:  Reimbursements will begin once your contract has been signed and submitted online.
+
+In addition to the grant agreement, you've also been assigned a report due at a later date. You will receive a reminder prior to the deadline. Please contact us if the follow up report should be assigned to another person in your organization.
+
+Thank you,
+
+{{Funder.Name}}
+&lt;data:image/jpeg;base64,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&gt;</Body>
+    <BodyHtml z:Id="59">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;Congratulations! You have been awarded {{Request.AmountAwarded}} for your {{Request.ProjectName}} project! Please&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;&amp;nbsp;&lt;/a&gt;log in to {{Funder.Name}}'s online system and review and complete the agreement as part of your grant requirements.&lt;br&gt;&lt;br&gt;Follow these steps to complete the contract:&lt;br&gt;&lt;br&gt;&lt;ol fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;Log in&lt;/a&gt; with your username ({{Recipient.Email}}) and password.&lt;/li&gt;&lt;li&gt;Once logged in you will be on the Applicant Dashboard.&lt;/li&gt;&lt;li&gt;Below your application, you will see that it reads {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form. You can save the form as often as you need but remember to submit by the due date ({{Submission.DueDate}}).&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;Note:&amp;nbsp;&lt;/strong&gt; Reimbursements will begin once your contract has been signed and submitted online.&lt;br&gt;&lt;br&gt;In addition to the grant agreement, you've also been assigned a report due at a later date. You will receive a reminder prior to the deadline. Please contact us if the follow up report should be assigned to another person in your organization.&lt;br&gt;&lt;br&gt;Thank you,&lt;br&gt;&lt;br&gt;{{Funder.Name}}&lt;br&gt;&lt;img src="data:image/jpeg;base64,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" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; box-sizing: border-box; border: 0px; position: relative; max-width: 100%; cursor: pointer;" fr-original-style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left;" fr-original-class="fr-draggable"&gt;</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="60">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>ca454368-e5e4-b61a-ac0e-f8431ee65e2b</Guid>
+    <MailMessageType>FormAssigned</MailMessageType>
+    <Name z:Id="61">Approval and Grant Agreement Notification - EXAMPLE</Name>
+    <Sequence>6</Sequence>
+    <Subject z:Id="62">Approval and {{Submission.FormName}} Assignment Notification - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="63">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="64">Dear {{Recipient.FirstName}},
+
+This is a friendly reminder that your {{Submission.FormName}} is one day late. Please log in to {{Funder.Name}}'s online system and review and complete your report as part of your grant agreement. It is important to our organization's understanding of how the grant benefited the community.
+
+Follow these steps to complete the form:
+
+
+1.	Log in&lt;{{Url.Logon}}&gt; with your username ({{Recipient.Email}}) and password.
+2.	Once logged in you will be on the Applicant Dashboard.
+3.	Below your application, you will see that it reads {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form. 
+4.	Yellow overdue notices do not prevent you from submitting your follow up report after the due date. 
+
+Please submit as soon as you can.
+
+Please let me know if you have questions.
+
+Thank you,
+
+{{Funder.Name}}
+
+</Body>
+    <BodyHtml z:Id="65">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;This is a friendly reminder that your {{Submission.FormName}} is &lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;one day late&lt;/strong&gt;. Please log in to {{Funder.Name}}'s online system and review and complete your report &lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;as part of your grant agreement&lt;/strong&gt;. It is important to our organization's understanding of how the grant benefited the community.&lt;br&gt;&lt;br&gt;Follow these steps to complete the form:&lt;br&gt;&lt;br&gt;&lt;ol fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;Log in&lt;/a&gt; with your username ({{Recipient.Email}}) and password.&lt;/li&gt;&lt;li&gt;Once logged in you will be on the Applicant Dashboard.&lt;/li&gt;&lt;li&gt;Below your application, you will see that it reads {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form.&amp;nbsp;&lt;/li&gt;&lt;li&gt;Yellow overdue notices do not prevent you from submitting your follow up report after the due date.&amp;nbsp;&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;Please submit as soon as you can.&lt;br&gt;&lt;br&gt;Please let me know if you have questions.&lt;br&gt;&lt;br&gt;Thank you,&lt;br&gt;&lt;br&gt;{{Funder.Name}}&lt;br&gt;&lt;br&gt;</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="66">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>09bce54b-14ae-5ce1-7100-b669d5bd0eb6</Guid>
+    <MailMessageType>FollowUpPastDueReminder</MailMessageType>
+    <Name z:Id="67">1 Day Late Follow-Up Form Due Reminder Notification - EXAMPLE</Name>
+    <Sequence>9</Sequence>
+    <Subject z:Id="68">{{Submission.FormName}} is One Day Late Reminder - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="69">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="70">Dear {{Recipient.FirstName}},
+
+Thank you for submitting your {{Submission.FormName}}. It was successfully received.  
+
+You will be contacted if any additional information is required.
+
+Sincerely,
+
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="71">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;Thank you for submitting your {{Submission.FormName}}. It was successfully received. &amp;nbsp;&lt;br&gt;&lt;br&gt;You will be contacted if any additional information is required.&lt;br&gt;&lt;br&gt;Sincerely,&lt;br&gt;&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="72">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>8b7c4504-8852-20dd-899a-5199c1cca05b</Guid>
+    <MailMessageType>SubmissionVerification</MailMessageType>
+    <Name z:Id="73">Applicant Notification - Follow-Up Form Received - EXAMPLE</Name>
+    <Sequence>12</Sequence>
+    <Subject z:Id="74">{{Submission.FormName}} Form Received - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="75">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="76">Dear {{Recipient.FirstName}},
+
+You have been assigned a {{Submission.FormName}} for the project {{Request.ProjectName}}. It is important to our organization's understanding of how the grant benefited the community. Please log in to {{Funder.Name}}'s online system and review and complete your report as part of your grant requirements by the due date, {{Submission.DueDate}}.
+
+Follow these steps to complete the form:
+
+
+1.	Log in&lt;https://sandbox.grantinterface.com/Email/%7B%7BUrl.Logon%7D%7D&gt; with your username ({{Recipient.Email}}) and password.
+2.	Once logged in you will be on the Applicant Dashboard.
+3.	Below your application, you will see that it reads {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form to access the form. You can save the form as often as you need but remember to submit by the due date, {{Submission.DueDate}}.
+Thank you,
+ 
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="77">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;You have been assigned a {{Submission.FormName}} for the project {{Request.ProjectName}}. It is important to our organization's understanding of how the grant benefited the community. Please log in to {{Funder.Name}}'s online system and review and complete your report as part of your grant requirements by the due date,&amp;nbsp;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;{{Submission.DueDate}}&lt;/strong&gt;.&lt;br&gt;&lt;br&gt;Follow these steps to complete the form:&lt;br&gt;&lt;br&gt;&lt;ol fr-original-style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding-left: 16px;"&gt;&lt;li&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="https://sandbox.grantinterface.com/Email/%7B%7BUrl.Logon%7D%7D" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;Log in&lt;/a&gt; with your username ({{Recipient.Email}}) and password.&lt;/li&gt;&lt;li&gt;Once logged in you will be on the Applicant Dashboard.&lt;/li&gt;&lt;li&gt;Below your application, you will see that it reads {{Submission.FormName}}. Click on the blue "Edit" link to the right of the form to access the form. You can save the form as often as you need but remember to submit by the due date,&amp;nbsp;&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;{{Submission.DueDate}}&lt;/strong&gt;.&lt;/li&gt;&lt;/ol&gt;Thank you,&lt;br&gt;&amp;nbsp;&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="78">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>219fcc24-2092-42dc-8a8b-633bfec1074c</Guid>
+    <MailMessageType>FormAssigned</MailMessageType>
+    <Name z:Id="79">Follow-Up Form Assigned - With Steps - EXAMPLE</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="80">{{Submission.FormName}} Form Assignment Notification - {{Funder.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="81">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="82">Dear {{Applicant.FirstName}}:
+
+{{Funder.Name}} is in receipt of your recently submitted grant application, {{Request.ProjectName}}. In our initial review, we found some item(s) incomplete. Please reference the blue-colored comments made within your application in order to complete the item(s).
+
+Please login to {{Funder.Name}}'s secure online grant making system via the following link&lt;{{Url.Logon}}&gt; to update the field(s) as indicated by the comments and resubmit as soon as possible.
+
+Until the missing item(s) are received and reviewed, your application will be considered incomplete, and therefore ineligible for participation in the current grant application process.
+
+Thank you,
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="83">Dear {{Applicant.FirstName}}:&lt;br&gt;&lt;br&gt;{{Funder.Name}} is in receipt of your recently submitted grant application, {{Request.ProjectName}}. In our initial review, we found some item(s) incomplete. Please reference the blue-colored comments made within your application in order to complete the item(s).&lt;br&gt;&lt;br&gt;Please login to {{Funder.Name}}'s secure online grant making system via the following &lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;link&lt;/a&gt; to update the field(s) as indicated by the comments and resubmit as soon as possible.&lt;br&gt;&lt;br&gt;Until the missing item(s) are received and reviewed, your application will be considered incomplete, and therefore ineligible for participation in the current grant application process.&lt;br&gt;&lt;br&gt;Thank you,&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="84">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>86f82cc3-50e1-4706-ae2b-f42e144cb2da</Guid>
+    <MailMessageType>None</MailMessageType>
+    <Name z:Id="85">Application Incomplete - EXAMPLE</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="86">Application Incomplete</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="87">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="88">Hello {{Recipient.FirstName}},
+
+You were recently assigned applications to review. Please use the link below to complete your reviews:
+Login Link&lt;{{Url.Logon}}&gt;
+
+The application review deadline is in about 24 hours. We look forward to receiving your feedback so that the applicant may receive full consideration. In today's busy times, we understand the effort it takes to respond to these requests and offer our very sincere appreciation for your reviewer contribution.
+
+If you have any questions, please contact me.
+
+Thank you,
+
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="89">Hello {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;You were recently assigned applications to review. Please use the link below to complete your reviews:&lt;br&gt;&lt;a fr-original-style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" href="{{Url.Logon}}" rel="noopener noreferrer" style="box-sizing: border-box; background-color: transparent; color: rgb(51, 122, 183); text-decoration: none; user-select: auto;" target="_blank"&gt;Login Link&lt;/a&gt;&lt;br&gt;&lt;br&gt;The application review deadline is in about 24 hours. We look forward to receiving your feedback so that the applicant may receive full consideration. In today's busy times, we understand the effort it takes to respond to these requests and offer our very sincere appreciation for your reviewer contribution.&lt;br&gt;&lt;br&gt;If you have any questions, please contact me.&lt;br&gt;&lt;br&gt;Thank you,&lt;br&gt;&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="90">ADMIN@EXAMPLE.ORG</FromAddress>
+    <Guid>23825611-c37e-4740-a408-56c9e13f05b9</Guid>
+    <MailMessageType>None</MailMessageType>
+    <Name z:Id="91">Evaluation Deadline Reminder - EXAMPLE</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="92">Evaluation Deadline Reminder</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="93">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="94">*Third Party notification template
+
+Form Name: {{Submission.FormName}}
+Organization Name: {{Organization.Name}}
+Project Name: {{Request.ProjectName}}
+Process: {{Process.Name}}</Body>
+    <BodyHtml z:Id="95">&lt;strong fr-original-style="box-sizing: border-box; font-weight: 700;" style="box-sizing: border-box; font-weight: 700;"&gt;&lt;u&gt;*Third Party notification template&lt;/u&gt;&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Form Name: {{Submission.FormName}}&lt;br&gt;Organization Name: {{Organization.Name}}&lt;br&gt;Project Name: {{Request.ProjectName}}&lt;br&gt;Process: {{Process.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="96">ghost.admin@email.ghostinspector.com</FromAddress>
+    <Guid>93336c6f-ecf0-465c-b615-603f2e6835f6</Guid>
+    <MailMessageType>ThirdPartyAssigned</MailMessageType>
+    <Name z:Id="97">Third Party - Form Submitted - EXAMPLE</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="98">{Organization.Name}} Submitted {{Submission.FormName}} for {{Process.Name}}</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="99">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="100">*Third Party notification template 7 Days Reminder
+
+Form Name: {{Submission.FormName}}
+Organization Name: {{Organization.Name}}
+Project Name: {{Request.ProjectName}}
+Process: {{Process.Name}}</Body>
+    <BodyHtml z:Id="101">&lt;strong style="box-sizing: border-box; font-weight: 700;"&gt;&lt;u&gt;*Third Party notification template 7 Days Reminder&lt;/u&gt;&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Form Name: {{Submission.FormName}}&lt;br&gt;Organization Name: {{Organization.Name}}&lt;br&gt;Project Name: {{Request.ProjectName}}&lt;br&gt;Process: {{Process.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="102">ghost.admin@email.ghostinspector.com</FromAddress>
+    <Guid>946ce3c8-1e3e-44e3-81fe-5880928ae9eb</Guid>
+    <MailMessageType>ThirdPartyReminder</MailMessageType>
+    <Name z:Id="103">Third Party - 7 Day Reminder - EXAMPLE</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="104">{Organization.Name}} Submitted {{Submission.FormName}} for {{Process.Name}} 7 Days Ago</Subject>
+  </EmailTemplate>
+  <EmailTemplate z:Id="105">
+    <ActiveStatus>Active</ActiveStatus>
+    <BccAddress i:nil="true" />
+    <Body z:Id="106">Dear {{Recipient.FirstName}},
+
+You have been assigned an application form for {{Process.Name}}. Please log into the online grant system to complete and submit your application.
+
+{{Url.Logon}}
+
+Thank you,
+{{Funder.Name}}</Body>
+    <BodyHtml z:Id="107">Dear {{Recipient.FirstName}},&lt;br&gt;&lt;br&gt;You have been assigned an application form for {{Process.Name}}. Please log into the online grant system to complete and submit your application.&lt;br&gt;&lt;br&gt;{{Url.Logon}}&lt;br&gt;&lt;br&gt;Thank you,&lt;br&gt;{{Funder.Name}}</BodyHtml>
+    <CcAddress i:nil="true" />
+    <FromAddress z:Id="108">ghost.admin@email.ghostinspector.com</FromAddress>
+    <Guid>2bddb319-70b0-4767-9541-a66c9410989b</Guid>
+    <MailMessageType>FormAssigned</MailMessageType>
+    <Name z:Id="109">Applicant Notification - Application Form Assigned - EXAMPLE</Name>
+    <Sequence>0</Sequence>
+    <Subject z:Id="110">Application Assignment Notification</Subject>
+  </EmailTemplate>
+</ArrayOfEmailTemplate>

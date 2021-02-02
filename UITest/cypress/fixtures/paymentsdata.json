@@ -1,0 +1,23 @@
+{"data":[
+  {
+    "Row_Id": "bd51c02b-4703-491b-b43c-e136fbd60a6c",
+    "Process_Id_Filter": "ac921753-91a7-439b-90ae-1e3d0c580b4c",
+    "Request_Id_Filter": "9c265715-c37b-4fee-8b8f-adb820380856",
+    "Installment_Guid_Filter": "bd51c02b-4703-491b-b43c-e136fbd60a6c",
+    "Organization_Name": "Ghost Org",
+    "Organization_Id_Link": "3ac1097b-b4c8-453c-89d9-c3be235cd05f",
+    "RF_6b86b273ff": "Ghost Project",
+    "Request_Id_Link": "9c265715-c37b-4fee-8b8f-adb820380856",
+    "Grant_Type": "One Time",
+    "Request_Status": "Approved",
+    "Installment_DueDate": "10/01/2020",
+    "Installment_Amount": "$1,000.00",
+    "Payment_Amount": "$0.00",
+    "Installment_Balance": "$1,000.00",
+    "Installment_View_Details_Modal": "{\"icon\":\"far fa-eye\",\"hidden\":\"View Details\",\"tooltip\":\"View Details\"}",
+    "Installment_Guid_Link": "bd51c02b-4703-491b-b43c-e136fbd60a6c",
+    "Installment_Make_Payment_Modal": "{\"icon\":\"fa fa-plus\",\"hidden\":\"Make Payment\",\"tooltip\":\"Make Payment\"}",
+    "Installment_Integration_Modal": "{\"icon\":\"\",\"hidden\":\"\",\"tooltip\":\"\"}",
+    "Installment_Guid_Data": "bd51c02b-4703-491b-b43c-e136fbd60a6c"
+  }
+]}

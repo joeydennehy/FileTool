@@ -1,0 +1,46 @@
+{
+  "defaultCommandTimeout": 60000,
+  "pageLoadTimeout": 120000,
+  "responseTimeout": 120000,
+  "env": {
+    "urlkey": "givisitallpages",
+    "SLM_urlkey": "slmcypresstest",
+    "CS_USER": "admin",
+    "CS_PASSWORD": "test",
+    "system_admin": {
+      "login": "ghost.systemadministrator@email.ghostinspector.com",
+      "password": "r7Vr3Vd3cMcJSmtq"
+    },
+    "admin": {
+      "first_name": "Ghost",
+      "last_name": "Admin",
+      "login": "ghost.admin@email.ghostinspector.com",
+      "password": "ZM$@*8PkvsRD@3DW"
+    },
+    "applicant": {
+      "first_name": "Ghost",
+      "last_name": "Applicant",
+      "login": "ghost.applicant@email.ghostinspector.com",
+      "password": "CVX!8bSLZw*ZEc_n"
+    },
+    "board_member": {
+      "first_name": "Ghost",
+      "last_name": "BoardMember",
+      "login": "ghost.board_member@email.ghostinspector.com",
+      "password": "#7#gb%f5t6T3dSF3"
+    },
+    "staff_evaluator": {
+      "first_name": "Ghost",
+      "last_name": "StaffEvaluator",
+      "login": "ghost.staff_evaluator@email.ghostinspector.com",
+      "password": "Ps3xv8!adWgJ^W"
+    },
+    "grant_manager": {
+      "first_name": "Ghost",
+      "last_name": "GrantManager",
+      "login": "ghost.grants_manager@email.ghostinspector.com",
+      "password": "34G6t_dHN8vHeshb"
+    }
+  },
+  "projectId": "ik72hx"
+}

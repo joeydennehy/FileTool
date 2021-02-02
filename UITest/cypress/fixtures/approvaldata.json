@@ -1,0 +1,23 @@
+{"data":[
+  {
+    "Row_Id": "2463420",
+    "Request_Id_Data": "194f0327-6ac6-4aa0-b530-eb34126aa96a",
+    "Submission_Id_Data": "93b6da01-38e3-4bff-91a7-532076805b11",
+    "Submission_Status_Data": "Assigned",
+    "Process_Id_Filter": "85a548b2-0e99-4cfb-b38c-058987a0327c",
+    "Request_Id_Filter": "194f0327-6ac6-4aa0-b530-eb34126aa96a",
+    "Submission_Id_Filter": "93b6da01-38e3-4bff-91a7-532076805b11",
+    "Submission_Form_Type_Filter": "Approval",
+    "Request_Status_Filter": "Approval Draft",
+    "Submission_Id_Print": "93b6da01-38e3-4bff-91a7-532076805b11",
+    "Submission_Id_Link": "93b6da01-38e3-4bff-91a7-532076805b11",
+    "Process_Name": "Ghost Process 2316lttwxKZewDzU",
+    "Organization_Name": "Ghost Org",
+    "Organization_Id_Link": "3ac1097b-b4c8-453c-89d9-c3be235cd05f",
+    "Applicant_Full_Name": "Test Applicant ",
+    "Applicant_Id_Link": "33880b22-cbaf-47f7-83d6-a88d74540ae8",
+    "RF_6b86b273ff": "Ghost Project",
+    "Request_Id_Link": "194f0327-6ac6-4aa0-b530-eb34126aa96a",
+    "Request_Integration": "{\"className\":\"Sync disabled installment\",\"icon\":\"fa fa-toggle-on off\",\"hidden\":\"Unsynced\",\"tooltip\":\"Unsynced\"}"
+  }
+]}
