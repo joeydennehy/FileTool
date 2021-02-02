@@ -1,16 +1,22 @@
 name: integration-tests
 on: [push]
 jobs:
+  cypress-file-upload:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Cypress File Run
+        uses: abramenal/cypress-file-upload@v5
   cypress-run:
+    needs: cypress-file-upload
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/checkout@v5
-      # https://github.com/cypress-io/github-action
+        # https://github.com/cypress-io/github-action
       - name: Cypress run
         uses: cypress-io/github-action@v2
-      - uses: abramenal/cypress-file-upload@v5
         with:
           record: true
           working-directory: UITest
