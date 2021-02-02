@@ -19,7 +19,7 @@ jobs:
           record: true
           parallel: true
           working-directory: UITest
-          config: baseUrl=http://unittest-betaa.fcsuite.com
+          config: baseUrl=https://unittest-betaa.fcsuite.com
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: fdd45e99-5916-41ae-90fb-85658b57961f
