@@ -5,10 +5,11 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2, cypress-file-upload/checkout@v2
+        uses: actions/checkout@v2
       # https://github.com/cypress-io/github-action
       - name: Cypress run
-        uses: cypress-io/github-action@v2,abramenal/cypress-file-upload@v2
+        uses: cypress-io/github-action@v2
+      - uses: abramenal/cypress-file-upload@v2
         with:
           record: true
           working-directory: UITest
