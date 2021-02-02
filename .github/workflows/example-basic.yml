@@ -9,7 +9,7 @@ jobs:
       # https://github.com/cypress-io/github-action
       - name: Cypress run
         uses: cypress-io/github-action@v2
-      - uses: abramenal/cypress-file-upload@v2
+      - uses: abramenal/cypress-file-upload@v1
         with:
           record: true
           working-directory: UITest
