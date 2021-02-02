@@ -11,5 +11,6 @@
   "private": true,
   "devDependencies": {
     "cypress": "6.0.0"
+	"cypress-file-upload": "^4.0.6"
   }
 }
