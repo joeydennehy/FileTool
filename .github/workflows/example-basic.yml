@@ -6,7 +6,6 @@ jobs:
     steps:
       - name: Cypress File Run
         run: npm install --save-dev cypress-file-upload
-      - run: npm init
   cypress-run:
     needs: cypress-file-upload
     runs-on: ubuntu-16.04
