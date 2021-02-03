@@ -1,17 +1,16 @@
 {
-  "name": "example-recording",
+  "name": "example-basic",
   "version": "1.0.0",
-  "description": "recording test results to Cypress Dashboard",
+  "description": "basic example how to run Cypress tests",
   "main": "index.js",
   "scripts": {
-    "test": "cypress run",
-    "cy:open": "cypress open"
+    "test": "cypress run"
   },
   "author": "",
   "license": "ISC",
   "private": true,
   "devDependencies": {
-    "cypress": "^4.8.0",
-    "cypress-file-upload": "^4.0.6"
+    "cypress": "6.0.0",
+	"cypress-file-upload": "^4.0.6"
   }
 }
